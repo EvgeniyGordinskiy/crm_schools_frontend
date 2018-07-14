@@ -1,8 +1,19 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./",
     "outDir": "./dist/out-tsc",
+    "baseUrl": "./src",
+    "paths": {
+      "@app/*": ["app/*"],
+      "@components/*": ["app/components/*"],
+      "@layouts/*": ["app/layouts/*"],
+      "@models/*": ["app/models/*"],
+      "@pages/*": ["app/pages/*"],
+      "@services/*": ["app/services/*"],
+      "@sharedModules/*": ["app/shared-modules/*"],
+      "@store/*": ["app/store/*"],
+      "@utils/*": ["app/utils/*"]
+    },
     "sourceMap": true,
     "declaration": false,
     "moduleResolution": "node",
@@ -15,10 +26,6 @@
     "lib": [
       "es2017",
       "dom"
-    ],
-    "paths": {
-      "@pagesLayout/*": ["app/pages/withinLayout/*"],
-
-    }
+    ]
   }
 }

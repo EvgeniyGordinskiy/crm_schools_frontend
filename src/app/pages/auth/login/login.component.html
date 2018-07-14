@@ -1,0 +1,48 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Login</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <form [formGroup]="signinForm" (ngSubmit)="login()">
+      <table cellspacing="0">
+        <tr>
+          <td>
+            <mat-form-field>
+              <input matInput placeholder="Email"
+                     name="email"
+                     formControlName="email"
+              >
+            </mat-form-field>
+            <div
+              *ngIf="!signinForm.get('email').valid && signinForm.get('email').touched"
+              class="help-block">
+              <span *ngIf="signinForm.get('email').errors['emailIsForbidden']">This email is invalid!</span>
+              <span *ngIf="signinForm.get('email').errors['required']">This field is required!</span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <mat-form-field>
+            <input matInput placeholder="Password"
+                   formControlName="password"
+                   type="password"
+                   name="password" required>
+          </mat-form-field>
+            <div
+              *ngIf="!signinForm.get('password').valid && signinForm.get('password').touched"
+              class="help-block">
+              <span *ngIf="signinForm.get('password').errors['required']">This field is required!</span>
+            </div>
+          </td>
+        </tr>
+      </table>
+      <mat-card-actions>
+        <button mat-raised-button
+                color="primary"
+                [disabled]="!signinForm.valid && signinForm.touched || !signinForm.touched
+    ">Login</button>
+      </mat-card-actions>
+    </form>
+  </mat-card-content>
+</mat-card>
