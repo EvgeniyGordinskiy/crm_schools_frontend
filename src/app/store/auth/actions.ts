@@ -1,5 +1,4 @@
-import { Action } from '@ngrx/store';
-
+import {ActionInterface  as Action} from '@app/interfaces/action.interface';
 // @ngrx
 import { Store } from '@ngrx/store';
 
@@ -171,9 +170,11 @@ export class SignUpSuccessAction implements Action {
  */
 export class RefreshAuthState implements Action {
   readonly type: string = ActionTypes.REFRESH_AUTH_STATE;
-  user: User;
-  authStatus: boolean;
-  constructor( user = {}, authStatus = false) {
+  payload: {
+    user: User,
+    authStatus: boolean
+  };
+  constructor() {
     const userAuth = AuthFacade.getUser();
     const token = AuthFacade.getToken();
     const authStatusAuth = AuthFacade.getAuthStatus();
@@ -182,8 +183,8 @@ export class RefreshAuthState implements Action {
       token &&
       authStatusAuth
     ) {
-      this.user = new User(userAuth);
-      this.authStatus = authStatusAuth;
+      this.payload.user = new User(userAuth);
+      this.payload.authStatus = authStatusAuth;
     }
   }
 }

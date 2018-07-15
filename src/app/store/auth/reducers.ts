@@ -2,6 +2,7 @@ import { Actions, ActionTypes } from './actions';
 import * as fromApp from '@app/store/app.reducers';
 
 import { User } from '@models/user';
+import {ActionInterface} from '@app/interfaces/action.interface';
 
 export interface AuthState extends fromApp.AppState {
   auth: State;
@@ -30,7 +31,7 @@ const initialState: State = {
  * @param {State} state Current state
  * @param {Actions} action Incoming action
  */
-export function reducer(state: any = initialState, action: Actions) {
+export function reducer(state: any = initialState, action: ActionInterface) {
   switch (action.type) {
     case ActionTypes.AUTHENTICATE:
       return {
@@ -99,8 +100,8 @@ export function reducer(state: any = initialState, action: Actions) {
       case ActionTypes.REFRESH_AUTH_STATE:
       return {
         ...state,
-        authenticated: action.authStatus,
-        user: action.user,
+        authenticated: action.payload.authStatus,
+        user: action.payload.user,
         error: undefined,
         loading: true
       };

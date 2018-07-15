@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import * as AuthenticateReducer from '@store/auth/reducers';
+import * as AuthReducer from '@store/auth/reducers';
 import {AuthState} from '@store/auth/reducers';
 import {Store} from '@ngrx/store';
 import {SignOut} from '@store/auth/actions';
@@ -16,7 +16,7 @@ export class UserComponent implements OnInit {
   name: string;
   constructor(
     private authFacade: AuthFacade,
-    private authStore: Store<AuthenticateReducer<AuthState>>
+    private authStore: Store<AuthReducer.AuthState>
   ) { }
 
   ngOnInit() {
