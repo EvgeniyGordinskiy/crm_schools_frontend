@@ -170,9 +170,9 @@ export class SignUpSuccessAction implements Action {
  */
 export class RefreshAuthState implements Action {
   readonly type: string = ActionTypes.REFRESH_AUTH_STATE;
-  payload: {
-    user: User,
-    authStatus: boolean
+  payload = {
+    user: {},
+    authStatus: false
   };
   constructor() {
     const userAuth = AuthFacade.getUser();
