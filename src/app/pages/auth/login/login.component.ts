@@ -20,8 +20,8 @@ import {AuthenticateResponseInterface} from '@app/interfaces/authenticateRespons
 import * as SpinnerReducer from '@store/spinner/reducers';
 import {StopSpinner} from '@store/spinner/actions';
 import {User} from '@models/user';
-import {UserInterface} from '@app/interfaces/user.interface';
 import {AccountServiceResponseInterface} from '@app/interfaces/accountServiceResponse.interface';
+import {AuthFacade} from '@app/facades/auth/authFacade';
 
 @Component({
   selector: 'app-login',
@@ -38,6 +38,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   private alive = true;
   constructor(
     private router: Router,
+    private authFacade: AuthFacade,
     private authService: AuthService,
     private accountService: AccountService,
     private store: Store<AuthenticateReducer.AuthState>,
@@ -51,11 +52,6 @@ export class LoginComponent implements OnInit, OnDestroy {
       'password': new FormControl(null, [Validators.required]),
       'email': new FormControl(null, [Validators.required, Validators.email])
     });
-    this.store.select('auth')
-      .takeWhile(() => this.alive)
-      .subscribe(value => {
-        console.log(value, 'from ngOnInit');
-      });
   }
 
   /**
@@ -74,10 +70,10 @@ export class LoginComponent implements OnInit, OnDestroy {
             this.store.dispatch(new AuthenticateAction(resp.token));
             this.accountService.getAccount().subscribe(
               (response: AccountServiceResponseInterface) => {
-                  console.log(response.data);
                   const user = new User(response.data);
                   this.spinnerStore.dispatch(new StopSpinner());
                   this.store.dispatch(new AuthenticatedSuccessAction({authenticated: true, user: user}));
+                  this.authFacade.checkAuthStatusAndRedirect();
               },
               error => {
                 console.log(error);

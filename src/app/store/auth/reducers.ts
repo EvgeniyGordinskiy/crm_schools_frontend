@@ -80,15 +80,7 @@ export function reducer(state: any = initialState, action: Actions) {
         user: user
       };
 
-    case ActionTypes.SIGN_OUT_ERROR:
-      return {
-        ...state,
-        authenticated: true,
-        // error: action.payload.error.message,
-        user: undefined
-      };
-
-    case ActionTypes.SIGN_OUT_SUCCESS:
+    case ActionTypes.SIGN_OUT:
       return {
         ...state,
         authenticated: false,
@@ -100,6 +92,15 @@ export function reducer(state: any = initialState, action: Actions) {
       return {
         ...state,
         authenticated: false,
+        error: undefined,
+        loading: true
+      };
+
+      case ActionTypes.REFRESH_AUTH_STATE:
+      return {
+        ...state,
+        authenticated: action.authStatus,
+        user: action.user,
         error: undefined,
         loading: true
       };

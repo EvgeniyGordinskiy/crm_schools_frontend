@@ -1,19 +1,33 @@
-import { Component } from '@angular/core';
+import {Component, Injectable} from '@angular/core';
 
+// @ngrx
+import { Store } from '@ngrx/store';
 
+// rxjs
+import 'rxjs/add/operator/filter';
+import 'rxjs/add/operator/takeWhile';
 
+import * as AuthenticateReducer from '@store/auth/reducers';
+import {AuthenticateAction, AuthenticatedSuccessAction, RefreshAuthState} from '@store/auth/actions';
+import {User} from '@models/user';
 import {AuthFacade} from '@app/facades/auth/authFacade';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
+
+@Injectable()
 export class AppComponent {
 
   constructor(
-    authFacade: AuthFacade
+    private router: Router,
+    private authStore: Store<AuthenticateReducer.AuthState>,
+    private authFacade: AuthFacade,
   ) {
-    authFacade.updateStore();
+    this.authStore.dispatch(new RefreshAuthState());
+    this.authFacade.checkAuthStatusAndRedirect();
   }
 }

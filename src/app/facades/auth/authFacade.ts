@@ -1,15 +1,13 @@
 import {User} from '@models/user';
-import {AuthenticateAction, AuthenticatedSuccessAction} from '@store/auth/actions';
-import * as AuthenticateReducer from '@store/auth/reducers';
-import {Store} from '@ngrx/store';
+import {Router} from '@angular/router';
 import {Injectable} from '@angular/core';
 
 @Injectable()
 export class AuthFacade {
   private static prefix = 'auth_schools_';
 
-  constructor(
-    private authStore: Store<AuthenticateReducer.AuthState>,
+  public constructor(
+    private router: Router,
   ) {}
 
   static setToken = (token: string) => {
@@ -36,18 +34,22 @@ export class AuthFacade {
     return localStorage.getItem(AuthFacade.prefix + 'status') === 'true';
   }
 
-  updateStore = () => {
-    const user = new User(AuthFacade.getUser());
-    const token = AuthFacade.getToken();
-    const authStatus = AuthFacade.getAuthStatus();
-    if (
-      user &&
-      token &&
-      authStatus
-    ) {
-      this.authStore.dispatch(new AuthenticateAction(token));
-      this.authStore.dispatch(new AuthenticatedSuccessAction({authenticated: authStatus, user: user}));
-    }
+  checkAuthStatusAndRedirect() {
+    setTimeout(() => {
+      if (AuthFacade.getAuthStatus() && this.router.url === '/auth/login') {
+        this.router.navigate(['/home']);
+      } else if (!AuthFacade.getAuthStatus()) {
+        this.router.navigate(['/auth/login']);
+      }
+    }, 50);
   }
+
+  endSession() {
+    localStorage.removeItem(AuthFacade.prefix + 'user');
+    localStorage.removeItem(AuthFacade.prefix + 'token');
+    localStorage.removeItem(AuthFacade.prefix + 'status');
+    this.router.navigate(['/auth/login']);
+  }
+
 
 }

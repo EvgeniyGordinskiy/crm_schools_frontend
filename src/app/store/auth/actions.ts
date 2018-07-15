@@ -33,7 +33,6 @@ export const ActionTypes = {
   REFRESH_AUTH_STATE: uniqueType('REFRESH_AUTH_STATE'),
 };
 
-
 /**
  * Authenticate.
  * @class AuthenticateAction
@@ -166,6 +165,39 @@ export class SignUpSuccessAction implements Action {
 }
 
 /**
+ * Refresh auth status.
+ * @class RefreshAuthState
+ * @implements {Action}
+ */
+export class RefreshAuthState implements Action {
+  readonly type: string = ActionTypes.REFRESH_AUTH_STATE;
+  user: User;
+  authStatus: boolean;
+  constructor( user = {}, authStatus = false) {
+    const userAuth = AuthFacade.getUser();
+    const token = AuthFacade.getToken();
+    const authStatusAuth = AuthFacade.getAuthStatus();
+    if (
+      userAuth &&
+      token &&
+      authStatusAuth
+    ) {
+      this.user = new User(userAuth);
+      this.authStatus = authStatusAuth;
+    }
+  }
+}
+
+export class SignOut implements Action {
+  readonly type: string = ActionTypes.SIGN_OUT;
+  constructor(
+    private authFacade: AuthFacade
+  ) {
+      authFacade.endSession();
+  }
+}
+
+/**
  * Actions type.
  * @type {Actions}
  */
@@ -179,4 +211,6 @@ export type Actions
   | AuthenticationSuccessAction
   | SignUpAction
   | SignUpErrorAction
-  | SignUpSuccessAction;
+  | SignUpSuccessAction
+  | RefreshAuthState
+  | SignOut;

@@ -1,0 +1,29 @@
+<mat-toolbar>
+  <mat-toolbar-row class="first-header">
+    <div class="first-header-content">
+      <a>Manage my Gyms</a>
+      <div class="profile-details inline_block">
+        <img src="https://picsum.photos/40/30">
+        <span>
+          {{name}}
+        </span>
+      </div>
+      <mat-menu #appMenu="matMenu">
+        <button mat-menu-item>PricingHome</button>
+        <button mat-menu-item>My Details</button>
+        <button mat-menu-item>Pricing</button>
+        <button mat-menu-item (click)="onLogout()">Logout</button>
+      </mat-menu>
+
+      <button mat-icon-button [matMenuTriggerFor]="appMenu">
+        <mat-icon>menu</mat-icon>
+      </button>
+    </div>
+  </mat-toolbar-row>
+  <mat-toolbar-row class="second-header">
+    <span>Second Row</span>
+  </mat-toolbar-row>
+</mat-toolbar>
+<div class="content">
+  <router-outlet></router-outlet>
+</div>
