@@ -1,22 +1,25 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 
+// @ngrx
+import { Store } from '@ngrx/store';
+
+// rxjs
+import 'rxjs/add/operator/filter';
+import 'rxjs/add/operator/takeWhile';
+import * as SpinnerReducer from '@store/spinner/reducers';
+import {StartSpinner} from '@store/spinner/actions';
+
 @Injectable()
 export class AuthService {
   private static tokenKey = 'sch_token';
   constructor(
-    private httpClient: HttpClient
+    private httpClient: HttpClient,
+    private store: Store<SpinnerReducer.SpinnerState>
   ) { }
 
-  static setToken = (token: string) => {
-    localStorage.setItem(AuthService.tokenKey, token);
-  }
-
-  static getToken = (): string => {
-    return localStorage.getItem(AuthService.tokenKey);
-  }
-
   login({email, password}) {
-   return  this.httpClient.post('auth', {email, password});
+    this.store.dispatch(new StartSpinner());
+      return  this.httpClient.post('auth', {email, password});
   }
 }

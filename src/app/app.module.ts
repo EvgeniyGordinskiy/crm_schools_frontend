@@ -1,7 +1,7 @@
-import { NgModule } from '@angular/core';
+import {ErrorHandler, NgModule} from '@angular/core';
 
 import { StoreRouterConnectingModule } from '@ngrx/router-store';
-import {reducers} from './app.reducers';
+import {reducers} from '@store/app.reducers';
 
 import { AppComponent } from './app.component';
 import { LayoutModule } from '@angular/cdk/layout';
@@ -23,6 +23,8 @@ import {MetaReducer, StoreModule} from '@ngrx/store';
 import {environment} from '../environments/environment';
 import {StoreDevtoolsModule} from '@ngrx/store-devtools';
 import {AuthService} from '@services/auth/auth.service';
+import {ToastrModule} from 'ngx-toastr';
+import {AuthFacade} from '@app/facades/auth/authFacade';
 export const metaReducers: MetaReducer<any>[] = environment.production
   ? []
   : []; // [storeFreeze]
@@ -48,11 +50,13 @@ export const metaReducers: MetaReducer<any>[] = environment.production
     !environment.production
       ? StoreDevtoolsModule.instrument({ maxAge: 50 })
       : [],
+    ToastrModule.forRoot(),
   ],
   providers: [
     AuthService,
+    AuthFacade,
     { provide: HTTP_INTERCEPTORS, useClass: MainInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
   ],
   bootstrap: [AppComponent]
 })

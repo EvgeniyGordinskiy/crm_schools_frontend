@@ -3,7 +3,6 @@ import {Router} from '@angular/router';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {AuthService} from '@services/auth/auth.service';
 
-
 // @ngrx
 import { Store } from '@ngrx/store';
 
@@ -17,6 +16,12 @@ import * as AuthenticateReducer from '@store/auth/reducers';
 
 // reducers
 import {AccountService} from '@services/account/account.service';
+import {AuthenticateResponseInterface} from '@app/interfaces/authenticateResponse.interface';
+import * as SpinnerReducer from '@store/spinner/reducers';
+import {StopSpinner} from '@store/spinner/actions';
+import {User} from '@models/user';
+import {UserInterface} from '@app/interfaces/user.interface';
+import {AccountServiceResponseInterface} from '@app/interfaces/accountServiceResponse.interface';
 
 @Component({
   selector: 'app-login',
@@ -35,7 +40,9 @@ export class LoginComponent implements OnInit, OnDestroy {
     private router: Router,
     private authService: AuthService,
     private accountService: AccountService,
-    private store: Store<AuthenticateReducer.AuthState>
+    private store: Store<AuthenticateReducer.AuthState>,
+    private spinnerStore: Store<SpinnerReducer.SpinnerState>
+
   ) {
   }
 
@@ -62,17 +69,15 @@ export class LoginComponent implements OnInit, OnDestroy {
   login(): void {
     this.authService.login({email: this.signinForm.value.email, password: this.signinForm.value.password})
       .subscribe(
-        (resp) => {
+        (resp: AuthenticateResponseInterface) => {
           if (resp.token) {
-            this.store.dispatch(new AuthenticateAction({
-              email: this.signinForm.value.email,
-              password: this.signinForm.value.password,
-              token: resp.token
-            }));
+            this.store.dispatch(new AuthenticateAction(resp.token));
             this.accountService.getAccount().subscribe(
-              response => {
-                  console.log(response);
-                  // this.store.dispatch(new AuthenticatedSuccessAction());
+              (response: AccountServiceResponseInterface) => {
+                  console.log(response.data);
+                  const user = new User(response.data);
+                  this.spinnerStore.dispatch(new StopSpinner());
+                  this.store.dispatch(new AuthenticatedSuccessAction({authenticated: true, user: user}));
               },
               error => {
                 console.log(error);

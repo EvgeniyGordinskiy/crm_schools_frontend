@@ -1,5 +1,5 @@
 import { Actions, ActionTypes } from './actions';
-import * as fromApp from '@app/app.reducers';
+import * as fromApp from '@app/store/app.reducers';
 
 import { User } from '@models/user';
 
@@ -84,7 +84,7 @@ export function reducer(state: any = initialState, action: Actions) {
       return {
         ...state,
         authenticated: true,
-        error: action.payload.error.message,
+        // error: action.payload.error.message,
         user: undefined
       };
 

@@ -1,11 +1,20 @@
 import { Action } from '@ngrx/store';
 
+// @ngrx
+import { Store } from '@ngrx/store';
+
+// rxjs
+import 'rxjs/add/operator/filter';
+import 'rxjs/add/operator/takeWhile';
+
+import * as AuthenticateReducer from '@store/auth/reducers';
+
 // import type function
 import { uniqueType } from '@utils/uniqueType';
 
 // import models
 import { User } from '@models/user';
-import {AuthService} from '@services/auth/auth.service';
+import {AuthFacade} from '@app/facades/auth/authFacade';
 import {OnInit} from '@angular/core';
 
 export const ActionTypes = {
@@ -20,8 +29,10 @@ export const ActionTypes = {
   SIGN_OUT_SUCCESS: uniqueType('Sign off success'),
   SIGN_UP: uniqueType('Sign up'),
   SIGN_UP_ERROR: uniqueType('Sign up error'),
-  SIGN_UP_SUCCESS: uniqueType('Sign up success')
+  SIGN_UP_SUCCESS: uniqueType('Sign up success'),
+  REFRESH_AUTH_STATE: uniqueType('REFRESH_AUTH_STATE'),
 };
+
 
 /**
  * Authenticate.
@@ -30,9 +41,8 @@ export const ActionTypes = {
  */
 export class AuthenticateAction implements Action {
   readonly type: string = ActionTypes.AUTHENTICATE;
-  constructor(
-    public payload: {email: string, password: string, token: string}) {
-    AuthService.setToken(payload.token);
+  constructor(token: string) {
+    AuthFacade.setToken(token);
   }
 }
 
@@ -55,7 +65,11 @@ export class AuthenticatedAction implements Action {
 export class AuthenticatedSuccessAction implements Action {
   readonly type: string = ActionTypes.AUTHENTICATED_SUCCESS;
 
-  constructor(public payload: {authenticated: boolean, user: User}) {}
+  constructor(public payload: {authenticated: boolean, user: User}) {
+    AuthFacade.setUser(payload.user);
+    AuthFacade.setAuthStatus(payload.authenticated);
+
+  }
 }
 
 /**
