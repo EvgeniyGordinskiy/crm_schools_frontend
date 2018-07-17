@@ -19,7 +19,6 @@ export class MainMenuComponent implements OnInit {
   ) {
     authStore.select('auth').subscribe(
       (val: AuthState) => {
-        console.log(val);
         if (val.user && val.user.permissions) {
           this.permissions = val.user.permissions;
         }
@@ -28,7 +27,6 @@ export class MainMenuComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.permissions);
   }
 
 }

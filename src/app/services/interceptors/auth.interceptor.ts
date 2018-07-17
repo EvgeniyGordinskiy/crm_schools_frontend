@@ -34,7 +34,7 @@ export class AuthInterceptor implements HttpInterceptor {
       () => {},
       (err: any) => {
         this.store.dispatch(new StopSpinner());
-        if (err.error.error.message) {
+        if (err.error.error) {
           this.notificationManager.error(err.error.error.message, 'Error' );
         } else {
           this.notificationManager.error('An error has occurred', 'Error');

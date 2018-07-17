@@ -12,7 +12,6 @@ import {StartSpinner} from '@store/spinner/actions';
 
 @Injectable()
 export class AuthService {
-  private static tokenKey = 'sch_token';
   constructor(
     private httpClient: HttpClient,
     private store: Store<SpinnerReducer.SpinnerState>
@@ -20,6 +19,6 @@ export class AuthService {
 
   login({email, password}) {
     this.store.dispatch(new StartSpinner());
-      return  this.httpClient.post('auth', {email, password});
+    return  this.httpClient.post('auth', {email, password});
   }
 }
