@@ -11,13 +11,17 @@ import { Store } from '@ngrx/store';
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/takeWhile';
 import * as SpinnerReducer from '@store/spinner/reducers';
+import * as AuthReducer from '@store/auth/reducers';
 import {StopSpinner} from '@store/spinner/actions';
+import {SignOut} from '@store/auth/actions';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
   constructor(
     private notificationManager: ToastrService,
-    private store: Store<SpinnerReducer.SpinnerState>
+    private store: Store<SpinnerReducer.SpinnerState>,
+    private authStore: Store<AuthReducer.AuthState>,
+    private authFacade: AuthFacade,
   ) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -34,7 +38,10 @@ export class AuthInterceptor implements HttpInterceptor {
       () => {},
       (err: any) => {
         this.store.dispatch(new StopSpinner());
-        if (err.error.error) {
+        console.log(err.status);
+        if (err.status && err.status === 401) {
+          this.authStore.dispatch(new SignOut(this.authFacade));
+        } else if (err.error.error) {
           this.notificationManager.error(err.error.error.message, 'Error' );
         } else {
           this.notificationManager.error('An error has occurred', 'Error');

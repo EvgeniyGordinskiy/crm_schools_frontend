@@ -5,10 +5,7 @@ import {Permission} from '@models/permission';
 export class PermissionFacade {
 
   static groupByModelName(permissionsArray) {
-  let permissions: { key: [Permission]};
-    if (!permissions) {
-      permissions = {};
-    }
+  let permissions = {};
     permissionsArray.map((item) => {
       if (!permissions[item.model_name]) {
         permissions[item.model_name] = [];

@@ -4,11 +4,14 @@ import { PermissionPageComponent } from './permission-page/permission-page.compo
 import {PermissionsRoutingModule} from '@pages/layout/permissions/permissions-routing.module';
 import {PermissionService} from '@services/permission/permission.service';
 import {RoleService} from '@services/role/role.service';
+import {MatSelectModule, MatTabsModule} from '@angular/material';
 
 @NgModule({
   imports: [
     CommonModule,
-    PermissionsRoutingModule
+    PermissionsRoutingModule,
+    MatTabsModule,
+    MatSelectModule
   ],
   declarations: [PermissionPageComponent],
   providers: [PermissionService, RoleService]
