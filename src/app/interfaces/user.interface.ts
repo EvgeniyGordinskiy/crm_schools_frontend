@@ -5,5 +5,7 @@ export interface UserInterface {
   email: string;
   name: string;
   role: string;
-  permissions: [Permission];
+  permissions: {
+    key: [Permission]
+  };
 }

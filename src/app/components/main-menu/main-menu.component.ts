@@ -13,7 +13,7 @@ import {AuthState} from '@store/auth/reducers';
 export class MainMenuComponent implements OnInit {
   permissions: {
     key: [Permission]
-  } = {};
+  };
   constructor(
     private authStore: Store<AuthenticateReducer.AuthState>
   ) {

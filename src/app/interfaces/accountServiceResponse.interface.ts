@@ -1,5 +1,11 @@
-import {UserInterface} from '@app/interfaces/user.interface';
+import {Permission} from '@models/permission';
 
 export interface AccountServiceResponseInterface {
-  data: UserInterface;
+  data: {
+    id?: string;
+    email: string;
+    name: string;
+    role: string;
+    permissions: [Permission];
+  };
 }

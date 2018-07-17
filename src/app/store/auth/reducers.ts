@@ -5,7 +5,7 @@ import { User } from '@models/user';
 import {ActionInterface} from '@app/interfaces/action.interface';
 
 export interface AuthState extends fromApp.AppState {
-  authenticated: boolean;
+  authenticated: false;
   error?: string;
   user?: User;
 }
@@ -14,16 +14,16 @@ export interface AuthState extends fromApp.AppState {
  * The state.
  * @interface State
  */
-// export interface State {
-//   authenticated: boolean;
-//   error?: string;
-//   user?: User;
-// }
+export interface State {
+  authenticated: boolean;
+  error?: string;
+  user?: User;
+}
 
 /**
  * The initial state.
  */
-const initialState: AuthState = {
+const initialState: State = {
   authenticated: false,
 };
 

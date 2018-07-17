@@ -22,6 +22,7 @@ import {StopSpinner} from '@store/spinner/actions';
 import {User} from '@models/user';
 import {AccountServiceResponseInterface} from '@app/interfaces/accountServiceResponse.interface';
 import {AuthFacade} from '@app/facades/auth/authFacade';
+import {Permission} from '@models/permission';
 
 @Component({
   selector: 'app-login',
@@ -70,8 +71,13 @@ export class LoginComponent implements OnInit, OnDestroy {
             this.store.dispatch(new AuthenticateAction(resp.token));
             this.accountService.getAccount().subscribe(
               (response: AccountServiceResponseInterface) => {
-                let permissions = {};
+                let permissions : {
+                  key: [Permission]
+                };
                 response.data.permissions.map(item => {
+                  if (!permissions) {
+                    permissions = {};
+                  }
                   if (!permissions[item.model_name]) {
                     permissions[item.model_name] = [];
                   }
