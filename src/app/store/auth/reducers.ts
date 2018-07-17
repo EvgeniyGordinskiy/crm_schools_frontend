@@ -5,24 +5,26 @@ import { User } from '@models/user';
 import {ActionInterface} from '@app/interfaces/action.interface';
 
 export interface AuthState extends fromApp.AppState {
-  auth: State;
-}
-
-/**
- * The state.
- * @interface State
- */
-export interface State {
   authenticated: boolean;
   error?: string;
   user?: User;
 }
 
 /**
+ * The state.
+ * @interface State
+ */
+// export interface State {
+//   authenticated: boolean;
+//   error?: string;
+//   user?: User;
+// }
+
+/**
  * The initial state.
  */
-const initialState: State = {
-  authenticated: null,
+const initialState: AuthState = {
+  authenticated: false,
 };
 
 /**
@@ -117,7 +119,7 @@ export function reducer(state: any = initialState, action: ActionInterface) {
  * @param {State} state
  * @returns {boolean}
  */
-export const isAuthenticated = (state: State) => console.log(state);
+export const isAuthenticated = (state: AuthState) => console.log(state);
 
 /**
  * Return the users state
@@ -125,7 +127,7 @@ export const isAuthenticated = (state: State) => console.log(state);
  * @param {State} state
  * @returns {User}
  */
-export const getAuthenticatedUser = (state: State) => state.user;
+export const getAuthenticatedUser = (state: AuthState) => state.user;
 
 /**
  * Returns the authentication error.
@@ -133,7 +135,7 @@ export const getAuthenticatedUser = (state: State) => state.user;
  * @param {State} state
  * @returns {Error}
  */
-export const getAuthenticationError = (state: State) => state.error;
+export const getAuthenticationError = (state: AuthState) => state.error;
 
 /**
  * Returns the sign out error.
@@ -141,7 +143,7 @@ export const getAuthenticationError = (state: State) => state.error;
  * @param {State} state
  * @returns {Error}
  */
-export const getSignOutError = (state: State) => state.error;
+export const getSignOutError = (state: AuthState) => state.error;
 
 /**
  * Returns the sign up error.
@@ -149,4 +151,4 @@ export const getSignOutError = (state: State) => state.error;
  * @param {State} state
  * @returns {Error}
  */
-export const getSignUpError = (state: State) => state.error;
+export const getSignUpError = (state: AuthState) => state.error;

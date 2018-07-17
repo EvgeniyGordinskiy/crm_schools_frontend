@@ -25,6 +25,7 @@ import {StoreDevtoolsModule} from '@ngrx/store-devtools';
 import {AuthService} from '@services/auth/auth.service';
 import {ToastrModule} from 'ngx-toastr';
 import {AuthFacade} from '@app/facades/auth/authFacade';
+import {MainMenuComponent} from '@components/main-menu/main-menu.component';
 export const metaReducers: MetaReducer<any>[] = environment.production
   ? []
   : []; // [storeFreeze]
@@ -36,6 +37,7 @@ export const metaReducers: MetaReducer<any>[] = environment.production
     DashboardComponent,
     TableComponent,
     MainSpinnerComponent,
+    MainMenuComponent,
   ],
   imports: [
     BrowserModule,

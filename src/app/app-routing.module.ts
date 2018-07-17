@@ -16,6 +16,10 @@ const routes: Routes = [
         loadChildren: './pages/layout/home/home.module#HomeModule'
       },
       {
+        path: 'permissions',
+        loadChildren: './pages/layout/permissions/permissions.module#HomeModule'
+      },
+      {
         path: '**',
         redirectTo: '/home'
       }

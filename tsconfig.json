@@ -12,7 +12,9 @@
       "@services/*": ["app/services/*"],
       "@sharedModules/*": ["app/shared-modules/*"],
       "@store/*": ["app/store/*"],
-      "@utils/*": ["app/utils/*"]
+      "@utils/*": ["app/utils/*"],
+      "@facades*": ["app/facades/*"],
+      "@interfaces*": ["app/interfaces/*"]
     },
     "sourceMap": true,
     "declaration": false,

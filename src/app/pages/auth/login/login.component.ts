@@ -70,7 +70,17 @@ export class LoginComponent implements OnInit, OnDestroy {
             this.store.dispatch(new AuthenticateAction(resp.token));
             this.accountService.getAccount().subscribe(
               (response: AccountServiceResponseInterface) => {
+                let permissions = {};
+                response.data.permissions.map(item => {
+                  if (!permissions[item.model_name]) {
+                    permissions[item.model_name] = [];
+                  }
+                  permissions[item.model_name].push({event: item.event, permission_type: item.permission_type});
+                });
                   const user = new User(response.data);
+                if (permissions) {
+                  user.permissions = permissions;
+                }
                   this.spinnerStore.dispatch(new StopSpinner());
                   this.store.dispatch(new AuthenticatedSuccessAction({authenticated: true, user: user}));
                   this.authFacade.checkAuthStatusAndRedirect();

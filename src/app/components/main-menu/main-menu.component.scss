@@ -1,0 +1,26 @@
+@import "./../../../assets/scss/variables.scss";
+
+:host{
+  height: 100%;
+  .main-menu{
+    height: 100%;
+    margin: 0;
+    font-size: $base_font;
+    a{
+      color: black;
+
+    }
+    li{
+      height: 100%;
+      padding: 0 19px;
+      span{
+        position: relative;
+        top: 3px;
+      }
+      &:hover{
+        background-color: #fff;
+      }
+    }
+  }
+
+}

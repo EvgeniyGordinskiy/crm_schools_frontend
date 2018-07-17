@@ -6,7 +6,9 @@ export class User implements UserInterface {
   email: string;
   name: string;
   role: string;
-  permissions: [Permission];
+  permissions: {
+    key: [Permission]
+  };
 
   constructor(params) {
     this.email = params.email;
