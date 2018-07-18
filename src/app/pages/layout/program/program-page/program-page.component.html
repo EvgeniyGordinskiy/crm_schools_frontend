@@ -25,7 +25,8 @@
              <div class="carousel-custom">
                <button mat-button class="mat-primary" (click)="carouselToRight()"><mat-icon>keyboard_arrow_left</mat-icon></button>
                <div class="carousel-content">
-                 <div class="inner-carousel-content">
+                 <div class="inner-carousel-content"
+                 [@carouselsMoves] = "timetableCarouselPosition">
                    <div class="carousel-content-item" *ngFor="let day of timetable">
                      <div class="day-number">
                        <span>{{day.number}}</span>

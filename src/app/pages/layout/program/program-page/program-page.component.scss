@@ -26,6 +26,7 @@
         }
         .carousel-custom {
           width: 100%;
+          min-width: 290px;
           height: 60%;
           button {
             display: inline-block;
@@ -44,6 +45,7 @@
             .inner-carousel-content {
               display: flex;
               width: 500px;
+              position:relative;
             }
             .carousel-content-item {
               display: inline-block;

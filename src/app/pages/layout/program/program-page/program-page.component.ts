@@ -1,12 +1,35 @@
 import { Component, OnInit } from '@angular/core';
 
+import {
+  trigger,
+  state,
+  style,
+  animate,
+  transition
+} from '@angular/animations';
+
 @Component({
   selector: 'app-program-page',
   templateUrl: './program-page.component.html',
-  styleUrls: ['./program-page.component.scss']
+  styleUrls: ['./program-page.component.scss'],
+  animations: [
+    trigger('carouselsMoves', [
+      state('toTheLeft', style({
+        right: ProgramPageComponent.right + 'px'
+      })),
+      state('toTheRight',   style({
+        left: ProgramPageComponent.left + 'px'
+      })),
+      transition('toTheLeft => toTheRight', animate('100ms ease-in')),
+      transition('toTheRight => toTheLeft', animate('100ms ease-out'))
+    ])
+  ]
 })
 export class ProgramPageComponent implements OnInit {
-
+  static left = 0;
+  static right = 0;
+  widthOneItem = 26;
+  countOfItems = 7;
   timetable = [
     {
       number: 13,
@@ -76,20 +99,19 @@ export class ProgramPageComponent implements OnInit {
     },
   ];
 
+  timetableCarouselPosition = 'disable';
 
   constructor() { }
 
   ngOnInit() {
   }
 
-  carouselToRight()
-  {
-    console.log('to right');
+  carouselToRight() {
+    this.timetableCarouselPosition = 'toTheRight';
   }
 
-  carouselToLeft()
-  {
-    console.log('to Left');
+  carouselToLeft() {
+    this.timetableCarouselPosition = 'toTheLeft';
   }
 
 }
