@@ -15,6 +15,7 @@ import {FormControl, FormGroup} from '@angular/forms';
 import {isNumber} from 'util';
 import * as SpinnerReducer from '@store/spinner/reducers';
 import {StartSpinner, StopSpinner} from '@store/spinner/actions';
+import {ToastrService} from 'ngx-toastr';
 
 @Component({
   selector: 'app-permission-page',
@@ -22,8 +23,6 @@ import {StartSpinner, StopSpinner} from '@store/spinner/actions';
   styleUrls: ['./permission-page.component.scss']
 })
 export class PermissionPageComponent implements OnInit {
-  currentNavItem = 'page1';
-  status = 'status';
   permissions: { key: [Permission]};
   rolesPermissions = [];
   roles: [RoleInterface];
@@ -33,8 +32,9 @@ export class PermissionPageComponent implements OnInit {
   constructor(
     private authStore: Store<AuthenticateReducer.AuthState>,
     private spinnerStore: Store<SpinnerReducer.SpinnerState>,
-  private roleService: RoleService,
-    private permissionService: PermissionService
+    private roleService: RoleService,
+    private permissionService: PermissionService,
+    private notificationManager: ToastrService,
   ) {
   }
 
@@ -43,39 +43,10 @@ export class PermissionPageComponent implements OnInit {
     this.permissionService.getAll().subscribe(
       (resp: { data: {key: [Permission]}}) => {
         this.permissions = PermissionFacade.groupByModelName(resp.data);
-        this.roleService.getAll().subscribe(
-          (resp: {data: [RoleInterface]}) => {
-            this.roles = resp.data;
-            this.permissionService.getRolesPermissions().subscribe(
-              (resp: {data: [RolePermissionInterface]}) => {
-                resp.data.map((item) => {
-                  if (!this.rolesPermissions[item.role]) {
-                    this.rolesPermissions[item.role] = [];
-                  }
-                  if (!this.rolesPermissions[item.role][item.model_name]) {
-                    this.rolesPermissions[item.role][item.model_name] = [];
-                  }
-                  this.rolesPermissions[item.role][item.model_name].push(item.permission_id);
-                });
-                for (let roleKey of this.roles) {
-                  let tmpControll = {};
-                  for(let modelName of this.getKeys()) {
-                    let initialState = [];
-                    if(this.rolesPermissions[roleKey.name] && this.rolesPermissions[roleKey.name][modelName]) {
-                      initialState = this.rolesPermissions[roleKey.name][modelName];
-                    }
-                    tmpControll[modelName] = new FormControl(initialState);
-                  }
-                  formGroups[roleKey.name] = new FormGroup(tmpControll);
-                }
-                this.permissionForm = new FormGroup(formGroups);
-                this.spinnerStore.dispatch(new StopSpinner());
-              });
-            let formGroups = {};
-          }
-        );
-      }
-    );
+        this.assignData();
+      });
+    this.getRolesPermission();
+    this.getAllRoles();
   }
 
   getKeys() {
@@ -83,6 +54,7 @@ export class PermissionPageComponent implements OnInit {
   }
 
   savePermissions() {
+    this.spinnerStore.dispatch(new StartSpinner());
     for (let roleKey of this.roles) {
       if (!this.resultRolesPermissions[roleKey.name]) {
         this.resultRolesPermissions[roleKey.name] = [];
@@ -90,7 +62,8 @@ export class PermissionPageComponent implements OnInit {
       const permissionsOfRole = this.permissionForm.get(roleKey.name).value;
       for( let key of Object.keys(permissionsOfRole)) {
         if (permissionsOfRole[key]) {
-          this.resultRolesPermissions[roleKey.name] = this.resultRolesPermissions[roleKey.name].concat(permissionsOfRole[key].filter(item => {
+          this.resultRolesPermissions[roleKey.name] = this.resultRolesPermissions[roleKey.name]
+            .concat(permissionsOfRole[key].filter(item => {
             return isNumber(item);
           }));
         }
@@ -98,11 +71,50 @@ export class PermissionPageComponent implements OnInit {
     }
     this.permissionService.update(this.resultRolesPermissions).subscribe(
       resp => {
-        console.log(resp);
+        this.spinnerStore.dispatch(new StopSpinner());
+        this.notificationManager.success('Roles permissions updated successfully', 'Success');
       }
     );
-    console.log(this.resultRolesPermissions);
     this.resultRolesPermissions = [];
-    console.log(this.resultRolesPermissions);
+  }
+
+  getRolesPermission() {
+    this.permissionService.getRolesPermissions().subscribe(
+      (resp: {data: [RolePermissionInterface]}) => {
+        resp.data.map((item) => {
+          if (!this.rolesPermissions[item.role]) {
+            this.rolesPermissions[item.role] = [];
+          }
+          if (!this.rolesPermissions[item.role][item.model_name]) {
+            this.rolesPermissions[item.role][item.model_name] = [];
+          }
+          this.rolesPermissions[item.role][item.model_name].push(item.permission_id);
+        });
+      });
+  }
+
+  async getAllRoles() {
+   await this.roleService.getAll().subscribe(
+      (resp: {data: [RoleInterface]}) => {
+        this.roles = resp.data;
+      }
+    );
+  }
+
+  assignData() {
+    let formGroups = {};
+    for (let roleKey of this.roles) {
+      let tmpControll = {};
+      for (let modelName of this.getKeys()) {
+        let initialState = [];
+        if (this.rolesPermissions[roleKey.name] && this.rolesPermissions[roleKey.name][modelName]) {
+          initialState = this.rolesPermissions[roleKey.name][modelName];
+        }
+        tmpControll[modelName] = new FormControl(initialState);
+      }
+      formGroups[roleKey.name] = new FormGroup(tmpControll);
+    }
+    this.permissionForm = new FormGroup(formGroups);
+    this.spinnerStore.dispatch(new StopSpinner());
   }
 }

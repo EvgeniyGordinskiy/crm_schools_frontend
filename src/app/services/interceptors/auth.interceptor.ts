@@ -10,10 +10,12 @@ import { Store } from '@ngrx/store';
 // rxjs
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/takeWhile';
+import 'rxjs/add/operator/do';
 import * as SpinnerReducer from '@store/spinner/reducers';
 import * as AuthReducer from '@store/auth/reducers';
 import {StopSpinner} from '@store/spinner/actions';
 import {SignOut} from '@store/auth/actions';
+import {Router} from '@angular/router';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -22,6 +24,7 @@ export class AuthInterceptor implements HttpInterceptor {
     private store: Store<SpinnerReducer.SpinnerState>,
     private authStore: Store<AuthReducer.AuthState>,
     private authFacade: AuthFacade,
+    private router: Router
   ) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -34,12 +37,10 @@ export class AuthInterceptor implements HttpInterceptor {
         })
       });
     }
-    next.handle(req).subscribe(
-      () => {},
-      (err: any) => {
+    return next.handle(req).do((event: HttpEvent<any>) => {}, (err: any) => {
+      if (err instanceof HttpErrorResponse) {
         this.store.dispatch(new StopSpinner());
-        console.log(err.status);
-        if (err.status && err.status === 401) {
+        if (err.status && err.status === 401 && this.router.url !== '/auth/login') {
           this.authStore.dispatch(new SignOut(this.authFacade));
         } else if (err.error.error) {
           this.notificationManager.error(err.error.error.message, 'Error' );
@@ -47,7 +48,6 @@ export class AuthInterceptor implements HttpInterceptor {
           this.notificationManager.error('An error has occurred', 'Error');
         }
       }
-    );
-    return next.handle(req);
+    });
   }
 }
