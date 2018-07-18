@@ -1,16 +1,9 @@
 :host{
-  .permission-page-wrapper{
-    .tabs{
-      ul{
-        display: table;
-        width: 100%;
-        padding-left: 0;
-        table-layout: fixed;
-        li{
-          display: table-cell;
-          text-align: center;
-        }
+  mat-tab-group, mat-tab-body{
+      margin-top: 30px;
+      .select_permission{
+        text-align: center;
+        margin: 17px;
       }
-    }
   }
 }

@@ -11,6 +11,8 @@ import {PermissionFacade} from '@facadespermission/permissionFacade';
 import {RolePermissionInterface} from '@interfacesrolePermission.interface';
 import {RoleService} from '@services/role/role.service';
 import {RoleInterface} from '@interfacesrole.interface';
+import {FormControl, FormGroup} from '@angular/forms';
+import {isNumber} from 'util';
 
 @Component({
   selector: 'app-permission-page',
@@ -23,6 +25,8 @@ export class PermissionPageComponent implements OnInit {
   permissions: { key: [Permission]};
   rolesPermissions = [];
   roles: [RoleInterface];
+  permissionForm: FormGroup;
+  resultRolesPermissions = [];
 
   constructor(
     private authStore: Store<AuthenticateReducer.AuthState>,
@@ -33,22 +37,63 @@ export class PermissionPageComponent implements OnInit {
 
   ngOnInit() {
     this.permissionService.getAll().subscribe(
-      (resp: { data: {key: [Permission]}}) => {this.permissions = PermissionFacade.groupByModelName(resp.data);
-        console.log(this.permissions);
-        },
-    );
-    this.permissionService.getRolesPermissions().subscribe(
-      (resp: {data: [RolePermissionInterface]}) => {this.rolesPermissions = resp.data;
-        console.log(this.rolesPermissions);
-      });
-    this.roleService.getAll().subscribe(
-      (resp: {data: [RoleInterface]}) => {this.roles = resp.data;
-        console.log(this.roles)}
+      (resp: { data: {key: [Permission]}}) => {
+        this.permissions = PermissionFacade.groupByModelName(resp.data);
+        this.roleService.getAll().subscribe(
+          (resp: {data: [RoleInterface]}) => {
+            this.roles = resp.data;
+            this.permissionService.getRolesPermissions().subscribe(
+              (resp: {data: [RolePermissionInterface]}) => {
+                resp.data.map((item) => {
+                  if (!this.rolesPermissions[item.role]) {
+                    this.rolesPermissions[item.role] = [];
+                  }
+                  this.rolesPermissions[item.role].push(item.permission_id);
+                });
+                for (let roleKey of this.roles) {
+                  let tmpControll = {};
+                  for(let modelName of this.getKeys()) {
+                    let initialState = [];
+                    if(this.rolesPermissions[roleKey.name]) {
+                      initialState = this.rolesPermissions[roleKey.name];
+                    }
+                    tmpControll[modelName] = new FormControl(initialState);
+                  }
+                  formGroups[roleKey.name] = new FormGroup(tmpControll);
+                }
+                this.permissionForm = new FormGroup(formGroups);
+              });
+            let formGroups = {};
+          }
+        );
+      }
     );
   }
 
   getKeys() {
-    console.log(this.permissions, '*********');
     return Object.keys(this.permissions);
+  }
+
+  savePermissions() {
+    for (let roleKey of this.roles) {
+      if (!this.resultRolesPermissions[roleKey.name]) {
+        this.resultRolesPermissions[roleKey.name] = [];
+      }
+      const permissionsOfRole = this.permissionForm.get(roleKey.name).value;
+      for( let key of Object.keys(permissionsOfRole)) {
+        if (permissionsOfRole[key]) {
+          this.resultRolesPermissions[roleKey.name] = this.resultRolesPermissions[roleKey.name].concat(permissionsOfRole[key].filter(item => {
+            return isNumber(item);
+          }));
+        }
+      }
+    }
+    this.permissionService.update(this.resultRolesPermissions).subscribe(
+      resp => {
+        console.log(resp);
+      }
+    );
+    this.resultRolesPermissions = [];
+    console.log(this.resultRolesPermissions);
   }
 }

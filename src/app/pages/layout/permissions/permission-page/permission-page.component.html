@@ -1,17 +1,12 @@
 <mat-tab-group>
   <mat-tab  *ngFor="let role of roles" label="{{role.name}}">
-    <div>
-      <mat-form-field *ngIf="permissions">
-        <mat-select placeholder="Toppings" multiple *ngFor="let key of getKeys(permissions)">
-          <!--<mat-select-trigger>-->
-            <!--{{toppings.value ? toppings.value[0] : ''}}-->
-            <!--<span *ngIf="toppings.value?.length > 1" class="example-additional-selection">-->
-        <!--(+{{toppings.value.length - 1}} {{toppings.value?.length === 2 ? 'other' : 'others'}})-->
-      <!--</span>-->
-          <!--</mat-select-trigger>-->
-          <mat-option *ngFor="let permission of permissions[key]" [value]="permission.name">{{permission.name}}: {{permission.event}}</mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
+        <form [formGroup]="permissionForm" *ngIf="permissionForm">
+          <mat-form-field class="select_permission" *ngFor="let key of getKeys(permissions)" [formGroupName]="role.name" >
+            <mat-select placeholder="{{key}}" multiple formControlName="{{key}}">
+              <mat-option *ngFor="let permission of permissions[key]" [value]="permission.id" aria-checked="true">{{permission.event}}: {{permission.permission_type}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </form>
   </mat-tab>
 </mat-tab-group>
+<button mat-raised-button  (click)="savePermissions()"> Save permissions </button>

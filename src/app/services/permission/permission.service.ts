@@ -15,4 +15,8 @@ export class PermissionService {
   getRolesPermissions() {
     return  this.httpClient.get('permissions/roles');
   }
+
+  update(body: object) {
+     return this.httpClient.post('permissions', {prolesPermissions: {...body}});
+  }
 }

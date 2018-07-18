@@ -5,13 +5,15 @@ import {PermissionsRoutingModule} from '@pages/layout/permissions/permissions-ro
 import {PermissionService} from '@services/permission/permission.service';
 import {RoleService} from '@services/role/role.service';
 import {MatSelectModule, MatTabsModule} from '@angular/material';
+import {SharedModule} from '@sharedModules/shared-module/shared-module.module';
 
 @NgModule({
   imports: [
     CommonModule,
     PermissionsRoutingModule,
     MatTabsModule,
-    MatSelectModule
+    MatSelectModule,
+    SharedModule,
   ],
   declarations: [PermissionPageComponent],
   providers: [PermissionService, RoleService]
