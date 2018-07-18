@@ -48,14 +48,17 @@ export class PermissionPageComponent implements OnInit {
                   if (!this.rolesPermissions[item.role]) {
                     this.rolesPermissions[item.role] = [];
                   }
-                  this.rolesPermissions[item.role].push(item.permission_id);
+                  if (!this.rolesPermissions[item.role][item.model_name]) {
+                    this.rolesPermissions[item.role][item.model_name] = [];
+                  }
+                  this.rolesPermissions[item.role][item.model_name].push(item.permission_id);
                 });
                 for (let roleKey of this.roles) {
                   let tmpControll = {};
                   for(let modelName of this.getKeys()) {
                     let initialState = [];
-                    if(this.rolesPermissions[roleKey.name]) {
-                      initialState = this.rolesPermissions[roleKey.name];
+                    if(this.rolesPermissions[roleKey.name] && this.rolesPermissions[roleKey.name][modelName]) {
+                      initialState = this.rolesPermissions[roleKey.name][modelName];
                     }
                     tmpControll[modelName] = new FormControl(initialState);
                   }
@@ -93,6 +96,7 @@ export class PermissionPageComponent implements OnInit {
         console.log(resp);
       }
     );
+    console.log(this.resultRolesPermissions);
     this.resultRolesPermissions = [];
     console.log(this.resultRolesPermissions);
   }
