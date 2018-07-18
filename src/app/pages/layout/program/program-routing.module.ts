@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import {PermissionPageComponent} from '@pages/layout/permissions/permission-page/permission-page.component';
+import {ProgramPageComponent} from '@pages/layout/program/program-page/program-page.component';
 
 const routes: Routes = [
   {
-    path: '', component: PermissionPageComponent
+    path: '', component: ProgramPageComponent
   },
 ];
 
@@ -17,4 +17,4 @@ const routes: Routes = [
   ],
   declarations: []
 })
-export class PermissionsRoutingModule { }
+export class ProgramRoutingModule { }

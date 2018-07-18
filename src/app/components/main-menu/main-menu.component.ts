@@ -5,6 +5,7 @@ import {Store} from '@ngrx/store';
 import {Permission} from '@models/permission';
 import {UserInterface} from '@interfacesuser.interface';
 import {AuthState} from '@store/auth/reducers';
+import {PermissionFacade} from '@facadespermission/permissionFacade';
 @Component({
   selector: 'app-main-menu',
   templateUrl: './main-menu.component.html',
@@ -27,6 +28,10 @@ export class MainMenuComponent implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  checkPermission( modelName, event = '', type = '') {
+    return PermissionFacade.checkPermission(this.permissions, modelName, event, type)
   }
 
 }

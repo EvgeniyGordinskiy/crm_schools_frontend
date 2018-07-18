@@ -13,6 +13,8 @@ import {RoleService} from '@services/role/role.service';
 import {RoleInterface} from '@interfacesrole.interface';
 import {FormControl, FormGroup} from '@angular/forms';
 import {isNumber} from 'util';
+import * as SpinnerReducer from '@store/spinner/reducers';
+import {StartSpinner, StopSpinner} from '@store/spinner/actions';
 
 @Component({
   selector: 'app-permission-page',
@@ -30,12 +32,14 @@ export class PermissionPageComponent implements OnInit {
 
   constructor(
     private authStore: Store<AuthenticateReducer.AuthState>,
-    private roleService: RoleService,
+    private spinnerStore: Store<SpinnerReducer.SpinnerState>,
+  private roleService: RoleService,
     private permissionService: PermissionService
   ) {
   }
 
   ngOnInit() {
+    this.spinnerStore.dispatch(new StartSpinner());
     this.permissionService.getAll().subscribe(
       (resp: { data: {key: [Permission]}}) => {
         this.permissions = PermissionFacade.groupByModelName(resp.data);
@@ -65,6 +69,7 @@ export class PermissionPageComponent implements OnInit {
                   formGroups[roleKey.name] = new FormGroup(tmpControll);
                 }
                 this.permissionForm = new FormGroup(formGroups);
+                this.spinnerStore.dispatch(new StopSpinner());
               });
             let formGroups = {};
           }

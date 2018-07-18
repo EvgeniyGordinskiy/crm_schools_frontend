@@ -1,12 +1,12 @@
 <ul class="main-menu">
   <a [routerLink]="['/dashboard']"><li class="inline_block"><span>Dashboard</span></li></a>
-  <li class="inline_block"><span>Messages</span></li>
-  <li class="inline_block"><span>Customers</span></li>
-  <a [routerLink]="['/permissions']"><li class="inline_block"><span>Permissions</span></li></a>
-  <li class="inline_block"><span>Schools</span></li>
-  <li class="inline_block"><span>Programs</span></li>
-  <li class="inline_block"><span>Memberships</span></li>
-  <li class="inline_block"><span>Payments</span></li>
-  <li class="inline_block"><span>Attendances</span></li>
+  <li class="inline_block" *ngIf="checkPermission('Message')"><span>Messages</span></li>
+  <li class="inline_block" *ngIf="checkPermission('User')"><span>Customers</span></li>
+  <a [routerLink]="['/permissions']" *ngIf="checkPermission('Permission')"><li class="inline_block"><span>Permissions</span></li></a>
+  <li class="inline_block" *ngIf="checkPermission('School')"><span>Schools</span></li>
+  <a [routerLink]="['/program']" *ngIf="checkPermission('Program')"><li class="inline_block"><span>Programs</span></li></a>
+  <li class="inline_block" *ngIf="checkPermission('Membership')"><span>Memberships</span></li>
+  <li class="inline_block" *ngIf="checkPermission('Payment')"><span>Payments</span></li>
+  <li class="inline_block" *ngIf="checkPermission('Attendances')"><span>Attendances</span></li>
   <li class="inline_block"><span>Curriculums</span></li>
 </ul>

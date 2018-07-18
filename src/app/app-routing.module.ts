@@ -1,8 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import {UserComponent} from '@layouts/user/user.component';
-import {PermissionsModule} from '@pages/layout/permissions/permissions.module';
-import {DashboardModule} from '@pages/layout/dashboard/dashboard.module';
 
 const routes: Routes = [
   {
@@ -20,6 +18,10 @@ const routes: Routes = [
       {
         path: 'dashboard',
         loadChildren: './pages/layout/dashboard/dashboard.module#DashboardModule'
+      },
+      {
+        path: 'program',
+        loadChildren: './pages/layout/program/program.module#ProgramModule'
       },
       {
         path: 'permissions',
