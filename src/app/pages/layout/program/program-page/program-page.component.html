@@ -1,6 +1,6 @@
 <div class="program-wrapper">
   <div class="add-new-program">
-    <button mat-stroked-button class="mat-primary">
+    <button mat-stroked-button class="mat-primary" (click)="openCreateModal()">
       <mat-icon>add</mat-icon>
       Add New Program
     </button>
@@ -145,7 +145,7 @@
                     </div>
                   </div>
                 </div>
-                <button mat-button class="mat-primary" (click)="carouselToLeft('inner-carousel-content-students', displayItemsStudents, students, 'leftStudents', 22)"><mat-icon>keyboard_arrow_right</mat-icon></button>
+                <button mat-button class="mat-primary" (click)="carouselToLeft('inner-carousel-content-students', displayItemsStudents, students, 'leftStudents', 12)"><mat-icon>keyboard_arrow_right</mat-icon></button>
               </div>
             </div>
           </mat-grid-tile>
@@ -154,3 +154,4 @@
     </mat-card>
   </div>
 </div>
+<app-program-create [opening]="openingModal"></app-program-create>

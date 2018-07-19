@@ -1,4 +1,6 @@
 import {Component, ElementRef, OnInit, Renderer2} from '@angular/core';
+// import {MatDialog} from '@angular/material';
+import {Subject} from 'rxjs';
 
 @Component({
   selector: 'app-program-page',
@@ -6,6 +8,8 @@ import {Component, ElementRef, OnInit, Renderer2} from '@angular/core';
   styleUrls: ['./program-page.component.scss'],
 })
 export class ProgramPageComponent implements OnInit {
+  openingModal: Subject<boolean> = new Subject();
+
   leftDay = 0;
   leftMonth = 0;
   leftIncome = 0;
@@ -218,7 +222,8 @@ export class ProgramPageComponent implements OnInit {
 
   constructor(
     private renderer: Renderer2,
-    private elRef: ElementRef
+    private elRef: ElementRef,
+    // public dialog: MatDialog
   ) { }
 
   ngOnInit() {
@@ -260,6 +265,10 @@ export class ProgramPageComponent implements OnInit {
     if (currentElement) {
       currentElement.classList.add('selectedCarouselItem');
     }
+  }
+
+  openCreateModal() {
+    this.openingModal.next(true);
   }
 
 }
