@@ -1,3 +1,5 @@
+@import "variables";
+
 .inline_block{
   display: inline-block;
 }
@@ -7,15 +9,47 @@
 }
 
 .grey-border-left{
-  border-left: #cccccc4f solid 1.5px;
+  border-left: $grey solid 1.5px;
 }
 .grey-border-right{
-  border-right: #cccccc4f solid 1.5px;
+  border-right: $grey solid 1.5px;
 }
 .grey-border-top{
-  border-top: #cccccc4f solid 1.5px;
+  border-top: $grey solid 1.5px;
 }
 .grey-border-bottom{
-  border-bottom: #cccccc4f solid 1.5px;
+  border-bottom: $grey solid 1.5px;
+}
+
+.active-border{
+  border-color: #cc3387 !important;
+}
+
+.buttons-are-small{
+  .mat-button{
+    width: 34px;
+    height: 34px;
+    min-width: 34px;
+    position: relative;
+    top: 50%;
+    &:first-child{
+      right: 12px;
+    }
+    &:last-child{
+      left: 4px;
+    }
+    mat-icon{
+      position: relative;
+      top: 2px;
+      font-size: 13px;
+    }
+  }
+}
+
+.buttons-are-with-border{
+  .mat-button {
+    border: $grey solid 1.5px;
+    border-radius: 5px;
+  }
 }
 

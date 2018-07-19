@@ -9,9 +9,11 @@ export class ProgramPageComponent implements OnInit {
   leftDay = 0;
   leftMonth = 0;
   leftIncome = 0;
+  leftStudents = 0;
   displayItemsDays = 7;
   displayItemsMonths = 1;
   displayItemsIncome = 7;
+  displayItemsStudents = 7;
   currentYear: number;
   incomes =[
     {
@@ -63,6 +65,73 @@ export class ProgramPageComponent implements OnInit {
       amount: 1000
     },
   ];
+  students = [
+    {
+      first_name: 'first_name',
+      last_name: 'last_name',
+    },
+    {
+      first_name: 'first_name',
+      last_name: 'last_name',
+    },
+    {
+      first_name: 'first_name',
+      last_name: 'last_name',
+    },
+    {
+      first_name: 'first_name',
+      last_name: 'last_name',
+    },
+    {
+      first_name: 'first_name',
+      last_name: 'last_name',
+    },
+    {
+      first_name: 'first_name',
+      last_name: 'last_name',
+    },
+    {
+      first_name: 'first_name',
+      last_name: 'last_name',
+    },
+    {
+      first_name: 'first_name',
+      last_name: 'last_name',
+    },
+    {
+      first_name: 'first_name',
+      last_name: 'last_name',
+    },
+    {
+      first_name: 'first_name',
+      last_name: 'last_name',
+    },
+    {
+      first_name: 'first_name',
+      last_name: 'last_name',
+    },
+    {
+      first_name: 'first_name',
+      last_name: 'last_name',
+    },
+    {
+      first_name: 'first_name',
+      last_name: 'last_name',
+    },
+    {
+      first_name: 'first_name',
+      last_name: 'last_name',
+    },
+    {
+      first_name: 'first_name',
+      last_name: 'last_name',
+    },
+    {
+      first_name: 'first_name',
+      last_name: 'last_name',
+    }
+  ];
+
   months = [
     'January',
     'February',
@@ -157,18 +226,39 @@ export class ProgramPageComponent implements OnInit {
   }
 
   carouselToRight(innerDivClass: string, displayItems: number, left: string, margin = 5) {
-    if (this[left] !== 0) {
+    console.log(this[left], 'before left');
+    if (!this[left] <= 0) {
       let width = this.elRef.nativeElement.querySelector(`.${innerDivClass}`).querySelector('.carousel-content-item').clientWidth + margin;
+      console.log(width);
       this[left] += width * displayItems;
       this.renderer.setStyle(this.elRef.nativeElement.querySelector(`.${innerDivClass}`), 'left', this[left] + "px");
     }
   }
 
   carouselToLeft(innerDivClass: string, displayItems: number, arrayItems, left: string, margin = 5) {
+    console.log(this[left], 'before right');
     let width = this.elRef.nativeElement.querySelector(`.${innerDivClass}`).querySelector('.carousel-content-item').clientWidth + margin;
+    console.log(width);
     if (Math.abs(this[left]) < arrayItems.length * width - width * displayItems) {
       this[left] -= width * displayItems;
       this.renderer.setStyle(this.elRef.nativeElement.querySelector(`.${innerDivClass}`), 'left', this[left] + "px");
+    }
+  }
+
+  getHeightForAmountGraph(amount: number) {
+    const height = amount * 0.075;
+    return height > 140 ? 140 : height;
+  }
+
+  onSelectCarouselContentItem(event) {
+    for (let carouselItem of document.getElementsByClassName('carousel-content-item')) {
+      if (carouselItem) {
+        carouselItem.classList.remove("selectedCarouselItem");
+      }
+    }
+    let currentElement = event.target.closest(".carousel-content-item");
+    if (currentElement) {
+      currentElement.classList.add('selectedCarouselItem');
     }
   }
 
