@@ -11,6 +11,7 @@ import { ProgramCreateComponent } from './program-create/program-create.componen
     SharedModule,
     ProgramRoutingModule,
   ],
-  declarations: [ProgramPageComponent, ProgramCreateComponent]
+  declarations: [ProgramPageComponent, ProgramCreateComponent],
+  entryComponents: [ProgramCreateComponent]
 })
 export class ProgramModule { }

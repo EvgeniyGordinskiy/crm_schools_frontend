@@ -42,6 +42,7 @@
                 color="primary"
                 [disabled]="!signinForm.valid && signinForm.touched || !signinForm.touched
     ">Login</button>
+        <a mat-button [routerLink]="['/auth/register']">Register</a>
       </mat-card-actions>
     </form>
   </mat-card-content>

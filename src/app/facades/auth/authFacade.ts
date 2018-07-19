@@ -38,10 +38,10 @@ export class AuthFacade {
     setTimeout(() => {
       if (AuthFacade.getAuthStatus() && this.router.url === '/auth/login') {
         this.router.navigate(['/home']);
-      } else if (!AuthFacade.getAuthStatus()) {
+      } else if (!AuthFacade.getAuthStatus() && this.router.url !== '/auth/login' && this.router.url !== '/auth/register') {
         this.router.navigate(['/auth/login']);
       }
-    }, 50);
+    }, 75);
   }
 
   endSession() {

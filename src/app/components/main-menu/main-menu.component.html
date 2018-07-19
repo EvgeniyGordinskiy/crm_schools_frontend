@@ -1,5 +1,5 @@
 <ul class="main-menu">
-  <a [routerLink]="['/dashboard']"><li class="inline_block"><span>Dashboard</span></li></a>
+    <a [routerLink]="['/dashboard']"><li class="inline_block"><span>Dashboard</span></li></a>
   <li class="inline_block" *ngIf="checkPermission('Message')"><span>Messages</span></li>
   <li class="inline_block" *ngIf="checkPermission('User')"><span>Customers</span></li>
   <a [routerLink]="['/permissions']" *ngIf="checkPermission('Permission')"><li class="inline_block"><span>Permissions</span></li></a>

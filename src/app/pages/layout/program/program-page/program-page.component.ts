@@ -1,6 +1,6 @@
-import {Component, ElementRef, OnInit, Renderer2} from '@angular/core';
-// import {MatDialog} from '@angular/material';
-import {Subject} from 'rxjs';
+import {Component, ElementRef, HostListener, OnInit, Renderer2} from '@angular/core';
+import {MatDialog} from '@angular/material';
+import {ProgramCreateComponent} from '../program-create/program-create.component';
 
 @Component({
   selector: 'app-program-page',
@@ -8,8 +8,6 @@ import {Subject} from 'rxjs';
   styleUrls: ['./program-page.component.scss'],
 })
 export class ProgramPageComponent implements OnInit {
-  openingModal: Subject<boolean> = new Subject();
-
   leftDay = 0;
   leftMonth = 0;
   leftIncome = 0;
@@ -19,7 +17,7 @@ export class ProgramPageComponent implements OnInit {
   displayItemsIncome = 7;
   displayItemsStudents = 7;
   currentYear: number;
-  incomes =[
+  incomes = [
     {
       month: 'Jan',
       amount: 970
@@ -182,13 +180,16 @@ export class ProgramPageComponent implements OnInit {
     {
       number: 21,
       name: 'M'
-    },{
+    },
+    {
       number: 22,
       name: 'T'
-    },{
+    },
+    {
       number: 23,
       name: 'W'
-    },{
+    },
+    {
       number: 24,
       name: 'T'
     },
@@ -207,13 +208,16 @@ export class ProgramPageComponent implements OnInit {
     {
       number: 28,
       name: 'M'
-    },{
+    },
+    {
       number: 29,
       name: 'T'
-    },{
+    },
+    {
       number: 31,
       name: 'W'
-    },{
+    },
+    {
       number: 32,
       name: 'T'
     },
@@ -223,7 +227,7 @@ export class ProgramPageComponent implements OnInit {
   constructor(
     private renderer: Renderer2,
     private elRef: ElementRef,
-    // public dialog: MatDialog
+    public dialog: MatDialog,
   ) { }
 
   ngOnInit() {
@@ -268,7 +272,11 @@ export class ProgramPageComponent implements OnInit {
   }
 
   openCreateModal() {
-    this.openingModal.next(true);
-  }
+    const dialogRef = this.dialog.open(ProgramCreateComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      dialogRef.close();
+      console.log('The dialog was closed');
+    });  }
 
 }
