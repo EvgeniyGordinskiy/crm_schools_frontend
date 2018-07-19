@@ -1,35 +1,82 @@
-import { Component, OnInit } from '@angular/core';
-
-import {
-  trigger,
-  state,
-  style,
-  animate,
-  transition
-} from '@angular/animations';
+import {Component, ElementRef, OnInit, Renderer2} from '@angular/core';
 
 @Component({
   selector: 'app-program-page',
   templateUrl: './program-page.component.html',
   styleUrls: ['./program-page.component.scss'],
-  animations: [
-    trigger('carouselsMoves', [
-      state('toTheLeft', style({
-        right: ProgramPageComponent.right + 'px'
-      })),
-      state('toTheRight',   style({
-        left: ProgramPageComponent.left + 'px'
-      })),
-      transition('toTheLeft => toTheRight', animate('100ms ease-in')),
-      transition('toTheRight => toTheLeft', animate('100ms ease-out'))
-    ])
-  ]
 })
 export class ProgramPageComponent implements OnInit {
-  static left = 0;
-  static right = 0;
-  widthOneItem = 26;
-  countOfItems = 7;
+  leftDay = 0;
+  leftMonth = 0;
+  leftIncome = 0;
+  displayItemsDays = 7;
+  displayItemsMonths = 1;
+  displayItemsIncome = 7;
+  currentYear: number;
+  incomes =[
+    {
+      month: 'Jan',
+      amount: 970
+    },
+    {
+      month: 'Feb',
+      amount: 1500
+    },
+    {
+      month: 'Mar',
+      amount: 500
+    },
+    {
+      month: 'Apr',
+      amount: 1000
+    },
+    {
+      month: 'May',
+      amount: 1300
+    },
+    {
+      month: 'June',
+      amount: 1100
+    },
+    {
+      month: 'July',
+      amount: 700
+    },
+    {
+      month: 'Aug',
+      amount: 750
+    },
+    {
+      month: 'Sept',
+      amount: 900
+    },
+    {
+      month: 'Oct',
+      amount: 1500
+    },
+    {
+      month: 'Nov',
+      amount: 1500
+    },
+    {
+      month: 'Dec',
+      amount: 1000
+    },
+  ];
+  months = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
   timetable = [
     {
       number: 13,
@@ -99,19 +146,30 @@ export class ProgramPageComponent implements OnInit {
     },
   ];
 
-  timetableCarouselPosition = 'disable';
 
-  constructor() { }
+  constructor(
+    private renderer: Renderer2,
+    private elRef: ElementRef
+  ) { }
 
   ngOnInit() {
+    this.currentYear = (new Date()).getFullYear();
   }
 
-  carouselToRight() {
-    this.timetableCarouselPosition = 'toTheRight';
+  carouselToRight(innerDivClass: string, displayItems: number, left: string, margin = 5) {
+    if (this[left] !== 0) {
+      let width = this.elRef.nativeElement.querySelector(`.${innerDivClass}`).querySelector('.carousel-content-item').clientWidth + margin;
+      this[left] += width * displayItems;
+      this.renderer.setStyle(this.elRef.nativeElement.querySelector(`.${innerDivClass}`), 'left', this[left] + "px");
+    }
   }
 
-  carouselToLeft() {
-    this.timetableCarouselPosition = 'toTheLeft';
+  carouselToLeft(innerDivClass: string, displayItems: number, arrayItems, left: string, margin = 5) {
+    let width = this.elRef.nativeElement.querySelector(`.${innerDivClass}`).querySelector('.carousel-content-item').clientWidth + margin;
+    if (Math.abs(this[left]) < arrayItems.length * width - width * displayItems) {
+      this[left] -= width * displayItems;
+      this.renderer.setStyle(this.elRef.nativeElement.querySelector(`.${innerDivClass}`), 'left', this[left] + "px");
+    }
   }
 
 }

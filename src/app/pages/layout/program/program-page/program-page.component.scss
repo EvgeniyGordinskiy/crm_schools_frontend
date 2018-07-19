@@ -1,78 +1,143 @@
+@import '../../../../../assets/scss/variables';
 :host{
-  mat-card{
-    padding-left: 0;
-    padding-right: 0;
-    mat-card-header{
-      border-bottom: #cccccc4f solid 1.5px;
-      .card-header-buttons{
-        margin-left: auto;
-      }
-    }
-
-    .mat-grid-tile {
-      height: 100% ;
-      .card-content-title {
-        width: 100%;
-        min-height: 100%;
-        .inner-header{
-          span{
-            font-size: 16px;
-            font-weight: bold;
-            color: #3b3b3b;
-            position: relative;
-            top: 14px;
-            left: 20px;
-          }
+  .program {
+    mat-card {
+      padding-left: 0;
+      padding-right: 0;
+      height: 375px;
+      mat-card-header {
+        border-bottom: #cccccc4f solid 1.5px;
+        height: 51px;
+        .card-header-buttons {
+          margin-left: auto;
         }
-        .carousel-custom {
+      }
+
+      .mat-grid-tile {
+        height: 100%;
+        .card-content-title {
           width: 100%;
-          min-width: 290px;
-          height: 60%;
-          button {
-            display: inline-block;
-            margin: 0;
-            padding: 0;
-            width: 25px;
-            min-width: 26px;
-          }
-          .carousel-content {
-            display: inline-block;
-            overflow: hidden;
-            width: 218px;
-            height: 45px;
-            position: relative;
-            top: 28px;
-            .inner-carousel-content {
-              display: flex;
-              width: 500px;
-              position:relative;
+          min-height: 100%;
+          .inner-header {
+            span {
+              font-size: 16px;
+              font-weight: bold;
+              color: #3b3b3b;
+              position: relative;
+              top: 14px;
+              left: 20px;
             }
-            .carousel-content-item {
+          }
+          .carousel-custom {
+            width: 100%;
+            min-width: 290px;
+            height: 60%;
+            display: flex;
+            justify-content: center;
+            button {
               display: inline-block;
-              width: 32px;
-              text-align: center;
-              margin-left: 2.5px;
-              margin-right: 2.5px;
-              .day-number {
-                width: 24px;
-                height: 24px;
-                border: #ccc solid 1px;
-                border-radius: 5px;
-                span {
-                  position: relative;
-                  top: 4px;
-                  color: #757575;
-                  font-weight: bold;
+              margin: 0;
+              padding: 0;
+              width: 25px;
+              min-width: 26px;
+            }
+            .carousel-content {
+              display: inline-block;
+              overflow: hidden;
+              width: 218px;
+              height: 45px;
+              position: relative;
+              top: 9px;
+              .inner-carousel-content, .inner-carousel-content-months, .inner-carousel-content-income {
+                display: flex;
+                width: 500px;
+                left: 0;
+                position: relative;
+                -webkit-transition: left 0.25s;
+                -moz-transition: left 0.25s;
+                -o-transition: left 0.25s;
+                transition: left 0.25s;
+              }
+              .carousel-content-item {
+                display: inline-block;
+                width: 32px;
+                text-align: center;
+                margin-left: 2.5px;
+                margin-right: 2.5px;
+                .day-number {
+                  width: 24px;
+                  height: 24px;
+                  border: #ccc solid 1px;
+                  border-radius: 5px;
+                  span {
+                    position: relative;
+                    top: 4px;
+                    color: #757575;
+                    font-weight: bold;
+                  }
+                }
+                .day-name {
+                  span {
+                    color: #ccc;
+                    position: relative;
+                    right: 3px;
+                    font-size: 12px;
+                  }
+
                 }
               }
-              .day-name {
-                span {
-                  color: #ccc;
-                  position: relative;
-                  right: 3px;
-                  font-size: 12px;
+            }
+          }
+          .carousel-custom-month {
+            margin-top: 37px;
+            .carousel-content-months {
+              width: 98px;
+              top: 14px;
+              .inner-carousel-content-months {
+                .carousel-content-item {
+                  width: 210px;
+                  .month {
+                    width: 90px;
+                  }
                 }
-
+              }
+            }
+          }
+          .carousel-custom-income {
+            height: 170px;
+            .carousel-content-income {
+              width: 330px;
+              height: 147px;
+              .inner-carousel-content-income {
+                height: 147px;
+                .carousel-content-item {
+                  min-width: 39px;
+                  margin-left: 4px;
+                  margin-right: 4px;
+                  //.month {
+                  //  width: 90px;
+                  //}
+                }
+              }
+            }
+          }
+          .card-content-lessons {
+            max-height: 50px;
+            margin-top: 23px;
+            .lesson{
+              display: flex;
+              justify-content: space-around;
+              height: 43px;
+              .card-content-lesson-time, .card-content-lesson-class-teacher{
+                align-self: center;
+              }
+              .card-content-lesson-class-show-more{
+                color: $base_color;
+                font-weight: bold;
+                .mat-icon{
+                  position: relative;
+                  top: 8px;
+                }
               }
             }
           }
