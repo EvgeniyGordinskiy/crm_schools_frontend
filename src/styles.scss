@@ -9,6 +9,7 @@ html, body
   height: 100%;
   margin: 0;
   padding: 0;
+  font-family: Arial;
 }
 
 app-root {
@@ -18,4 +19,8 @@ app-root {
 
 .mat-primary{
   color: $base_color !important;
+}
+
+.help-block{
+  color: red;
 }

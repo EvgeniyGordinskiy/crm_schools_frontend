@@ -8,7 +8,7 @@
   <div class="program">
     <mat-card>
       <mat-card-header>
-        <mat-card-title>Beginners</mat-card-title>
+        <mat-card-title class="header">Beginners</mat-card-title>
         <mat-card-subtitle>June, 10 - August 21</mat-card-subtitle>
         <div class="card-header-buttons">
           <button mat-stroked-button class="mat-primary">
@@ -27,10 +27,16 @@
              <div class="inner-header">
                <span>Timetable</span>
              </div>
+             <app-custom-carousel
+               [innerDivClass]="'inner-carousel-content-months'"
+               [displayItems]="1"
+               [arrayItems]="months"
+               [move]="moveMonthsCarousel"
+             >
              <div class="carousel-custom carousel-custom-month buttons-are-small">
-               <button mat-button class="mat-primary" (click)="carouselToRight('inner-carousel-content-months', displayItemsMonths, 'leftMonth')"><mat-icon>keyboard_arrow_left</mat-icon></button>
+               <button mat-button class="mat-primary" (click)="this.moveMonthsCarousel.next('right')"><mat-icon>keyboard_arrow_left</mat-icon></button>
                <div class="carousel-content  carousel-content-months">
-                 <div class="inner-carousel-content-months">
+                 <div class="inner-carousel-content inner-carousel-content-months">
                    <div class="carousel-content-item" *ngFor="let month of months">
                      <div class="month">
                        <span>{{month}} {{currentYear}}</span>
@@ -38,12 +44,19 @@
                    </div>
                  </div>
                </div>
-               <button mat-button class="mat-primary" (click)="carouselToLeft('inner-carousel-content-months', displayItemsMonths, months, 'leftMonth')"><mat-icon>keyboard_arrow_right</mat-icon></button>
+               <button mat-button class="mat-primary" (click)="this.moveMonthsCarousel.next('left')"><mat-icon>keyboard_arrow_right</mat-icon></button>
              </div>
-             <div class="carousel-custom buttons-are-small">
-               <button mat-button class="mat-primary" (click)="carouselToRight('inner-carousel-content', displayItemsDays, 'leftDay')"><mat-icon>keyboard_arrow_left</mat-icon></button>
-               <div class="carousel-content">
-                 <div class="inner-carousel-content"  (click)="onSelectCarouselContentItem($event)">
+             </app-custom-carousel>
+             <app-custom-carousel
+               [innerDivClass]="'inner-carousel-content-months'"
+               [displayItems]="7"
+               [arrayItems]="timetable"
+               [move]="moveDaysCarousel"
+             >
+             <div class="carousel-custom carousel-custom-days buttons-are-small">
+               <button mat-button class="mat-primary" (click)="this.moveDaysCarousel.next('right')"><mat-icon>keyboard_arrow_left</mat-icon></button>
+               <div class="carousel-content carousel-content-months">
+                 <div class="inner-carousel-content inner-carousel-content-months"  (click)="onSelectCarouselContentItem($event)">
                    <div class="carousel-content-item" *ngFor="let day of timetable">
                      <div class="day-number active-border">
                        <span>{{day.number}}</span>
@@ -54,8 +67,9 @@
                    </div>
                  </div>
                </div>
-               <button mat-button class="mat-primary" (click)="carouselToLeft('inner-carousel-content', displayItemsDays, timetable, 'leftDay')"><mat-icon>keyboard_arrow_right</mat-icon></button>
+               <button mat-button class="mat-primary" (click)="this.moveDaysCarousel.next('left')"><mat-icon>keyboard_arrow_right</mat-icon></button>
              </div>
+             </app-custom-carousel>
              <div class="card-content-lessons  grey-border-top">
                <div class="lesson grey-border-bottom">
                  <div class="card-content-lesson-time ">
@@ -109,24 +123,32 @@
               <div class="inner-header">
                 <span>Income</span>
               </div>
-              <div class="carousel-custom carousel-custom-income buttons-are-small buttons-are-with-border">
-                <button mat-button class="mat-primary" (click)="carouselToRight('inner-carousel-content-income', displayItemsIncome, 'leftIncome', 22)"><mat-icon>keyboard_arrow_left</mat-icon></button>
-                <div class="carousel-content  carousel-content-income">
-                  <div class="inner-carousel-content-income">
-                    <div class="carousel-content-item" *ngFor="let income of incomes">
-                      <div class="month">
-                        <span>{{income.month}}</span>
-                      </div>
-                      <div class="graph" [ngStyle] = "{'height': getHeightForAmountGraph(income.amount) + 'px'}">
-                      </div>
-                      <div class="amount">
-                        <span>${{income.amount}}</span>
+              <app-custom-carousel
+              [innerDivClass]="'inner-carousel-content-income'"
+              [displayItems]="7"
+              [margin]="22"
+              [arrayItems]="incomes"
+              [move]="moveIncomesCarousel"
+              >
+                <div class="carousel-custom carousel-custom-income buttons-are-small buttons-are-with-border">
+                  <button mat-button class="mat-primary" (click)="this.moveIncomesCarousel.next('right')"><mat-icon>keyboard_arrow_left</mat-icon></button>
+                  <div class="carousel-content  carousel-content-income">
+                    <div class="inner-carousel-content inner-carousel-content-income">
+                      <div class="carousel-content-item" *ngFor="let income of incomes">
+                        <div class="month">
+                          <span>{{income.month}}</span>
+                        </div>
+                        <div class="graph" [ngStyle] = "{'height': getHeightForAmountGraph(income.amount) + 'px'}">
+                        </div>
+                        <div class="amount">
+                          <span>${{income.amount}}</span>
+                        </div>
                       </div>
                     </div>
                   </div>
+                  <button mat-button class="mat-primary" (click)="this.moveIncomesCarousel.next('left')"><mat-icon>keyboard_arrow_right</mat-icon></button>
                 </div>
-                <button mat-button class="mat-primary" (click)="carouselToLeft('inner-carousel-content-income', displayItemsIncome, incomes, 'leftIncome', 22)"><mat-icon>keyboard_arrow_right</mat-icon></button>
-              </div>
+              </app-custom-carousel>
             </div>
           </mat-grid-tile>
           <mat-grid-tile [colspan] = "3" [rowspan] = "1.5">
@@ -134,10 +156,17 @@
               <div class="inner-header">
                 <span>Students</span>
               </div>
+              <app-custom-carousel
+                [innerDivClass]="'inner-carousel-content-students'"
+                [displayItems]="7"
+                [margin]="12"
+                [arrayItems]="students"
+                [move]="moveStudentsCarousel"
+              >
               <div class="carousel-custom carousel-custom-students buttons-are-small buttons-are-with-border">
-                <button mat-button class="mat-primary" (click)="carouselToRight('inner-carousel-content-students', displayItemsStudents, 'leftStudents', 12)"><mat-icon>keyboard_arrow_left</mat-icon></button>
+                <button mat-button class="mat-primary" (click)="this.moveStudentsCarousel.next('right')"><mat-icon>keyboard_arrow_left</mat-icon></button>
                 <div class="carousel-content  carousel-content-students">
-                  <div class="inner-carousel-content-students">
+                  <div class="inner-carousel-content inner-carousel-content-students">
                     <div class="carousel-content-item" *ngFor="let student of students">
                       <img src="https://picsum.photos/50/40">
                       <span>{{student.first_name}}</span>
@@ -145,8 +174,9 @@
                     </div>
                   </div>
                 </div>
-                <button mat-button class="mat-primary" (click)="carouselToLeft('inner-carousel-content-students', displayItemsStudents, students, 'leftStudents', 12)"><mat-icon>keyboard_arrow_right</mat-icon></button>
+                <button mat-button class="mat-primary" (click)="this.moveStudentsCarousel.next('left')"><mat-icon>keyboard_arrow_right</mat-icon></button>
               </div>
+              </app-custom-carousel>
             </div>
           </mat-grid-tile>
         </mat-grid-list>

@@ -1,1 +1,66 @@
-<button mat-button (click)="create()">button</button>
+<div class="create-program-wrapper">
+  <div class="header">
+    <span>Create New Program</span>
+  </div>
+  <div class="inputs-header">Program name</div>
+  <input name="program_name" #program_name (input)="errors['program_name'] = false">
+  <div
+    *ngIf="errors['program_name']"
+    class="help-block">
+    <span>This field is required!</span>
+  </div>
+  <div class="inputs-header">Description</div>
+  <textarea name="description" #description></textarea>
+  <div class="inputs-header">Schedule a days</div>
+    <app-custom-carousel
+      [innerDivClass]="'inner-carousel-content-months'"
+      [displayItems]="1"
+      [arrayItems]="months"
+      [move]="moveMonthsCarousel"
+      [startPage]="currentMonth">
+      <div class="carousel-custom carousel-custom-months buttons-are-small">
+        <button mat-button class="mat-primary" (click)="onMonthToRight()"><mat-icon>keyboard_arrow_left</mat-icon></button>
+        <div class="carousel-content  carousel-content-months">
+          <div class="inner-carousel-content inner-carousel-content-months">
+            <div class="carousel-content-item" *ngFor="let month of months">
+              <div class="month">
+                <span>{{month}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button mat-button class="mat-primary" (click)="onMonthToLeft()"><mat-icon>keyboard_arrow_right</mat-icon></button>
+      </div>
+  </app-custom-carousel>
+  <app-calendar
+    [insertingTime]="selectingTime"
+    (selectedDay)="onSelectedDay($event)"
+    [insertingSchedule]="monthsSchedule"
+    [insertingMonth]="monthsNumber"></app-calendar>
+  <div class="inputs-header setTimeHeader">Set Time</div>
+  <input type="time" name="time" #time (blur)="onTimeBlur(time.value)"/>
+  <div class="inputs-header">Repeat Every</div>
+  <mat-radio-group name="repeat_every">
+    <mat-radio-button value="day">Day</mat-radio-button>
+    <mat-radio-button value="week">Week</mat-radio-button>
+    <mat-radio-button value="month">Month</mat-radio-button>
+  </mat-radio-group>
+  <div class="inputs-header">Select Teacher</div>
+  <mat-select name="teacherName" #teacherName (selectionChange)="errors['teacherName'] = false">
+    <mat-option *ngFor="let teacher of teachers" [value]="teacher.id">
+      {{teacher.name}}
+    </mat-option>
+  </mat-select>
+  <div
+    *ngIf="errors['teacherName']"
+    class="help-block">
+    <span>This field is required!</span>
+  </div>
+  <div class="buttons-in-bottom-modal">
+  <button mat-stroked-button class="mat-primary add-new-program-modal" (click)="onCreate()">
+    <mat-icon>add</mat-icon>
+    Add New Program
+  </button>
+  <button mat-button class="mat-primary" (click)="cancel()"><b>Cancel</b></button>
+  </div>
+</div>

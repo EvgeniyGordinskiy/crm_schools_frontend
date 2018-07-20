@@ -1,4 +1,6 @@
 @import '../../../../../assets/scss/variables';
+@import '../../../../../assets/scss/custom-carousel';
+
 :host{
   .add-new-program{
     margin: 27px 0;
@@ -18,10 +20,6 @@
         border-bottom: #cccccc4f solid 1.5px;
         height: 51px;
         margin: 0 20px;
-        .mat-card-title{
-          font-size: 20px;
-          font-weight: bold;
-        }
         .mat-card-subtitle{
           margin:0;
           position: relative;
@@ -55,90 +53,6 @@
               left: 20px;
             }
           }
-          .carousel-custom {
-            width: 100%;
-            min-width: 290px;
-            height: 60%;
-            display: flex;
-            justify-content: center;
-            button {
-              display: inline-block;
-              margin: 0;
-              padding: 0;
-            }
-            .carousel-content {
-              display: inline-block;
-              overflow: hidden;
-              width: 218px;
-              height: 48px;
-              position: relative;
-              margin-bottom: -3px;
-              .inner-carousel-content, .inner-carousel-content-months, .inner-carousel-content-income, .inner-carousel-content-students{
-                display: flex;
-                width: 500px;
-                left: 0;
-                position: relative;
-                -webkit-transition: left 0.25s;
-                -moz-transition: left 0.25s;
-                -o-transition: left 0.25s;
-                transition: left 0.25s;
-              }
-              .carousel-content-item {
-                display: inline-block;
-                width: 32px;
-                text-align: center;
-                margin-left: 2.5px;
-                margin-right: 2.5px;
-                &:hover{
-                  cursor: pointer;
-                }
-                .day-number {
-                  width: 24px;
-                  height: 24px;
-                  border: #ccc solid 1px;
-                  border-radius: 5px;
-                  span {
-                    position: relative;
-                    top: 4px;
-                    color: #757575;
-                    font-weight: bold;
-                  }
-                }
-                .day-name {
-                  span {
-                    color: #ccc;
-                    position: relative;
-                    font-size: 12px;
-                  }
-
-                }
-              }
-              .selectedCarouselItem{
-                .day-number{
-                  background-color: $base_color;
-                  span{
-                    color: #fff;
-                  }
-                }
-                .day-name{
-                  span{
-                    color: $base_color
-                  }
-                }
-                &:after{
-                  content: "\A";
-                  border-style: solid;
-                  border-width: 8px 8px 0 0;
-                  border-color: #39919c transparent transparent transparent;
-                  display: inline-block;
-                  position: relative;
-                  top: -8px;
-                  -webkit-transform: rotate(-135deg);
-                  transform: rotate(-135deg);
-                }
-              }
-            }
-          }
           .carousel-custom-month {
             margin-top: 37px;
             .carousel-content-months {
@@ -151,6 +65,58 @@
                     width: 90px;
                   }
                 }
+              }
+            }
+          }
+          .carousel-custom-days {
+            .carousel-content-months {
+              .inner-carousel-content-months {
+                .carousel-content-item {
+                  .day-number {
+                    width: 24px;
+                    height: 24px;
+                    border: #ccc solid 1px;
+                    border-radius: 5px;
+                    span {
+                      position: relative;
+                      top: 4px;
+                      color: #757575;
+                      font-weight: bold;
+                    }
+                  }
+                  .day-name {
+                    span {
+                      color: #ccc;
+                      position: relative;
+                      font-size: 12px;
+                    }
+
+                  }
+                }
+              }
+            }
+            .selectedCarouselItem{
+              .day-number{
+                background-color: $base_color;
+                span{
+                  color: #fff !important;
+                }
+              }
+              .day-name{
+                span{
+                  color: $base_color
+                }
+              }
+              &:after{
+                content: "\A";
+                border-style: solid;
+                border-width: 8px 8px 0 0;
+                border-color: #39919c transparent transparent transparent;
+                display: inline-block;
+                position: relative;
+                top: -8px;
+                -webkit-transform: rotate(-135deg);
+                transform: rotate(-135deg);
               }
             }
           }

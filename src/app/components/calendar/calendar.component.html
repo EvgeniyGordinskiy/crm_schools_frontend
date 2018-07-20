@@ -1,0 +1,21 @@
+<!--<div class="month">-->
+  <!--<ul>-->
+    <!--<li class="prev">&#10094;</li>-->
+    <!--<li class="next">&#10095;</li>-->
+    <!--<li>August<br><span style="font-size:18px">2017</span></li>-->
+  <!--</ul>-->
+<!--</div>-->
+
+<ul class="weekdays">
+  <li>M</li>
+  <li>T</li>
+  <li>W</li>
+  <li>T</li>
+  <li>F</li>
+  <li>S</li>
+  <li>S</li>
+</ul>
+
+<ul class="days" (click)="onSelectDay($event)">
+  <li *ngFor="let key of numberOfDays" [class.active-border]="isDayActive(key)" ><span>{{key + 1}}</span></li>
+</ul>

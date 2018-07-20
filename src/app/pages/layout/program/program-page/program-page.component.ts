@@ -1,6 +1,7 @@
 import {Component, ElementRef, HostListener, OnInit, Renderer2} from '@angular/core';
 import {MatDialog} from '@angular/material';
 import {ProgramCreateComponent} from '../program-create/program-create.component';
+import {Subject} from 'rxjs/Subject';
 
 @Component({
   selector: 'app-program-page',
@@ -8,14 +9,11 @@ import {ProgramCreateComponent} from '../program-create/program-create.component
   styleUrls: ['./program-page.component.scss'],
 })
 export class ProgramPageComponent implements OnInit {
-  leftDay = 0;
-  leftMonth = 0;
-  leftIncome = 0;
-  leftStudents = 0;
-  displayItemsDays = 7;
-  displayItemsMonths = 1;
-  displayItemsIncome = 7;
-  displayItemsStudents = 7;
+  moveMonthsCarousel: Subject<string> = new Subject();
+  moveDaysCarousel: Subject<string> = new Subject();
+  moveIncomesCarousel: Subject<string> = new Subject();
+  moveStudentsCarousel: Subject<string> = new Subject();
+
   currentYear: number;
   incomes = [
     {
@@ -225,33 +223,11 @@ export class ProgramPageComponent implements OnInit {
 
 
   constructor(
-    private renderer: Renderer2,
-    private elRef: ElementRef,
     public dialog: MatDialog,
   ) { }
 
   ngOnInit() {
     this.currentYear = (new Date()).getFullYear();
-  }
-
-  carouselToRight(innerDivClass: string, displayItems: number, left: string, margin = 5) {
-    console.log(this[left], 'before left');
-    if (!this[left] <= 0) {
-      let width = this.elRef.nativeElement.querySelector(`.${innerDivClass}`).querySelector('.carousel-content-item').clientWidth + margin;
-      console.log(width);
-      this[left] += width * displayItems;
-      this.renderer.setStyle(this.elRef.nativeElement.querySelector(`.${innerDivClass}`), 'left', this[left] + "px");
-    }
-  }
-
-  carouselToLeft(innerDivClass: string, displayItems: number, arrayItems, left: string, margin = 5) {
-    console.log(this[left], 'before right');
-    let width = this.elRef.nativeElement.querySelector(`.${innerDivClass}`).querySelector('.carousel-content-item').clientWidth + margin;
-    console.log(width);
-    if (Math.abs(this[left]) < arrayItems.length * width - width * displayItems) {
-      this[left] -= width * displayItems;
-      this.renderer.setStyle(this.elRef.nativeElement.querySelector(`.${innerDivClass}`), 'left', this[left] + "px");
-    }
   }
 
   getHeightForAmountGraph(amount: number) {

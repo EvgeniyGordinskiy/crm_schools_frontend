@@ -1,0 +1,73 @@
+@import "../../../../../assets/scss/custom-carousel";
+
+.create-program-wrapper{
+  width: 327px;
+  input, textarea, mat-select{
+    border: #585555cf solid 1.2px;
+    border-radius: 2px;
+  }
+  input[name="program_name"], textarea[name="description"], mat-select{
+    width: 240px;
+  }
+
+  input[name="time"], input[name="program_name"], mat-select{
+    height: 35px;
+  }
+  ::ng-deep mat-select[name=teacherName] {
+    .mat-select-trigger {
+      height: 38px;
+      .mat-select-value{
+        position: relative;
+        top: 8px;
+        left: 12px;
+      }
+    }
+  }
+  textarea[name="description"]{
+    height: 97px;
+    resize: none;
+  }
+  .mat-radio-group{
+    width: 23px;
+    height: 23px;
+    .mat-radio-button{
+      margin-top: 8px;
+      margin-right: 32px;
+    }
+  }
+  .inputs-header{
+    margin-top: 15px;
+    margin-bottom: 2px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #464646fa;
+  }
+  .setTimeHeader{
+    margin-top: 0;
+  }
+
+  .buttons-in-bottom-modal{
+    margin: 27px 0;
+    display: flex;
+    flex-direction: column;
+    .add-new-program-modal{
+      border-radius: 20px;
+      width: 170px;
+      align-self: center;
+    }
+  }
+  .carousel-custom-months {
+    .carousel-content-months {
+      width: 98px;
+      top: 5px;
+      .inner-carousel-content-months {
+        .carousel-content-item {
+          width: 210px;
+          .month {
+            width: 90px;
+          }
+        }
+      }
+    }
+  }
+}
