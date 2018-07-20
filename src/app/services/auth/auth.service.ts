@@ -21,4 +21,9 @@ export class AuthService {
     this.store.dispatch(new StartSpinner());
     return  this.httpClient.post('auth', {email, password});
   }
+
+  register({name, email, password, password_confirmation}) {
+    this.store.dispatch(new StartSpinner());
+    return  this.httpClient.post('auth/register', {name, email, password, password_confirmation});
+  }
 }

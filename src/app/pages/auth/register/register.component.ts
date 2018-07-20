@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Observable} from 'rxjs';
+import {AuthService} from '@services/auth/auth.service';
+import * as SpinnerReducer from '@store/spinner/reducers';
+import {Store} from '@ngrx/store';
+import {Router} from '@angular/router';
+import {StartSpinner, StopSpinner} from '@store/spinner/actions';
 
 @Component({
   selector: 'app-register',
@@ -10,7 +15,11 @@ import {Observable} from 'rxjs';
 export class RegisterComponent implements OnInit {
   signupForm: FormGroup;
 
-  constructor() { }
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+    private spinnerStore: Store<SpinnerReducer.SpinnerState>
+  ) { }
 
   ngOnInit() {
     this.signupForm = new FormGroup({
@@ -31,5 +40,16 @@ export class RegisterComponent implements OnInit {
 
   register() {
     console.log(this.signupForm);
+    this.spinnerStore.dispatch(new StartSpinner());
+    this.authService.register({name: this.signupForm.get('name').value,
+                              email: this.signupForm.get('email').value,
+                              password: this.signupForm.get('password').value,
+                              password_confirmation: this.signupForm.get('confirm_password').value})
+      .subscribe(
+        resp => {
+          this.spinnerStore.dispatch(new StopSpinner());
+          this.router.navigate(['/auth/login']);
+        }
+      )
   }
 }

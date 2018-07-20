@@ -29,6 +29,7 @@ export class AuthInterceptor implements HttpInterceptor {
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const token = AuthFacade.getToken();
+
     if (token) {
       req = req.clone({
         headers: new HttpHeaders({

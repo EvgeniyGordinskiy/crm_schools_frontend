@@ -41,7 +41,7 @@ export class AuthFacade {
       } else if (!AuthFacade.getAuthStatus() && this.router.url !== '/auth/login' && this.router.url !== '/auth/register') {
         this.router.navigate(['/auth/login']);
       }
-    }, 75);
+    }, 45);
   }
 
   endSession() {
