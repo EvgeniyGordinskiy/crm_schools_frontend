@@ -236,12 +236,13 @@ export class ProgramPageComponent implements OnInit {
   }
 
   onSelectCarouselContentItem(event) {
-    for (let carouselItem of document.getElementsByClassName('carousel-content-item')) {
+    const contentItems = document.getElementsByClassName('carousel-content-item');
+    Object.keys(contentItems).forEach( (carouselItem) => {
       if (carouselItem) {
-        carouselItem.classList.remove("selectedCarouselItem");
+        contentItems[carouselItem].classList.remove('selectedCarouselItem');
       }
-    }
-    let currentElement = event.target.closest(".carousel-content-item");
+    });
+    let currentElement = event.target.closest('.carousel-content-item');
     if (currentElement) {
       currentElement.classList.add('selectedCarouselItem');
     }

@@ -33,8 +33,8 @@ export class CalendarComponent implements OnInit {
     });
 
     this.insertingMonth.subscribe(
-      (resp: number) => {
-        if(resp > 0 && resp <= 12) {
+      (resp: any) => {
+        if (resp > 0 && resp <= 12) {
             this.clearCalendar();
             this.getMonthDays(resp);
         }
@@ -61,12 +61,11 @@ export class CalendarComponent implements OnInit {
     }
   }
 
-  getMonthDays(month: any = false) {
+  getMonthDays(month: any = 0) {
     let date = new Date();
-    if ( !month || !month > 0 ) {
+    if (month > 0 ) {
       month = date.getMonth() + 1;
     }
-    console.log(month);
     month = new Date(date.getFullYear(), month, 0);
     const days = month.getDate();
     if (!isNaN(days)) {
@@ -79,12 +78,13 @@ export class CalendarComponent implements OnInit {
   }
 
   clearCalendar() {
-    for (let calendarItem of document.getElementsByClassName('days')[0].getElementsByTagName('li')) {
-      if (calendarItem) {
-        calendarItem.classList.remove("selectedCalendarItem");
-        calendarItem.classList.remove("active-border");
-      }
-    }
+    const elements = document.getElementsByClassName('days');
+    Object.keys(elements).forEach( (key) => {
+      Object.keys(elements[key].getElementsByTagName('li')).forEach((item) => {
+        item[key].classList.remove('selectedCalendarItem');
+        item[key].classList.remove('active-border');
+      });
+    });
   }
 
 }

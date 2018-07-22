@@ -11,7 +11,7 @@ export class ProgramCreateComponent implements OnInit{
   @ViewChild('program_name') program_name:ElementRef;
   @ViewChild('description') description:ElementRef;
   @ViewChild('time') time:ElementRef;
-  @ViewChild('teacherName') teacherName:ElementRef;
+  @ViewChild('teacherName') teacherName;
 
   moveMonthsCarousel: Subject<string> = new Subject();
   selectingTime: Subject<boolean> = new Subject();
@@ -21,9 +21,8 @@ export class ProgramCreateComponent implements OnInit{
   currentMonth = new Date().getMonth() + 1;
 
   schedule = {};
-  selectedDay = '';
 
-  selectedDay: string;
+  selectedDay = '';
 
   errors = {};
 
@@ -69,11 +68,11 @@ export class ProgramCreateComponent implements OnInit{
   ) {}
 
   ngOnInit() {
-    console.log(new Date().getMonth())
+    console.log(new Date().getMonth());
   }
 
   onCreate(): void {
-    if (!this.program_name.nativeElement.value > 0) {
+    if (this.program_name.nativeElement.value < 0) {
       this.errors['program_name'] = true;
     }
     if (!this.teacherName.value) {
