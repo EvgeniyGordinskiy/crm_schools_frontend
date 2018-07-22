@@ -7,7 +7,7 @@ export class User implements UserInterface {
   name: string;
   role: string;
   permissions: {
-    key: [Permission]
+    key?: [Permission]
   };
 
   constructor(params) {

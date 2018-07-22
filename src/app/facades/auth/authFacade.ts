@@ -12,27 +12,27 @@ export class AuthFacade {
 
   static setToken = (token: string) => {
     localStorage.setItem(AuthFacade.prefix + 'token', token);
-  };
+  }
 
   static getToken = (): string => {
     return localStorage.getItem(AuthFacade.prefix + 'token');
-  };
+  }
 
   static setUser = (user: User) => {
     localStorage.setItem(AuthFacade.prefix + 'user', JSON.stringify(user));
-  };
+  }
 
   static getUser = () => {
     return JSON.parse(localStorage.getItem(AuthFacade.prefix + 'user'));
-  };
+  }
 
   static setAuthStatus = (status: boolean) => {
     localStorage.setItem(AuthFacade.prefix + 'status', status.toString());
-  };
+  }
 
   static getAuthStatus = () => {
     return localStorage.getItem(AuthFacade.prefix + 'status') === 'true';
-  };
+  }
 
   checkAuthStatusAndRedirect() {
     setTimeout(() => {

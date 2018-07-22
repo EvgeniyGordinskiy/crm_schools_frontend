@@ -704,9 +704,9 @@ var PermissionFacade = /** @class */ (function () {
     function PermissionFacade() {
     }
     PermissionFacade.groupByModelName = function (permissionsArray) {
-        var permissions;
+        var permissions = {};
         permissionsArray.map(function (item) {
-            if (permissions && permissions.hasOwnProperty(item.model_name)) {
+            if (!permissions.hasOwnProperty(item.model_name)) {
                 permissions[item.model_name] = [];
             }
             permissions[item.model_name].push({ event: item.event, permission_type: item.permission_type, id: item.id });

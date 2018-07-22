@@ -6,10 +6,10 @@ export class PermissionFacade {
 
   static groupByModelName(permissionsArray) {
   let permissions: {
-    key: [Permission]
-  };
+    key ?: [Permission]
+  } = {};
     permissionsArray.map((item) => {
-      if (permissions && permissions.hasOwnProperty(item.model_name)) {
+      if (!permissions.hasOwnProperty(item.model_name)) {
         permissions[item.model_name] = [];
       }
       permissions[item.model_name].push({event: item.event, permission_type: item.permission_type, id: item.id});

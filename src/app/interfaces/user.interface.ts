@@ -6,6 +6,6 @@ export interface UserInterface {
   name: string;
   role: string;
   permissions: {
-    key: [Permission]
+    key?: [Permission]
   };
 }

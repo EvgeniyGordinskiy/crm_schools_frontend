@@ -13,7 +13,7 @@ import {PermissionFacade} from '@facadespermission/permissionFacade';
 })
 export class MainMenuComponent implements OnInit {
   permissions: {
-    key: [Permission]
+    key?: [Permission]
   };
   constructor(
     private authStore: Store<AuthenticateReducer.AuthState>

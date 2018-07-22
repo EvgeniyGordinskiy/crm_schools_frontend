@@ -23,7 +23,7 @@ import {ToastrService} from 'ngx-toastr';
   styleUrls: ['./permission-page.component.scss']
 })
 export class PermissionPageComponent implements OnInit {
-  permissions: { key: [Permission]};
+  permissions: { key?: [Permission]};
   rolesPermissions = [];
   roles: [RoleInterface];
   permissionForm: FormGroup;
