@@ -305,7 +305,7 @@ var CustomCarouselComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"create-program-wrapper\" #create_program_wrapper>\n  <div class=\"header\">\n    <span>Create New Program</span>\n  </div>\n  <div class=\"inputs-header\">Program name</div>\n  <input name=\"program_name\" #program_name (input)=\"errors['program_name'] = false\">\n  <div\n    *ngIf=\"errors['program_name']\"\n    class=\"help-block\">\n    <span>This field is required!</span>\n  </div>\n  <div class=\"inputs-header\">Description</div>\n  <textarea name=\"description\" #description></textarea>\n  <div class=\"inputs-header\">Schedule a days</div>\n    <app-custom-carousel\n      [innerDivClass]=\"'inner-carousel-content-months'\"\n      [displayItems]=\"1\"\n      [arrayItems]=\"months\"\n      [move]=\"moveMonthsCarousel\"\n      [startPage]=\"currentMonth\">\n      <div class=\"carousel-custom carousel-custom-months buttons-are-small\">\n        <button mat-button class=\"mat-primary\" (click)=\"onMonthToRight()\"><mat-icon>keyboard_arrow_left</mat-icon></button>\n        <div class=\"carousel-content  carousel-content-months\">\n          <div class=\"inner-carousel-content inner-carousel-content-months\">\n            <div class=\"carousel-content-item\" *ngFor=\"let month of months\">\n              <div class=\"month\">\n                <span>{{month}}</span>\n              </div>\n            </div>\n          </div>\n        </div>\n        <button mat-button class=\"mat-primary\" (click)=\"onMonthToLeft()\"><mat-icon>keyboard_arrow_right</mat-icon></button>\n      </div>\n  </app-custom-carousel>\n  <app-calendar\n    [insertingTime]=\"selectingTime\"\n    (selectedDay)=\"onSelectedDay($event)\"\n    [insertingSchedule]=\"monthsSchedule\"\n    [insertingMonth]=\"monthsNumber\"></app-calendar>\n  <div class=\"inputs-header setTimeHeader\">Set Time</div>\n  <input type=\"time\" name=\"time\" #time (blur)=\"onTimeBlur(time.value)\"/>\n  <div class=\"inputs-header\">Repeat Every</div>\n  <mat-radio-group name=\"repeat_every\">\n    <mat-radio-button value=\"day\">Day</mat-radio-button>\n    <mat-radio-button value=\"week\">Week</mat-radio-button>\n    <mat-radio-button value=\"month\">Month</mat-radio-button>\n  </mat-radio-group>\n  <div class=\"inputs-header\">Select Teacher</div>\n  <mat-select name=\"teacherName\" #teacherName (selectionChange)=\"errors['teacherName'] = false\">\n    <mat-option *ngFor=\"let teacher of teachers\" [value]=\"teacher.id\">\n      {{teacher.name}}\n    </mat-option>\n  </mat-select>\n  <div\n    *ngIf=\"errors['teacherName']\"\n    class=\"help-block\">\n    <span>This field is required!</span>\n  </div>\n  <div class=\"buttons-in-bottom-modal\">\n  <button mat-stroked-button class=\"mat-primary add-new-program-modal\" (click)=\"onCreate()\">\n    <mat-icon>add</mat-icon>\n    Add New Program\n  </button>\n  <button mat-button class=\"mat-primary\" (click)=\"cancel()\"><b>Cancel</b></button>\n  </div>\n</div>\n"
+module.exports = "<div class=\"create-program-wrapper\" #create_program_wrapper>\n  <div class=\"header\">\n    <span>Create New Program</span>\n  </div>\n  <div class=\"inputs-header\">Program name</div>\n  <input name=\"program_name\" #program_name (input)=\"errors['program_name'] = false\">\n  <div\n    *ngIf=\"errors['program_name']\"\n    class=\"help-block\">\n    <span>This field is required!</span>\n  </div>\n  <div class=\"inputs-header\">Description</div>\n  <textarea name=\"description\" #description></textarea>\n  <div class=\"inputs-header\">Schedule a days</div>\n    <app-custom-carousel\n      [innerDivClass]=\"'inner-carousel-content-months'\"\n      [displayItems]=\"1\"\n      [arrayItems]=\"months\"\n      [move]=\"moveMonthsCarousel\"\n      [startPage]=\"currentMonth\">\n      <div class=\"carousel-custom carousel-custom-months buttons-are-small\">\n        <button mat-button class=\"mat-primary\" (click)=\"onMonthToRight()\"><mat-icon>keyboard_arrow_left</mat-icon></button>\n        <div class=\"carousel-content  carousel-content-months\">\n          <div class=\"inner-carousel-content inner-carousel-content-months\">\n            <div class=\"carousel-content-item\" *ngFor=\"let month of months\">\n              <div class=\"month\">\n                <span>{{month}}</span>\n              </div>\n            </div>\n          </div>\n        </div>\n        <button mat-button class=\"mat-primary\" (click)=\"onMonthToLeft()\"><mat-icon>keyboard_arrow_right</mat-icon></button>\n      </div>\n  </app-custom-carousel>\n  <app-calendar\n    [insertingTime]=\"selectingTime\"\n    (selectedDay)=\"onSelectedDay($event)\"\n    [insertingSchedule]=\"monthsSchedule\"\n    [insertingMonth]=\"monthsNumber\"></app-calendar>\n  <div class=\"inputs-header setTimeHeader\">Set Time</div>\n  <input type=\"time\" name=\"time\" #time (blur)=\"onTimeBlur(time.value)\"/>\n  <div class=\"inputs-header\">Repeat Every</div>\n  <mat-radio-group name=\"repeat_every\"  #repeat_time (change)=\"onSelectedRepeaTime($event)\">\n    <mat-radio-button value=\"day\">Day</mat-radio-button>\n    <mat-radio-button value=\"week\">Week</mat-radio-button>\n    <mat-radio-button value=\"month\">Month</mat-radio-button>\n  </mat-radio-group>\n  <div class=\"inputs-header\">Select Teacher</div>\n  <mat-select name=\"teacherName\" #teacherId (selectionChange)=\"errors['teacherId'] = false\">\n    <mat-option *ngFor=\"let teacher of teachers\" [value]=\"teacher.id\">\n      {{teacher.name}}\n    </mat-option>\n  </mat-select>\n  <div\n    *ngIf=\"errors['teacherId']\"\n    class=\"help-block\">\n    <span>This field is required!</span>\n  </div>\n  <div class=\"buttons-in-bottom-modal\">\n  <button mat-stroked-button class=\"mat-primary add-new-program-modal\" (click)=\"onCreate()\">\n    <mat-icon>add</mat-icon>\n    Add New Program\n  </button>\n  <button mat-button class=\"mat-primary\" (click)=\"cancel()\"><b>Cancel</b></button>\n  </div>\n</div>\n"
 
 /***/ }),
 
@@ -403,11 +403,18 @@ var ProgramCreateComponent = /** @class */ (function () {
         if (this.program_name.nativeElement.value < 0) {
             this.errors['program_name'] = true;
         }
-        if (!this.teacherName.value) {
-            this.errors['teacherName'] = true;
+        else if (!this.teacherId.value) {
+            this.errors['teacherId'] = true;
         }
-        // this.program
-        console.log(this.errors);
+        else {
+            this.programService.create({
+                program_name: this.program_name.nativeElement.value,
+                program_description: this.description.nativeElement.value,
+                schedule: this.schedule,
+                repeat_time: this.repeat_time,
+                teacher_id: this.teacherId.value
+            }).subscribe(function (resp) { return console.log(resp, 'resp'); }, function (err) { return console.log(err, 'err'); });
+        }
     };
     ProgramCreateComponent.prototype.cancel = function () {
     };
@@ -448,6 +455,9 @@ var ProgramCreateComponent = /** @class */ (function () {
         this.moveMonthsCarousel.next('left');
         this.monthsSchedule.next(this.schedule[this.currentMonth]);
     };
+    ProgramCreateComponent.prototype.onSelectedRepeaTime = function (event) {
+        this.repeat_time = event.value;
+    };
     ProgramCreateComponent.prototype.setSchedule = function (time) {
         if (!this.schedule[this.currentMonth]) {
             this.schedule[this.currentMonth] = {};
@@ -471,9 +481,9 @@ var ProgramCreateComponent = /** @class */ (function () {
         __metadata("design:type", _angular_core__WEBPACK_IMPORTED_MODULE_0__["ElementRef"])
     ], ProgramCreateComponent.prototype, "time", void 0);
     __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ViewChild"])('teacherName'),
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ViewChild"])('teacherId'),
         __metadata("design:type", Object)
-    ], ProgramCreateComponent.prototype, "teacherName", void 0);
+    ], ProgramCreateComponent.prototype, "teacherId", void 0);
     ProgramCreateComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'app-program-create',
@@ -922,8 +932,9 @@ var ProgramService = /** @class */ (function () {
     function ProgramService(httpClient) {
         this.httpClient = httpClient;
     }
-    ProgramService.prototype.create = function () {
-        this.httpClient.post('programs', {});
+    ProgramService.prototype.create = function (body) {
+        console.log(body);
+        return this.httpClient.post('program', body);
     };
     ProgramService = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])({

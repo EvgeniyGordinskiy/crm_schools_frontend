@@ -418,7 +418,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MainMenuComponent", function() { return MainMenuComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
-/* harmony import */ var _facadespermission_permissionFacade__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @facadespermission/permissionFacade */ "./src/app/facades/permission/permissionFacade.ts");
+/* harmony import */ var _facades_permission_permissionFacade__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @facades/permission/permissionFacade */ "./src/app/facades/permission/permissionFacade.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -446,7 +446,7 @@ var MainMenuComponent = /** @class */ (function () {
     MainMenuComponent.prototype.checkPermission = function (modelName, event, type) {
         if (event === void 0) { event = ''; }
         if (type === void 0) { type = ''; }
-        return _facadespermission_permissionFacade__WEBPACK_IMPORTED_MODULE_2__["PermissionFacade"].checkPermission(this.permissions, modelName, event, type);
+        return _facades_permission_permissionFacade__WEBPACK_IMPORTED_MODULE_2__["PermissionFacade"].checkPermission(this.permissions, modelName, event, type);
     };
     MainMenuComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
@@ -759,7 +759,7 @@ var PermissionFacade = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<mat-toolbar>\n  <mat-toolbar-row class=\"first-header\">\n    <div class=\"first-header-content\">\n      <a>Manage my Gyms</a>\n      <div class=\"profile-details inline_block\">\n        <img src=\"https://picsum.photos/40/30\">\n        <span>\n          {{name}}\n        </span>\n      </div>\n      <mat-menu #appMenu=\"matMenu\">\n        <button mat-menu-item>PricingHome</button>\n        <button mat-menu-item>My Details</button>\n        <button mat-menu-item>Pricing</button>\n        <button mat-menu-item (click)=\"onLogout()\">Logout</button>\n      </mat-menu>\n\n      <button mat-icon-button [matMenuTriggerFor]=\"appMenu\">\n        <mat-icon>menu</mat-icon>\n      </button>\n    </div>\n  </mat-toolbar-row>\n  <mat-toolbar-row class=\"second-header\">\n  <app-main-menu></app-main-menu>\n  </mat-toolbar-row>\n</mat-toolbar>\n<div class=\"content\">\n  <router-outlet></router-outlet>\n</div>\n"
+module.exports = "<mat-toolbar>\n  <mat-toolbar-row class=\"first-header\">\n    <div class=\"first-header-content\">\n      <a>Manage my Gyms</a>\n      <button mat-stroked-button class=\"mat-primary add-gym-button\">\n        <mat-icon>add</mat-icon>\n        Add Gym\n      </button>\n      <div class=\"profile-details inline_block\">\n        <img src=\"https://picsum.photos/40/30\">\n        <span>\n          {{name}}\n        </span>\n      </div>\n      <mat-menu #appMenu=\"matMenu\">\n        <button mat-menu-item>PricingHome</button>\n        <button mat-menu-item>My Details</button>\n        <button mat-menu-item>Pricing</button>\n        <button mat-menu-item (click)=\"onLogout()\">Logout</button>\n      </mat-menu>\n\n      <button mat-icon-button [matMenuTriggerFor]=\"appMenu\">\n        <mat-icon>menu</mat-icon>\n      </button>\n    </div>\n  </mat-toolbar-row>\n  <mat-toolbar-row class=\"second-header\">\n  <app-main-menu></app-main-menu>\n  </mat-toolbar-row>\n</mat-toolbar>\n<div class=\"content\">\n  <router-outlet></router-outlet>\n</div>\n"
 
 /***/ }),
 
@@ -770,7 +770,7 @@ module.exports = "<mat-toolbar>\n  <mat-toolbar-row class=\"first-header\">\n   
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ":host .mat-toolbar {\n  background: transparent; }\n  :host .mat-toolbar .first-header {\n    padding-right: 0;\n    height: 59px; }\n  :host .mat-toolbar .first-header .first-header-content {\n      display: flex;\n      font-size: 14px;\n      justify-content: space-between;\n      min-width: 335px;\n      margin-left: auto; }\n  :host .mat-toolbar .first-header .first-header-content .profile-details {\n        display: flex;\n        justify-content: center;\n        width: 60%; }\n  :host .mat-toolbar .first-header .first-header-content .profile-details img {\n          margin-right: 9px;\n          border-radius: 50%; }\n  :host .mat-toolbar .second-header {\n    background-color: #7f7f7f;\n    height: 39px;\n    display: flex;\n    justify-content: center; }\n  :host .content {\n  margin: 0 auto;\n  height: 100%;\n  width: 70%;\n  -ms-grid-row-align: center;\n      align-self: center; }\n"
+module.exports = ":host .mat-toolbar {\n  background: transparent; }\n  :host .mat-toolbar .first-header {\n    padding-right: 0;\n    height: 59px; }\n  :host .mat-toolbar .first-header .first-header-content {\n      display: flex;\n      font-size: 14px;\n      justify-content: space-between;\n      min-width: 335px;\n      margin-left: auto; }\n  :host .mat-toolbar .first-header .first-header-content .add-gym-button {\n        border-radius: 20px;\n        width: 175px;\n        height: 30px;\n        padding-left: 6px;\n        justify-content: center;\n        flex-direction: column;\n        margin-top: 5px;\n        margin-left: 50px; }\n  :host .mat-toolbar .first-header .first-header-content .add-gym-button .mat-icon {\n          font-size: 17px;\n          font-weight: bold;\n          margin-top: 7px; }\n  :host .mat-toolbar .first-header .first-header-content .profile-details {\n        display: flex;\n        justify-content: center;\n        width: 60%; }\n  :host .mat-toolbar .first-header .first-header-content .profile-details img {\n          margin-right: 9px;\n          border-radius: 50%; }\n  :host .mat-toolbar .second-header {\n    background-color: #7f7f7f;\n    height: 39px;\n    display: flex;\n    justify-content: center; }\n  :host .content {\n  margin: 0 auto;\n  height: 100%;\n  width: 70%;\n  -ms-grid-row-align: center;\n      align-self: center; }\n"
 
 /***/ }),
 
@@ -1033,8 +1033,8 @@ var MainInterceptor = /** @class */ (function () {
     function MainInterceptor() {
     }
     MainInterceptor.prototype.intercept = function (req, next) {
-        var url = 'http://ec2-18-221-164-63.us-east-2.compute.amazonaws.com:8000/api/';
-        // const url = 'http://localhost:8000/api/';
+        // const url = 'http://ec2-18-221-164-63.us-east-2.compute.amazonaws.com:8000/api/';
+        var url = 'http://localhost:8000/api/';
         req = req.clone({
             url: url + req.url
         });
@@ -1091,7 +1091,8 @@ var MaterialModule = /** @class */ (function () {
                 _angular_material__WEBPACK_IMPORTED_MODULE_1__["MatProgressSpinnerModule"],
                 _angular_material__WEBPACK_IMPORTED_MODULE_1__["MatDialogModule"],
                 _angular_material__WEBPACK_IMPORTED_MODULE_1__["MatRadioModule"],
-                _angular_material__WEBPACK_IMPORTED_MODULE_1__["MatSelectModule"]
+                _angular_material__WEBPACK_IMPORTED_MODULE_1__["MatSelectModule"],
+                _angular_material__WEBPACK_IMPORTED_MODULE_1__["MatCheckboxModule"]
             ],
             exports: [
                 _angular_material__WEBPACK_IMPORTED_MODULE_1__["MatTabsModule"],
@@ -1109,7 +1110,8 @@ var MaterialModule = /** @class */ (function () {
                 _angular_material__WEBPACK_IMPORTED_MODULE_1__["MatProgressSpinnerModule"],
                 _angular_material__WEBPACK_IMPORTED_MODULE_1__["MatDialogModule"],
                 _angular_material__WEBPACK_IMPORTED_MODULE_1__["MatRadioModule"],
-                _angular_material__WEBPACK_IMPORTED_MODULE_1__["MatSelectModule"]
+                _angular_material__WEBPACK_IMPORTED_MODULE_1__["MatSelectModule"],
+                _angular_material__WEBPACK_IMPORTED_MODULE_1__["MatCheckboxModule"]
             ],
         })
     ], MaterialModule);

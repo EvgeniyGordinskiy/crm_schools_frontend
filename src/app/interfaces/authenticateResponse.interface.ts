@@ -1,4 +1,6 @@
 
 export interface AuthenticateResponseInterface {
-  token: string;
+  data:{
+    token: string
+  };
 }

@@ -13,6 +13,7 @@ import { Store } from '@ngrx/store';
 import * as SpinnerReducer from '@store/spinner/reducers';
 import {StartSpinner, StopSpinner} from '@store/spinner/actions';
 import {AuthFacade} from '@app/facades/auth/authFacade';
+import {SchoolService} from '@services/school/school.service';
 
 
 @NgModule({
@@ -22,7 +23,7 @@ import {AuthFacade} from '@app/facades/auth/authFacade';
     AuthRoutingModule
   ],
   declarations: [LoginComponent, RegisterComponent, AuthWrapperComponent],
-  providers: [AuthService, AccountService]
+  providers: [AuthService, SchoolService, AccountService]
 })
 export class AuthModule implements OnDestroy, OnInit {
 

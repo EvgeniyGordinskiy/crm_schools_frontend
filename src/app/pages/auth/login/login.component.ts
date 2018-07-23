@@ -22,7 +22,7 @@ import {StopSpinner} from '@store/spinner/actions';
 import {User} from '@models/user';
 import {AccountServiceResponseInterface} from '@app/interfaces/accountServiceResponse.interface';
 import {AuthFacade} from '@app/facades/auth/authFacade';
-import {PermissionFacade} from '@facadespermission/permissionFacade';
+import {PermissionFacade} from '@facades/permission/permissionFacade';
 
 @Component({
   selector: 'app-login',
@@ -67,8 +67,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.authService.login({email: this.signinForm.value.email, password: this.signinForm.value.password})
       .subscribe(
         (resp: AuthenticateResponseInterface) => {
-          if (resp.token) {
-            this.store.dispatch(new AuthenticateAction(resp.token));
+          if (resp.data.token) {
+            this.store.dispatch(new AuthenticateAction(resp.data.token));
             this.accountService.getAccount().subscribe(
               (response: AccountServiceResponseInterface) => {
                 const permissions = PermissionFacade.groupByModelName(response.data.permissions);
@@ -76,7 +76,6 @@ export class LoginComponent implements OnInit, OnDestroy {
                 if (permissions) {
                   user.permissions = permissions;
                 }
-                  this.spinnerStore.dispatch(new StopSpinner());
                   this.store.dispatch(new AuthenticatedSuccessAction({authenticated: true, user: user}));
                   this.authFacade.checkAuthStatusAndRedirect();
               },
@@ -85,6 +84,7 @@ export class LoginComponent implements OnInit, OnDestroy {
               }
             );
           }
+          this.spinnerStore.dispatch(new StopSpinner());
         });
   }
 

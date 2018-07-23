@@ -682,7 +682,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
 /* harmony import */ var _services_permission_permission_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @services/permission/permission.service */ "./src/app/services/permission/permission.service.ts");
-/* harmony import */ var _facadespermission_permissionFacade__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @facadespermission/permissionFacade */ "./src/app/facades/permission/permissionFacade.ts");
+/* harmony import */ var _facades_permission_permissionFacade__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @facades/permission/permissionFacade */ "./src/app/facades/permission/permissionFacade.ts");
 /* harmony import */ var _services_role_role_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @services/role/role.service */ "./src/app/services/role/role.service.ts");
 /* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm5/forms.js");
 /* harmony import */ var util__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! util */ "./node_modules/util/util.js");
@@ -757,7 +757,7 @@ var PermissionPageComponent = /** @class */ (function () {
         var _this = this;
         this.spinnerStore.dispatch(new _store_spinner_actions__WEBPACK_IMPORTED_MODULE_7__["StartSpinner"]());
         this.permissionService.getAll().subscribe(function (resp) {
-            _this.permissions = _facadespermission_permissionFacade__WEBPACK_IMPORTED_MODULE_3__["PermissionFacade"].groupByModelName(resp.data);
+            _this.permissions = _facades_permission_permissionFacade__WEBPACK_IMPORTED_MODULE_3__["PermissionFacade"].groupByModelName(resp.data);
             _this.assignData();
         });
         this.getRolesPermission();

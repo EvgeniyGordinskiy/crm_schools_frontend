@@ -1,11 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {Observable} from 'rxjs';
 import {AuthService} from '@services/auth/auth.service';
 import * as SpinnerReducer from '@store/spinner/reducers';
 import {Store} from '@ngrx/store';
 import {Router} from '@angular/router';
 import {StartSpinner, StopSpinner} from '@store/spinner/actions';
+import {SchoolService} from '@services/school/school.service';
+import {AuthFacade} from '@facades/auth/authFacade';
+import {AuthenticateAction, SignOut} from '@store/auth/actions';
+import * as AuthReducer from '@store/auth/reducers';
+import {AuthenticateResponseInterface} from '@interfaces/authenticateResponse.interface';
 
 @Component({
   selector: 'app-register',
@@ -14,11 +18,15 @@ import {StartSpinner, StopSpinner} from '@store/spinner/actions';
 })
 export class RegisterComponent implements OnInit {
   signupForm: FormGroup;
+  addASchool = false;
 
   constructor(
     private router: Router,
+    private authFacade: AuthFacade,
     private authService: AuthService,
-    private spinnerStore: Store<SpinnerReducer.SpinnerState>
+    private schoolService: SchoolService,
+    private authStore: Store<AuthReducer.AuthState>,
+  private spinnerStore: Store<SpinnerReducer.SpinnerState>
   ) { }
 
   ngOnInit() {
@@ -27,6 +35,9 @@ export class RegisterComponent implements OnInit {
       'email': new FormControl(null, [Validators.required, Validators.email]),
       'password': new FormControl(null, [Validators.required]),
       'confirm_password': new FormControl(null, [Validators.required, this.confirmedPassword.bind(this)]),
+      'gym_name': new FormControl(null, [this.requiredCustom.bind(this)]),
+      'gym_description': new FormControl(null),
+      'gym_address': new FormControl(null),
     });
   }
 
@@ -38,6 +49,24 @@ export class RegisterComponent implements OnInit {
     }
   }
 
+  requiredCustom(control: FormControl): {[s: string]: boolean} {
+    if (control.value && control.value.length !== 0) {
+      control.markAsTouched();
+    }
+    if (this.addASchool && control.touched && (!control.value || control.value.length === 0)) {
+      return {'required_custom': true};
+    } else {
+      return null;
+    }
+  }
+
+  onClickedCheckBox(val) {
+    if (!val.checked) {
+      this.signupForm.get('gym_name').reset();
+    }
+    this.addASchool = !this.addASchool
+  }
+
   register() {
     console.log(this.signupForm);
     this.spinnerStore.dispatch(new StartSpinner());
@@ -46,7 +75,19 @@ export class RegisterComponent implements OnInit {
                               password: this.signupForm.get('password').value,
                               password_confirmation: this.signupForm.get('confirm_password').value})
       .subscribe(
-        resp => {
+        (resp: AuthenticateResponseInterface) => {
+          const schoolName = this.signupForm.get('gym_name').value;
+          if(schoolName && schoolName.length > 0) {
+            this.authStore.dispatch(new AuthenticateAction(resp.data.token));
+            this.schoolService.create({
+              name: this.signupForm.get('gym_name').value,
+              description: this.signupForm.get('gym_description').value,
+              address: this.signupForm.get('gym_address').value
+            }).subscribe(
+              resp => console.log(resp)
+            )
+          }
+          this.authStore.dispatch(new SignOut(this.authFacade));
           this.spinnerStore.dispatch(new StopSpinner());
           this.router.navigate(['/auth/login']);
         }

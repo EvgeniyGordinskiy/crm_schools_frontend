@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import {
-  MatButtonModule, MatCardModule, MatDialogModule, MatFormFieldModule,
+  MatButtonModule, MatCardModule, MatCheckboxModule, MatDialogModule, MatFormFieldModule,
   MatGridListModule,
   MatIconModule, MatInputModule,
   MatListModule, MatMenuModule, MatProgressSpinnerModule, MatRadioModule, MatSelectModule,
@@ -26,7 +26,8 @@ import {
     MatProgressSpinnerModule,
     MatDialogModule,
     MatRadioModule,
-    MatSelectModule
+    MatSelectModule,
+    MatCheckboxModule
   ],
   exports: [
     MatTabsModule,
@@ -44,7 +45,8 @@ import {
     MatProgressSpinnerModule,
     MatDialogModule,
     MatRadioModule,
-    MatSelectModule
+    MatSelectModule,
+    MatCheckboxModule
   ],
 })
 

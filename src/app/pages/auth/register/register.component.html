@@ -31,7 +31,7 @@
             <div
               *ngIf="!signupForm.get('email').valid && signupForm.get('email').touched"
               class="help-block">
-              <span *ngIf="signupForm.get('email').errors['emailIsForbidden']">This email is invalid!</span>
+              <span *ngIf="signupForm.get('email').errors['email']">This email is invalid!</span>
               <span *ngIf="signupForm.get('email').errors['required']">This field is required!</span>
             </div>
           </td>
@@ -67,6 +67,49 @@
             </div>
           </td>
         </tr>
+        <tr>
+          <td class="float_right">
+            <mat-checkbox #checkbox (change)="onClickedCheckBox(checkbox)" class="mat-primary">Create school</mat-checkbox>
+          </td>
+        </tr>
+        <div *ngIf="addASchool === true">
+          <h2>Create Gym</h2>
+          <tr>
+            <td>
+              <mat-form-field>
+                <input matInput placeholder="Gym Name"
+                       name="gym_name"
+                       formControlName="gym_name"
+                >
+              </mat-form-field>
+              <div
+                *ngIf="!signupForm.get('gym_name').valid && signupForm.get('gym_name').touched"
+                class="help-block">
+                <span *ngIf="signupForm.get('gym_name').errors['required_custom']">This field is required!</span>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <mat-form-field>
+                <input matInput placeholder="Gym Description"
+                       name="gym_description"
+                       formControlName="gym_description"
+                >
+              </mat-form-field>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <mat-form-field>
+                <input matInput placeholder="Gym Address"
+                       name="gym_address"
+                       formControlName="gym_address"
+                >
+              </mat-form-field>
+            </td>
+          </tr>
+        </div>
       </table>
       <mat-card-actions>
         <button mat-raised-button

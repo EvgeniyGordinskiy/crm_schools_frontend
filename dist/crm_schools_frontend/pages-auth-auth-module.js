@@ -146,6 +146,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
 /* harmony import */ var _store_spinner_actions__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @store/spinner/actions */ "./src/app/store/spinner/actions.ts");
 /* harmony import */ var _app_facades_auth_authFacade__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @app/facades/auth/authFacade */ "./src/app/facades/auth/authFacade.ts");
+/* harmony import */ var _services_school_school_service__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @services/school/school.service */ "./src/app/services/school/school.service.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -165,6 +166,7 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 // @ngrx
+
 
 
 
@@ -188,7 +190,7 @@ var AuthModule = /** @class */ (function () {
                 _auth_routing_module__WEBPACK_IMPORTED_MODULE_3__["AuthRoutingModule"]
             ],
             declarations: [_login_login_component__WEBPACK_IMPORTED_MODULE_2__["LoginComponent"], _register_register_component__WEBPACK_IMPORTED_MODULE_4__["RegisterComponent"], _auth_wrapper_auth_wrapper_component__WEBPACK_IMPORTED_MODULE_6__["AuthWrapperComponent"]],
-            providers: [_services_auth_auth_service__WEBPACK_IMPORTED_MODULE_7__["AuthService"], _services_account_account_service__WEBPACK_IMPORTED_MODULE_8__["AccountService"]]
+            providers: [_services_auth_auth_service__WEBPACK_IMPORTED_MODULE_7__["AuthService"], _services_school_school_service__WEBPACK_IMPORTED_MODULE_12__["SchoolService"], _services_account_account_service__WEBPACK_IMPORTED_MODULE_8__["AccountService"]]
         }),
         __metadata("design:paramtypes", [_app_facades_auth_authFacade__WEBPACK_IMPORTED_MODULE_11__["AuthFacade"],
             _ngrx_store__WEBPACK_IMPORTED_MODULE_9__["Store"]])
@@ -244,7 +246,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _store_spinner_actions__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @store/spinner/actions */ "./src/app/store/spinner/actions.ts");
 /* harmony import */ var _models_user__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @models/user */ "./src/app/models/user.ts");
 /* harmony import */ var _app_facades_auth_authFacade__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @app/facades/auth/authFacade */ "./src/app/facades/auth/authFacade.ts");
-/* harmony import */ var _facadespermission_permissionFacade__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @facadespermission/permissionFacade */ "./src/app/facades/permission/permissionFacade.ts");
+/* harmony import */ var _facades_permission_permissionFacade__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @facades/permission/permissionFacade */ "./src/app/facades/permission/permissionFacade.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -302,21 +304,21 @@ var LoginComponent = /** @class */ (function () {
         var _this = this;
         this.authService.login({ email: this.signinForm.value.email, password: this.signinForm.value.password })
             .subscribe(function (resp) {
-            if (resp.token) {
-                _this.store.dispatch(new _store_auth_actions__WEBPACK_IMPORTED_MODULE_7__["AuthenticateAction"](resp.token));
+            if (resp.data.token) {
+                _this.store.dispatch(new _store_auth_actions__WEBPACK_IMPORTED_MODULE_7__["AuthenticateAction"](resp.data.token));
                 _this.accountService.getAccount().subscribe(function (response) {
-                    var permissions = _facadespermission_permissionFacade__WEBPACK_IMPORTED_MODULE_12__["PermissionFacade"].groupByModelName(response.data.permissions);
+                    var permissions = _facades_permission_permissionFacade__WEBPACK_IMPORTED_MODULE_12__["PermissionFacade"].groupByModelName(response.data.permissions);
                     var user = new _models_user__WEBPACK_IMPORTED_MODULE_10__["User"](response.data);
                     if (permissions) {
                         user.permissions = permissions;
                     }
-                    _this.spinnerStore.dispatch(new _store_spinner_actions__WEBPACK_IMPORTED_MODULE_9__["StopSpinner"]());
                     _this.store.dispatch(new _store_auth_actions__WEBPACK_IMPORTED_MODULE_7__["AuthenticatedSuccessAction"]({ authenticated: true, user: user }));
                     _this.authFacade.checkAuthStatusAndRedirect();
                 }, function (error) {
                     console.log(error);
                 });
             }
+            _this.spinnerStore.dispatch(new _store_spinner_actions__WEBPACK_IMPORTED_MODULE_9__["StopSpinner"]());
         });
     };
     LoginComponent = __decorate([
@@ -346,7 +348,7 @@ var LoginComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<mat-card>\n  <mat-card-header>\n    <mat-card-title>Register</mat-card-title>\n  </mat-card-header>\n  <mat-card-content>\n    <form [formGroup]=\"signupForm\" (ngSubmit)=\"register()\">\n      <table cellspacing=\"0\">\n        <tr>\n          <td>\n            <mat-form-field>\n              <input matInput placeholder=\"Name\"\n                     name=\"email\"\n                     formControlName=\"name\"\n              >\n            </mat-form-field>\n            <div\n              *ngIf=\"!signupForm.get('name').valid && signupForm.get('name').touched\"\n              class=\"help-block\">\n              <span *ngIf=\"signupForm.get('name').errors['required']\">This field is required!</span>\n            </div>\n          </td>\n        </tr>\n        <tr>\n          <td>\n            <mat-form-field>\n              <input matInput placeholder=\"Email\"\n                     name=\"email\"\n                     formControlName=\"email\"\n              >\n            </mat-form-field>\n            <div\n              *ngIf=\"!signupForm.get('email').valid && signupForm.get('email').touched\"\n              class=\"help-block\">\n              <span *ngIf=\"signupForm.get('email').errors['emailIsForbidden']\">This email is invalid!</span>\n              <span *ngIf=\"signupForm.get('email').errors['required']\">This field is required!</span>\n            </div>\n          </td>\n        </tr>\n        <tr>\n          <td>\n            <mat-form-field>\n              <input matInput placeholder=\"Password\"\n                     formControlName=\"password\"\n                     type=\"password\"\n                     name=\"password\" required>\n            </mat-form-field>\n            <div\n              *ngIf=\"!signupForm.get('password').valid && signupForm.get('password').touched\"\n              class=\"help-block\">\n              <span *ngIf=\"signupForm.get('password').errors['required']\">This field is required!</span>\n            </div>\n          </td>\n        </tr>\n        <tr>\n          <td>\n            <mat-form-field>\n              <input matInput placeholder=\"Confirm password\"\n                     formControlName=\"confirm_password\"\n                     type=\"password\"\n                     name=\"confirm_password\" required>\n            </mat-form-field>\n            <div\n              *ngIf=\"!signupForm.get('confirm_password').valid && signupForm.get('confirm_password').touched\"\n              class=\"help-block\">\n              <span *ngIf=\"signupForm.get('confirm_password').errors['confirmedPassword']\">Password not confirmed!</span>\n              <span *ngIf=\"signupForm.get('confirm_password').errors['required']\">This field is required!</span>\n            </div>\n          </td>\n        </tr>\n      </table>\n      <mat-card-actions>\n        <button mat-raised-button\n                color=\"primary\"\n                [disabled]=\"!signupForm.valid && signupForm.touched || !signupForm.touched\n    \">Register</button>\n      </mat-card-actions>\n    </form>\n  </mat-card-content>\n</mat-card>\n"
+module.exports = "<mat-card>\n  <mat-card-header>\n    <mat-card-title>Register</mat-card-title>\n  </mat-card-header>\n  <mat-card-content>\n    <form [formGroup]=\"signupForm\" (ngSubmit)=\"register()\">\n      <table cellspacing=\"0\">\n        <tr>\n          <td>\n            <mat-form-field>\n              <input matInput placeholder=\"Name\"\n                     name=\"email\"\n                     formControlName=\"name\"\n              >\n            </mat-form-field>\n            <div\n              *ngIf=\"!signupForm.get('name').valid && signupForm.get('name').touched\"\n              class=\"help-block\">\n              <span *ngIf=\"signupForm.get('name').errors['required']\">This field is required!</span>\n            </div>\n          </td>\n        </tr>\n        <tr>\n          <td>\n            <mat-form-field>\n              <input matInput placeholder=\"Email\"\n                     name=\"email\"\n                     formControlName=\"email\"\n              >\n            </mat-form-field>\n            <div\n              *ngIf=\"!signupForm.get('email').valid && signupForm.get('email').touched\"\n              class=\"help-block\">\n              <span *ngIf=\"signupForm.get('email').errors['email']\">This email is invalid!</span>\n              <span *ngIf=\"signupForm.get('email').errors['required']\">This field is required!</span>\n            </div>\n          </td>\n        </tr>\n        <tr>\n          <td>\n            <mat-form-field>\n              <input matInput placeholder=\"Password\"\n                     formControlName=\"password\"\n                     type=\"password\"\n                     name=\"password\" required>\n            </mat-form-field>\n            <div\n              *ngIf=\"!signupForm.get('password').valid && signupForm.get('password').touched\"\n              class=\"help-block\">\n              <span *ngIf=\"signupForm.get('password').errors['required']\">This field is required!</span>\n            </div>\n          </td>\n        </tr>\n        <tr>\n          <td>\n            <mat-form-field>\n              <input matInput placeholder=\"Confirm password\"\n                     formControlName=\"confirm_password\"\n                     type=\"password\"\n                     name=\"confirm_password\" required>\n            </mat-form-field>\n            <div\n              *ngIf=\"!signupForm.get('confirm_password').valid && signupForm.get('confirm_password').touched\"\n              class=\"help-block\">\n              <span *ngIf=\"signupForm.get('confirm_password').errors['confirmedPassword']\">Password not confirmed!</span>\n              <span *ngIf=\"signupForm.get('confirm_password').errors['required']\">This field is required!</span>\n            </div>\n          </td>\n        </tr>\n        <tr>\n          <td class=\"float_right\">\n            <mat-checkbox #checkbox (change)=\"onClickedCheckBox(checkbox)\" class=\"mat-primary\">Create school</mat-checkbox>\n          </td>\n        </tr>\n        <div *ngIf=\"addASchool === true\">\n          <h2>Create Gym</h2>\n          <tr>\n            <td>\n              <mat-form-field>\n                <input matInput placeholder=\"Gym Name\"\n                       name=\"gym_name\"\n                       formControlName=\"gym_name\"\n                >\n              </mat-form-field>\n              <div\n                *ngIf=\"!signupForm.get('gym_name').valid && signupForm.get('gym_name').touched\"\n                class=\"help-block\">\n                <span *ngIf=\"signupForm.get('gym_name').errors['required_custom']\">This field is required!</span>\n              </div>\n            </td>\n          </tr>\n          <tr>\n            <td>\n              <mat-form-field>\n                <input matInput placeholder=\"Gym Description\"\n                       name=\"gym_description\"\n                       formControlName=\"gym_description\"\n                >\n              </mat-form-field>\n            </td>\n          </tr>\n          <tr>\n            <td>\n              <mat-form-field>\n                <input matInput placeholder=\"Gym Address\"\n                       name=\"gym_address\"\n                       formControlName=\"gym_address\"\n                >\n              </mat-form-field>\n            </td>\n          </tr>\n        </div>\n      </table>\n      <mat-card-actions>\n        <button mat-raised-button\n                color=\"primary\"\n                [disabled]=\"!signupForm.valid && signupForm.touched || !signupForm.touched\n    \">Register</button>\n      </mat-card-actions>\n    </form>\n  </mat-card-content>\n</mat-card>\n"
 
 /***/ }),
 
@@ -377,6 +379,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
 /* harmony import */ var _store_spinner_actions__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @store/spinner/actions */ "./src/app/store/spinner/actions.ts");
+/* harmony import */ var _services_school_school_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @services/school/school.service */ "./src/app/services/school/school.service.ts");
+/* harmony import */ var _facades_auth_authFacade__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @facades/auth/authFacade */ "./src/app/facades/auth/authFacade.ts");
+/* harmony import */ var _store_auth_actions__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @store/auth/actions */ "./src/app/store/auth/actions.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -392,11 +397,18 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
+
+
+
 var RegisterComponent = /** @class */ (function () {
-    function RegisterComponent(router, authService, spinnerStore) {
+    function RegisterComponent(router, authFacade, authService, schoolService, authStore, spinnerStore) {
         this.router = router;
+        this.authFacade = authFacade;
         this.authService = authService;
+        this.schoolService = schoolService;
+        this.authStore = authStore;
         this.spinnerStore = spinnerStore;
+        this.addASchool = false;
     }
     RegisterComponent.prototype.ngOnInit = function () {
         this.signupForm = new _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormGroup"]({
@@ -404,6 +416,9 @@ var RegisterComponent = /** @class */ (function () {
             'email': new _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormControl"](null, [_angular_forms__WEBPACK_IMPORTED_MODULE_1__["Validators"].required, _angular_forms__WEBPACK_IMPORTED_MODULE_1__["Validators"].email]),
             'password': new _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormControl"](null, [_angular_forms__WEBPACK_IMPORTED_MODULE_1__["Validators"].required]),
             'confirm_password': new _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormControl"](null, [_angular_forms__WEBPACK_IMPORTED_MODULE_1__["Validators"].required, this.confirmedPassword.bind(this)]),
+            'gym_name': new _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormControl"](null, [this.requiredCustom.bind(this)]),
+            'gym_description': new _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormControl"](null),
+            'gym_address': new _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormControl"](null),
         });
     };
     RegisterComponent.prototype.confirmedPassword = function (control) {
@@ -414,6 +429,23 @@ var RegisterComponent = /** @class */ (function () {
             return null;
         }
     };
+    RegisterComponent.prototype.requiredCustom = function (control) {
+        if (control.value && control.value.length !== 0) {
+            control.markAsTouched();
+        }
+        if (this.addASchool && control.touched && (!control.value || control.value.length === 0)) {
+            return { 'required_custom': true };
+        }
+        else {
+            return null;
+        }
+    };
+    RegisterComponent.prototype.onClickedCheckBox = function (val) {
+        if (!val.checked) {
+            this.signupForm.get('gym_name').reset();
+        }
+        this.addASchool = !this.addASchool;
+    };
     RegisterComponent.prototype.register = function () {
         var _this = this;
         console.log(this.signupForm);
@@ -423,6 +455,16 @@ var RegisterComponent = /** @class */ (function () {
             password: this.signupForm.get('password').value,
             password_confirmation: this.signupForm.get('confirm_password').value })
             .subscribe(function (resp) {
+            var schoolName = _this.signupForm.get('gym_name').value;
+            if (schoolName && schoolName.length > 0) {
+                _this.authStore.dispatch(new _store_auth_actions__WEBPACK_IMPORTED_MODULE_8__["AuthenticateAction"](resp.data.token));
+                _this.schoolService.create({
+                    name: _this.signupForm.get('gym_name').value,
+                    description: _this.signupForm.get('gym_description').value,
+                    address: _this.signupForm.get('gym_address').value
+                }).subscribe(function (resp) { return console.log(resp); });
+            }
+            _this.authStore.dispatch(new _store_auth_actions__WEBPACK_IMPORTED_MODULE_8__["SignOut"](_this.authFacade));
             _this.spinnerStore.dispatch(new _store_spinner_actions__WEBPACK_IMPORTED_MODULE_5__["StopSpinner"]());
             _this.router.navigate(['/auth/login']);
         });
@@ -434,7 +476,10 @@ var RegisterComponent = /** @class */ (function () {
             styles: [__webpack_require__(/*! ./register.component.scss */ "./src/app/pages/auth/register/register.component.scss")]
         }),
         __metadata("design:paramtypes", [_angular_router__WEBPACK_IMPORTED_MODULE_4__["Router"],
+            _facades_auth_authFacade__WEBPACK_IMPORTED_MODULE_7__["AuthFacade"],
             _services_auth_auth_service__WEBPACK_IMPORTED_MODULE_2__["AuthService"],
+            _services_school_school_service__WEBPACK_IMPORTED_MODULE_6__["SchoolService"],
+            _ngrx_store__WEBPACK_IMPORTED_MODULE_3__["Store"],
             _ngrx_store__WEBPACK_IMPORTED_MODULE_3__["Store"]])
     ], RegisterComponent);
     return RegisterComponent;
@@ -479,6 +524,47 @@ var AccountService = /** @class */ (function () {
         __metadata("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpClient"]])
     ], AccountService);
     return AccountService;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/services/school/school.service.ts":
+/*!***************************************************!*\
+  !*** ./src/app/services/school/school.service.ts ***!
+  \***************************************************/
+/*! exports provided: SchoolService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SchoolService", function() { return SchoolService; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var SchoolService = /** @class */ (function () {
+    function SchoolService(httpClient) {
+        this.httpClient = httpClient;
+    }
+    SchoolService.prototype.create = function (body) {
+        return this.httpClient.post('school', body);
+    };
+    SchoolService = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])(),
+        __metadata("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpClient"]])
+    ], SchoolService);
+    return SchoolService;
 }());
 
 
