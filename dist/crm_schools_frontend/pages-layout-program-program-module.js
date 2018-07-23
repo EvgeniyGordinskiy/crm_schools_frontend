@@ -125,7 +125,7 @@ var CalendarComponent = /** @class */ (function () {
         Object.keys(days).forEach(function (item) {
             if (typeof days[item] !== 'undefined') {
                 days[item].classList.remove('selectedCalendarItem');
-                days[item].classList.remove('active-border');
+                // days[item].classList.remove('active-border');
             }
         });
     };

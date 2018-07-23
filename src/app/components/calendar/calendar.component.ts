@@ -83,7 +83,7 @@ export class CalendarComponent implements OnInit {
       Object.keys(days).forEach((item) => {
         if ( typeof days[item] !== 'undefined') {
           days[item].classList.remove('selectedCalendarItem');
-          days[item].classList.remove('active-border');
+          // days[item].classList.remove('active-border');
         }
       });
   }
