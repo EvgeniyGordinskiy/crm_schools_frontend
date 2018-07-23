@@ -117,6 +117,8 @@ var CalendarComponent = /** @class */ (function () {
         }
     };
     CalendarComponent.prototype.isDayActive = function (day) {
+        console.log(this.schedule);
+        console.log(day);
         return this.schedule && this.schedule[day + 1];
     };
     CalendarComponent.prototype.clearCalendar = function () {
@@ -125,7 +127,7 @@ var CalendarComponent = /** @class */ (function () {
         Object.keys(days).forEach(function (item) {
             if (typeof days[item] !== 'undefined') {
                 days[item].classList.remove('selectedCalendarItem');
-                // days[item].classList.remove('active-border');
+                days[item].classList.remove('active-border');
             }
         });
     };

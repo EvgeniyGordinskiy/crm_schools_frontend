@@ -74,6 +74,8 @@ export class CalendarComponent implements OnInit {
   }
 
   isDayActive(day) {
+    console.log(this.schedule);
+    console.log(day);
     return this.schedule && this.schedule[day + 1];
   }
 
@@ -83,7 +85,7 @@ export class CalendarComponent implements OnInit {
       Object.keys(days).forEach((item) => {
         if ( typeof days[item] !== 'undefined') {
           days[item].classList.remove('selectedCalendarItem');
-          // days[item].classList.remove('active-border');
+          days[item].classList.remove('active-border');
         }
       });
   }
