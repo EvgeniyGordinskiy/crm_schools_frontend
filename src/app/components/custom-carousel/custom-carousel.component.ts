@@ -1,6 +1,5 @@
-import {AfterViewChecked, AfterViewInit, Component, ElementRef, Input, OnInit, Renderer2} from '@angular/core';
+import {AfterViewChecked, AfterViewInit, Component, ElementRef, Input, OnInit, Renderer2, ViewChild} from '@angular/core';
 import {Subject} from 'rxjs/Subject';
-import {T} from '@angular/core/src/render3';
 
 @Component({
   selector: 'app-custom-carousel',
@@ -10,9 +9,9 @@ import {T} from '@angular/core/src/render3';
 export class CustomCarouselComponent implements OnInit, AfterViewInit {
   @Input() innerDivClass: string;
   @Input() displayItems: number;
-  @Input() margin: number = 5;
+  @Input() margin = 5;
   @Input() arrayItems: any;
-  @Input() startPage: number = 1;
+  @Input() startPage = 1;
   @Input() move: Subject<string>;
 
   left = 0;
@@ -43,7 +42,8 @@ export class CustomCarouselComponent implements OnInit, AfterViewInit {
   }
 
   carouselToRight() {
-    if (this.left === 0 || this.left > 0) {
+    console.log(this.left);
+    if (this.left !== 0 || this.left > 0) {
       let width = this.elRef.nativeElement.querySelector(`.${this.innerDivClass}`)
         .querySelector('.carousel-content-item').clientWidth + this.margin;
       this.left += width * this.displayItems;

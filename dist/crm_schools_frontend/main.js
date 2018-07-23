@@ -1034,6 +1034,7 @@ var MainInterceptor = /** @class */ (function () {
     }
     MainInterceptor.prototype.intercept = function (req, next) {
         var url = 'http://ec2-18-221-164-63.us-east-2.compute.amazonaws.com:8000/api/';
+        // const url = 'http://localhost:8000/api/';
         req = req.clone({
             url: url + req.url
         });

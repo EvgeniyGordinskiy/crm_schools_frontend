@@ -48,7 +48,7 @@ export class CalendarComponent implements OnInit {
         }
         console.log(resp);
       }
-    )
+      );
   }
 
   onSelectDay(event) {
@@ -78,13 +78,14 @@ export class CalendarComponent implements OnInit {
   }
 
   clearCalendar() {
-    const elements = document.getElementsByClassName('days');
-    Object.keys(elements).forEach( (key) => {
-      Object.keys(elements[key].getElementsByTagName('li')).forEach((item) => {
-        item[key].classList.remove('selectedCalendarItem');
-        item[key].classList.remove('active-border');
+    const days = document.getElementsByClassName('days').item(0)
+      .getElementsByTagName('li');
+      Object.keys(days).forEach((item) => {
+        if ( typeof days[item] !== 'undefined') {
+          days[item].classList.remove('selectedCalendarItem');
+          days[item].classList.remove('active-border');
+        }
       });
-    });
   }
 
 }

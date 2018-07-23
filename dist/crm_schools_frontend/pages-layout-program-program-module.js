@@ -120,12 +120,13 @@ var CalendarComponent = /** @class */ (function () {
         return this.schedule && this.schedule[day + 1];
     };
     CalendarComponent.prototype.clearCalendar = function () {
-        var elements = document.getElementsByClassName('days');
-        Object.keys(elements).forEach(function (key) {
-            Object.keys(elements[key].getElementsByTagName('li')).forEach(function (item) {
-                item[key].classList.remove('selectedCalendarItem');
-                item[key].classList.remove('active-border');
-            });
+        var days = document.getElementsByClassName('days').item(0)
+            .getElementsByTagName('li');
+        Object.keys(days).forEach(function (item) {
+            if (typeof days[item] !== 'undefined') {
+                days[item].classList.remove('selectedCalendarItem');
+                days[item].classList.remove('active-border');
+            }
         });
     };
     __decorate([
@@ -232,7 +233,8 @@ var CustomCarouselComponent = /** @class */ (function () {
         }
     };
     CustomCarouselComponent.prototype.carouselToRight = function () {
-        if (this.left === 0 || this.left > 0) {
+        console.log(this.left);
+        if (this.left !== 0 || this.left > 0) {
             var width = this.elRef.nativeElement.querySelector("." + this.innerDivClass)
                 .querySelector('.carousel-content-item').clientWidth + this.margin;
             this.left += width * this.displayItems;
@@ -257,7 +259,7 @@ var CustomCarouselComponent = /** @class */ (function () {
     ], CustomCarouselComponent.prototype, "displayItems", void 0);
     __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
-        __metadata("design:type", Number)
+        __metadata("design:type", Object)
     ], CustomCarouselComponent.prototype, "margin", void 0);
     __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
@@ -265,7 +267,7 @@ var CustomCarouselComponent = /** @class */ (function () {
     ], CustomCarouselComponent.prototype, "arrayItems", void 0);
     __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
-        __metadata("design:type", Number)
+        __metadata("design:type", Object)
     ], CustomCarouselComponent.prototype, "startPage", void 0);
     __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
@@ -294,7 +296,7 @@ var CustomCarouselComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"create-program-wrapper\">\n  <div class=\"header\">\n    <span>Create New Program</span>\n  </div>\n  <div class=\"inputs-header\">Program name</div>\n  <input name=\"program_name\" #program_name (input)=\"errors['program_name'] = false\">\n  <div\n    *ngIf=\"errors['program_name']\"\n    class=\"help-block\">\n    <span>This field is required!</span>\n  </div>\n  <div class=\"inputs-header\">Description</div>\n  <textarea name=\"description\" #description></textarea>\n  <div class=\"inputs-header\">Schedule a days</div>\n    <app-custom-carousel\n      [innerDivClass]=\"'inner-carousel-content-months'\"\n      [displayItems]=\"1\"\n      [arrayItems]=\"months\"\n      [move]=\"moveMonthsCarousel\"\n      [startPage]=\"currentMonth\">\n      <div class=\"carousel-custom carousel-custom-months buttons-are-small\">\n        <button mat-button class=\"mat-primary\" (click)=\"onMonthToRight()\"><mat-icon>keyboard_arrow_left</mat-icon></button>\n        <div class=\"carousel-content  carousel-content-months\">\n          <div class=\"inner-carousel-content inner-carousel-content-months\">\n            <div class=\"carousel-content-item\" *ngFor=\"let month of months\">\n              <div class=\"month\">\n                <span>{{month}}</span>\n              </div>\n            </div>\n          </div>\n        </div>\n        <button mat-button class=\"mat-primary\" (click)=\"onMonthToLeft()\"><mat-icon>keyboard_arrow_right</mat-icon></button>\n      </div>\n  </app-custom-carousel>\n  <app-calendar\n    [insertingTime]=\"selectingTime\"\n    (selectedDay)=\"onSelectedDay($event)\"\n    [insertingSchedule]=\"monthsSchedule\"\n    [insertingMonth]=\"monthsNumber\"></app-calendar>\n  <div class=\"inputs-header setTimeHeader\">Set Time</div>\n  <input type=\"time\" name=\"time\" #time (blur)=\"onTimeBlur(time.value)\"/>\n  <div class=\"inputs-header\">Repeat Every</div>\n  <mat-radio-group name=\"repeat_every\">\n    <mat-radio-button value=\"day\">Day</mat-radio-button>\n    <mat-radio-button value=\"week\">Week</mat-radio-button>\n    <mat-radio-button value=\"month\">Month</mat-radio-button>\n  </mat-radio-group>\n  <div class=\"inputs-header\">Select Teacher</div>\n  <mat-select name=\"teacherName\" #teacherName (selectionChange)=\"errors['teacherName'] = false\">\n    <mat-option *ngFor=\"let teacher of teachers\" [value]=\"teacher.id\">\n      {{teacher.name}}\n    </mat-option>\n  </mat-select>\n  <div\n    *ngIf=\"errors['teacherName']\"\n    class=\"help-block\">\n    <span>This field is required!</span>\n  </div>\n  <div class=\"buttons-in-bottom-modal\">\n  <button mat-stroked-button class=\"mat-primary add-new-program-modal\" (click)=\"onCreate()\">\n    <mat-icon>add</mat-icon>\n    Add New Program\n  </button>\n  <button mat-button class=\"mat-primary\" (click)=\"cancel()\"><b>Cancel</b></button>\n  </div>\n</div>\n"
+module.exports = "<div class=\"create-program-wrapper\" #create_program_wrapper>\n  <div class=\"header\">\n    <span>Create New Program</span>\n  </div>\n  <div class=\"inputs-header\">Program name</div>\n  <input name=\"program_name\" #program_name (input)=\"errors['program_name'] = false\">\n  <div\n    *ngIf=\"errors['program_name']\"\n    class=\"help-block\">\n    <span>This field is required!</span>\n  </div>\n  <div class=\"inputs-header\">Description</div>\n  <textarea name=\"description\" #description></textarea>\n  <div class=\"inputs-header\">Schedule a days</div>\n    <app-custom-carousel\n      [innerDivClass]=\"'inner-carousel-content-months'\"\n      [displayItems]=\"1\"\n      [arrayItems]=\"months\"\n      [move]=\"moveMonthsCarousel\"\n      [startPage]=\"currentMonth\">\n      <div class=\"carousel-custom carousel-custom-months buttons-are-small\">\n        <button mat-button class=\"mat-primary\" (click)=\"onMonthToRight()\"><mat-icon>keyboard_arrow_left</mat-icon></button>\n        <div class=\"carousel-content  carousel-content-months\">\n          <div class=\"inner-carousel-content inner-carousel-content-months\">\n            <div class=\"carousel-content-item\" *ngFor=\"let month of months\">\n              <div class=\"month\">\n                <span>{{month}}</span>\n              </div>\n            </div>\n          </div>\n        </div>\n        <button mat-button class=\"mat-primary\" (click)=\"onMonthToLeft()\"><mat-icon>keyboard_arrow_right</mat-icon></button>\n      </div>\n  </app-custom-carousel>\n  <app-calendar\n    [insertingTime]=\"selectingTime\"\n    (selectedDay)=\"onSelectedDay($event)\"\n    [insertingSchedule]=\"monthsSchedule\"\n    [insertingMonth]=\"monthsNumber\"></app-calendar>\n  <div class=\"inputs-header setTimeHeader\">Set Time</div>\n  <input type=\"time\" name=\"time\" #time (blur)=\"onTimeBlur(time.value)\"/>\n  <div class=\"inputs-header\">Repeat Every</div>\n  <mat-radio-group name=\"repeat_every\">\n    <mat-radio-button value=\"day\">Day</mat-radio-button>\n    <mat-radio-button value=\"week\">Week</mat-radio-button>\n    <mat-radio-button value=\"month\">Month</mat-radio-button>\n  </mat-radio-group>\n  <div class=\"inputs-header\">Select Teacher</div>\n  <mat-select name=\"teacherName\" #teacherName (selectionChange)=\"errors['teacherName'] = false\">\n    <mat-option *ngFor=\"let teacher of teachers\" [value]=\"teacher.id\">\n      {{teacher.name}}\n    </mat-option>\n  </mat-select>\n  <div\n    *ngIf=\"errors['teacherName']\"\n    class=\"help-block\">\n    <span>This field is required!</span>\n  </div>\n  <div class=\"buttons-in-bottom-modal\">\n  <button mat-stroked-button class=\"mat-primary add-new-program-modal\" (click)=\"onCreate()\">\n    <mat-icon>add</mat-icon>\n    Add New Program\n  </button>\n  <button mat-button class=\"mat-primary\" (click)=\"cancel()\"><b>Cancel</b></button>\n  </div>\n</div>\n"
 
 /***/ }),
 
@@ -305,7 +307,7 @@ module.exports = "<div class=\"create-program-wrapper\">\n  <div class=\"header\
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ".carousel-custom {\n  width: 100%;\n  min-width: 290px;\n  height: 60%;\n  display: flex;\n  justify-content: center; }\n  .carousel-custom button {\n    display: inline-block;\n    margin: 0;\n    padding: 0; }\n  .carousel-custom .carousel-content {\n    display: inline-block;\n    overflow: hidden;\n    width: 218px;\n    height: 48px;\n    position: relative;\n    margin-bottom: -3px; }\n  .carousel-custom .carousel-content .inner-carousel-content {\n      display: flex;\n      width: 500px;\n      left: 0;\n      position: relative;\n      transition: left 0.25s; }\n  .carousel-custom .carousel-content .carousel-content-item {\n      display: inline-block;\n      width: 32px;\n      text-align: center;\n      margin-left: 2.5px;\n      margin-right: 2.5px; }\n  .carousel-custom .carousel-content .carousel-content-item:hover {\n        cursor: pointer; }\n  .create-program-wrapper {\n  width: 327px; }\n  .create-program-wrapper input, .create-program-wrapper textarea, .create-program-wrapper mat-select {\n    border: #585555cf solid 1.2px;\n    border-radius: 2px; }\n  .create-program-wrapper input[name=\"program_name\"], .create-program-wrapper textarea[name=\"description\"], .create-program-wrapper mat-select {\n    width: 240px; }\n  .create-program-wrapper input[name=\"time\"], .create-program-wrapper input[name=\"program_name\"], .create-program-wrapper mat-select {\n    height: 35px; }\n  .create-program-wrapper ::ng-deep mat-select[name=teacherName] .mat-select-trigger {\n    height: 38px; }\n  .create-program-wrapper ::ng-deep mat-select[name=teacherName] .mat-select-trigger .mat-select-value {\n      position: relative;\n      top: 8px;\n      left: 12px; }\n  .create-program-wrapper textarea[name=\"description\"] {\n    height: 97px;\n    resize: none; }\n  .create-program-wrapper .mat-radio-group {\n    width: 23px;\n    height: 23px; }\n  .create-program-wrapper .mat-radio-group .mat-radio-button {\n      margin-top: 8px;\n      margin-right: 32px; }\n  .create-program-wrapper .inputs-header {\n    margin-top: 15px;\n    margin-bottom: 2px;\n    font-size: 18px;\n    font-weight: bold;\n    color: #464646fa; }\n  .create-program-wrapper .setTimeHeader {\n    margin-top: 0; }\n  .create-program-wrapper .buttons-in-bottom-modal {\n    margin: 27px 0;\n    display: flex;\n    flex-direction: column; }\n  .create-program-wrapper .buttons-in-bottom-modal .add-new-program-modal {\n      border-radius: 20px;\n      width: 170px;\n      -ms-grid-row-align: center;\n          align-self: center; }\n  .create-program-wrapper .carousel-custom-months .carousel-content-months {\n    width: 98px;\n    top: 5px; }\n  .create-program-wrapper .carousel-custom-months .carousel-content-months .inner-carousel-content-months .carousel-content-item {\n      width: 210px; }\n  .create-program-wrapper .carousel-custom-months .carousel-content-months .inner-carousel-content-months .carousel-content-item .month {\n        width: 90px; }\n"
+module.exports = ".carousel-custom {\n  width: 100%;\n  min-width: 290px;\n  height: 60%;\n  display: flex;\n  justify-content: center; }\n  .carousel-custom button {\n    display: inline-block;\n    margin: 0;\n    padding: 0; }\n  .carousel-custom .carousel-content {\n    display: inline-block;\n    overflow: hidden;\n    width: 218px;\n    height: 48px;\n    position: relative;\n    margin-bottom: -3px; }\n  .carousel-custom .carousel-content .inner-carousel-content {\n      display: flex;\n      width: 500px;\n      left: 0;\n      position: relative;\n      transition: left 0.25s; }\n  .carousel-custom .carousel-content .carousel-content-item {\n      display: inline-block;\n      width: 32px;\n      text-align: center;\n      margin-left: 2.5px;\n      margin-right: 2.5px; }\n  .carousel-custom .carousel-content .carousel-content-item:hover {\n        cursor: pointer; }\n  .create-program-wrapper {\n  width: 327px; }\n  .create-program-wrapper input, .create-program-wrapper textarea, .create-program-wrapper mat-select {\n    border: #585555cf solid 1.2px;\n    border-radius: 2px; }\n  .create-program-wrapper input[name=\"program_name\"], .create-program-wrapper textarea[name=\"description\"], .create-program-wrapper mat-select {\n    width: 240px; }\n  .create-program-wrapper input[name=\"time\"], .create-program-wrapper input[name=\"program_name\"], .create-program-wrapper mat-select {\n    height: 35px; }\n  .create-program-wrapper ::ng-deep mat-select[name=teacherName] .mat-select-trigger {\n    height: 38px; }\n  .create-program-wrapper ::ng-deep mat-select[name=teacherName] .mat-select-trigger .mat-select-value {\n      position: relative;\n      top: 8px;\n      left: 12px; }\n  .create-program-wrapper textarea[name=\"description\"] {\n    height: 97px;\n    resize: none; }\n  .create-program-wrapper .mat-radio-group {\n    width: 23px;\n    height: 23px; }\n  .create-program-wrapper .mat-radio-group .mat-radio-button {\n      margin-top: 8px;\n      margin-right: 32px; }\n  .create-program-wrapper .inputs-header {\n    margin-top: 15px;\n    margin-bottom: 2px;\n    font-size: 18px;\n    font-weight: bold;\n    color: #464646fa; }\n  .create-program-wrapper .setTimeHeader {\n    margin-top: 0; }\n  .create-program-wrapper .buttons-in-bottom-modal {\n    margin: 27px 0;\n    display: flex;\n    flex-direction: column; }\n  .create-program-wrapper .buttons-in-bottom-modal .add-new-program-modal {\n      border-radius: 20px;\n      width: 170px;\n      -ms-grid-row-align: center;\n          align-self: center; }\n  .create-program-wrapper .carousel-custom-months {\n    height: 45px; }\n  .create-program-wrapper .carousel-custom-months button {\n      top: 0; }\n  .create-program-wrapper .carousel-custom-months .carousel-content-months {\n      width: 98px;\n      height: 45px;\n      top: 5px; }\n  .create-program-wrapper .carousel-custom-months .carousel-content-months .inner-carousel-content-months .carousel-content-item {\n        width: 210px; }\n  .create-program-wrapper .carousel-custom-months .carousel-content-months .inner-carousel-content-months .carousel-content-item .month {\n          width: 90px; }\n"
 
 /***/ }),
 
@@ -335,7 +337,9 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 var ProgramCreateComponent = /** @class */ (function () {
-    function ProgramCreateComponent(programService) {
+    function ProgramCreateComponent(renderer, elRef, programService) {
+        this.renderer = renderer;
+        this.elRef = elRef;
         this.programService = programService;
         this.moveMonthsCarousel = new rxjs_Subject__WEBPACK_IMPORTED_MODULE_1__["Subject"]();
         this.selectingTime = new rxjs_Subject__WEBPACK_IMPORTED_MODULE_1__["Subject"]();
@@ -381,6 +385,11 @@ var ProgramCreateComponent = /** @class */ (function () {
         ];
     }
     ProgramCreateComponent.prototype.ngOnInit = function () {
+        var bodyHeight = document.getElementsByTagName('body').item(0).clientHeight;
+        console.log(bodyHeight);
+        if (bodyHeight < 800) {
+            this.renderer.setStyle(this.host.nativeElement, 'height', bodyHeight - 50 + 'px');
+        }
         console.log(new Date().getMonth());
     };
     ProgramCreateComponent.prototype.onCreate = function () {
@@ -439,6 +448,10 @@ var ProgramCreateComponent = /** @class */ (function () {
         this.schedule[this.currentMonth][this.selectedDay] = time;
     };
     __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ViewChild"])('create_program_wrapper'),
+        __metadata("design:type", _angular_core__WEBPACK_IMPORTED_MODULE_0__["ElementRef"])
+    ], ProgramCreateComponent.prototype, "host", void 0);
+    __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ViewChild"])('program_name'),
         __metadata("design:type", _angular_core__WEBPACK_IMPORTED_MODULE_0__["ElementRef"])
     ], ProgramCreateComponent.prototype, "program_name", void 0);
@@ -460,7 +473,9 @@ var ProgramCreateComponent = /** @class */ (function () {
             template: __webpack_require__(/*! ./program-create.component.html */ "./src/app/pages/layout/program/program-create/program-create.component.html"),
             styles: [__webpack_require__(/*! ./program-create.component.scss */ "./src/app/pages/layout/program/program-create/program-create.component.scss")]
         }),
-        __metadata("design:paramtypes", [_services_program_program_service__WEBPACK_IMPORTED_MODULE_2__["ProgramService"]])
+        __metadata("design:paramtypes", [_angular_core__WEBPACK_IMPORTED_MODULE_0__["Renderer2"],
+            _angular_core__WEBPACK_IMPORTED_MODULE_0__["ElementRef"],
+            _services_program_program_service__WEBPACK_IMPORTED_MODULE_2__["ProgramService"]])
     ], ProgramCreateComponent);
     return ProgramCreateComponent;
 }());

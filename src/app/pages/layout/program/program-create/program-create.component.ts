@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, OnInit, Renderer2, ViewChild} from '@angular/core';
 import {Subject} from 'rxjs/Subject';
 import {ProgramService} from '@services/program/program.service';
 
@@ -7,10 +7,11 @@ import {ProgramService} from '@services/program/program.service';
   templateUrl: './program-create.component.html',
   styleUrls: ['./program-create.component.scss']
 })
-export class ProgramCreateComponent implements OnInit{
-  @ViewChild('program_name') program_name:ElementRef;
-  @ViewChild('description') description:ElementRef;
-  @ViewChild('time') time:ElementRef;
+export class ProgramCreateComponent implements OnInit {
+  @ViewChild('create_program_wrapper') host: ElementRef;
+  @ViewChild('program_name') program_name: ElementRef;
+  @ViewChild('description') description: ElementRef;
+  @ViewChild('time') time: ElementRef;
   @ViewChild('teacherName') teacherName;
 
   moveMonthsCarousel: Subject<string> = new Subject();
@@ -55,19 +56,26 @@ export class ProgramCreateComponent implements OnInit{
   teachers = [
     {
       id: 1,
-      name:'Teacher 1'
+      name: 'Teacher 1'
     },
     {
       id: 2,
-      name:'Teacher 2'
+      name: 'Teacher 2'
     },
   ];
 
   constructor(
-    private programService: ProgramService
+    private renderer: Renderer2,
+    private elRef: ElementRef,
+    private programService: ProgramService,
   ) {}
 
   ngOnInit() {
+    const bodyHeight = document.getElementsByTagName('body').item(0).clientHeight;
+    console.log(bodyHeight);
+    if (bodyHeight < 800) {
+      this.renderer.setStyle(this.host.nativeElement, 'height', bodyHeight - 50 + 'px');
+    }
     console.log(new Date().getMonth());
   }
 

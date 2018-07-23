@@ -57,8 +57,13 @@
     }
   }
   .carousel-custom-months {
+    height: 45px;
+    button{
+      top: 0;
+    }
     .carousel-content-months {
       width: 98px;
+      height: 45px;
       top: 5px;
       .inner-carousel-content-months {
         .carousel-content-item {
