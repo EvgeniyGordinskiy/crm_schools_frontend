@@ -40,19 +40,19 @@
   <div class="inputs-header setTimeHeader">Set Time</div>
   <input type="time" name="time" #time (blur)="onTimeBlur(time.value)"/>
   <div class="inputs-header">Repeat Every</div>
-  <mat-radio-group name="repeat_every">
+  <mat-radio-group name="repeat_every"  #repeat_time (change)="onSelectedRepeaTime($event)">
     <mat-radio-button value="day">Day</mat-radio-button>
     <mat-radio-button value="week">Week</mat-radio-button>
     <mat-radio-button value="month">Month</mat-radio-button>
   </mat-radio-group>
   <div class="inputs-header">Select Teacher</div>
-  <mat-select name="teacherName" #teacherName (selectionChange)="errors['teacherName'] = false">
+  <mat-select name="teacherName" #teacherId (selectionChange)="errors['teacherId'] = false">
     <mat-option *ngFor="let teacher of teachers" [value]="teacher.id">
       {{teacher.name}}
     </mat-option>
   </mat-select>
   <div
-    *ngIf="errors['teacherName']"
+    *ngIf="errors['teacherId']"
     class="help-block">
     <span>This field is required!</span>
   </div>

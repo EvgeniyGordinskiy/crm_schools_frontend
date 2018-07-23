@@ -12,7 +12,8 @@ export class ProgramCreateComponent implements OnInit {
   @ViewChild('program_name') program_name: ElementRef;
   @ViewChild('description') description: ElementRef;
   @ViewChild('time') time: ElementRef;
-  @ViewChild('teacherName') teacherName;
+  @ViewChild('teacherId') teacherId;
+  repeat_time: string;
 
   moveMonthsCarousel: Subject<string> = new Subject();
   selectingTime: Subject<boolean> = new Subject();
@@ -80,12 +81,20 @@ export class ProgramCreateComponent implements OnInit {
   onCreate(): void {
     if (this.program_name.nativeElement.value < 0) {
       this.errors['program_name'] = true;
+    } else if (!this.teacherId.value) {
+      this.errors['teacherId'] = true;
+    } else {
+      this.programService.create({
+        program_name: this.program_name.nativeElement.value,
+        program_description: this.description.nativeElement.value,
+        schedule: this.schedule,
+        repeat_time: this.repeat_time,
+        teacher_id: this.teacherId.value
+      }). subscribe(
+        resp => console.log(resp, 'resp'),
+        err => console.log(err, 'err')
+      );
     }
-    if (!this.teacherName.value) {
-      this.errors['teacherName'] = true;
-    }
-    // this.program
-    console.log(this.errors);
   }
 
   cancel() {
@@ -129,6 +138,10 @@ export class ProgramCreateComponent implements OnInit {
     this.monthsNumber.next(this.currentMonth );
     this.moveMonthsCarousel.next('left');
     this.monthsSchedule.next(this.schedule[this.currentMonth])
+  }
+
+  onSelectedRepeaTime(event) {
+    this.repeat_time = event.value;
   }
 
   setSchedule(time) {

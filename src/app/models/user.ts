@@ -1,5 +1,6 @@
 import {Permission} from '@models/permission';
 import {UserInterface} from '@app/interfaces/user.interface';
+import {School} from '@models/shool';
 
 export class User implements UserInterface {
   id?: string;
@@ -9,6 +10,7 @@ export class User implements UserInterface {
   permissions: {
     key?: [Permission]
   };
+  schools?: [School];
 
   constructor(params) {
     this.email = params.email;

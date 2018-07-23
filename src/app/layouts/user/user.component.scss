@@ -12,6 +12,21 @@
         justify-content: space-between;
         min-width: 335px;
         margin-left: auto;
+        .add-gym-button{
+          border-radius: 20px;
+          width: 175px;
+          height: 30px;
+          padding-left: 6px;
+          justify-content: center;
+          flex-direction: column;
+          margin-top: 5px;
+          margin-left: 50px;
+          .mat-icon{
+            font-size: 17px;
+            font-weight: bold;
+            margin-top: 7px;
+          }
+        }
         .profile-details{
           display: flex;
           justify-content: center;
