@@ -5473,7 +5473,7 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /home/evgen/www/crm_schools/crm_schools_frontend/src/polyfills.ts */"./src/polyfills.ts");
+module.exports = __webpack_require__(/*! /data/crm_schools/httpdocs_angular/src/polyfills.ts */"./src/polyfills.ts");
 
 
 /***/ })

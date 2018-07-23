@@ -1727,7 +1727,7 @@ Object(_angular_platform_browser_dynamic__WEBPACK_IMPORTED_MODULE_1__["platformB
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /home/evgen/www/crm_schools/crm_schools_frontend/src/main.ts */"./src/main.ts");
+module.exports = __webpack_require__(/*! /data/crm_schools/httpdocs_angular/src/main.ts */"./src/main.ts");
 
 
 /***/ })

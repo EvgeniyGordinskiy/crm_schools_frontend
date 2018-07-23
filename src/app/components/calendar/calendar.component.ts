@@ -1,4 +1,4 @@
-import {Component, ElementRef, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {Subject} from 'rxjs/Subject';
 
 @Component({
@@ -6,7 +6,7 @@ import {Subject} from 'rxjs/Subject';
   templateUrl: './calendar.component.html',
   styleUrls: ['./calendar.component.scss']
 })
-export class CalendarComponent implements OnInit {
+export class CalendarComponent implements OnInit, OnDestroy {
   @Input() insertingTime: Subject<boolean>;
   @Input() insertingMonth: Subject<string>;
   @Input() insertingSchedule = new EventEmitter<object>();
@@ -17,38 +17,44 @@ export class CalendarComponent implements OnInit {
   schedule = {};
   currentElement: any;
 
+  subscribes = [];
+
   constructor() { }
 
   ngOnInit() {
     this.getMonthDays();
-    this.insertingTime.subscribe(
+    this.subscribes.push(this.insertingTime.subscribe(
       resp => {
         if (this.currentElement) {
           if (resp) {
             this.currentElement.classList.add('active-border');
           }  else {
-          this.currentElement.classList.remove("active-border");
+          this.clearCalendar(false);
          }
         }
-    });
+    })
+    );
 
-    this.insertingMonth.subscribe(
+    this.subscribes.push(this.insertingMonth.subscribe(
       (resp: any) => {
         if (resp > 0 && resp <= 12) {
             this.clearCalendar();
             this.getMonthDays(resp);
         }
       }
+    )
     );
 
-    this.insertingSchedule.subscribe(
+    this.subscribes.push(this.insertingSchedule.subscribe(
       (resp) => {
-        if (resp) {
-          this.schedule = resp;
-        }
-        console.log(resp);
+        this.schedule = resp;
       }
-      );
+      )
+    );
+  }
+
+  ngOnDestroy() {
+    this.unsubscribe();
   }
 
   onSelectDay(event) {
@@ -56,7 +62,7 @@ export class CalendarComponent implements OnInit {
     if (currentElement) {
       this.currentElement = currentElement;
       this.selectedDay.emit(this.currentElement.innerText);
-      this.clearCalendar();
+      this.clearCalendar(false);
       currentElement.classList.add('selectedCalendarItem');
     }
   }
@@ -74,20 +80,26 @@ export class CalendarComponent implements OnInit {
   }
 
   isDayActive(day) {
-    console.log(this.schedule);
-    console.log(day);
-    return this.schedule && this.schedule[day + 1];
+    return !!(this.schedule && this.schedule[day + 1]);
   }
 
-  clearCalendar() {
+  clearCalendar(clearBorder = true) {
     const days = document.getElementsByClassName('days').item(0)
       .getElementsByTagName('li');
       Object.keys(days).forEach((item) => {
         if ( typeof days[item] !== 'undefined') {
           days[item].classList.remove('selectedCalendarItem');
-          days[item].classList.remove('active-border');
+          if (clearBorder) {
+            days[item].classList.remove('active-border');
+          }
         }
       });
+  }
+
+  unsubscribe() {
+    this.subscribes.map( subscr => {
+      subscr.unsubscribe();
+    });
   }
 
 }

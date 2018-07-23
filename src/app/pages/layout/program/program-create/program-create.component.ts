@@ -72,11 +72,9 @@ export class ProgramCreateComponent implements OnInit {
 
   ngOnInit() {
     const bodyHeight = document.getElementsByTagName('body').item(0).clientHeight;
-    console.log(bodyHeight);
     if (bodyHeight < 800) {
       this.renderer.setStyle(this.host.nativeElement, 'height', bodyHeight - 50 + 'px');
     }
-    console.log(new Date().getMonth());
   }
 
   onCreate(): void {
@@ -109,27 +107,27 @@ export class ProgramCreateComponent implements OnInit {
   onSelectedDay(value) {
     if (value) {
       this.selectedDay = value;
-      if (this.schedule[this.selectedDay]) {
-        this.time.nativeElement.value = this.schedule[this.selectedDay];
-      } else {
-        this.time.nativeElement.value = this.schedule[this.selectedDay];
+      if (this.schedule && this.schedule[this.currentMonth] && this.schedule[this.currentMonth][this.selectedDay]) {
+          this.time.nativeElement.value = this.schedule[this.currentMonth][this.selectedDay];
+      }else {
+        this.time.nativeElement.value = '';
       }
     }
   }
 
   onMonthToRight() {
     this.currentMonth -= 1;
+    this.time.nativeElement.value = '';
     this.monthsNumber.next(this.currentMonth);
     this.moveMonthsCarousel.next('right');
-    console.log(this.schedule[this.currentMonth]);
     this.monthsSchedule.next(this.schedule[this.currentMonth])
   }
 
   onMonthToLeft() {
     this.currentMonth += 1;
+    this.time.nativeElement.value = '';
     this.monthsNumber.next(this.currentMonth );
     this.moveMonthsCarousel.next('left');
-    console.log(this.schedule[this.currentMonth]);
     this.monthsSchedule.next(this.schedule[this.currentMonth])
   }
 

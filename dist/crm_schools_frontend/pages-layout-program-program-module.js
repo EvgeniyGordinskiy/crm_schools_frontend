@@ -68,39 +68,40 @@ var CalendarComponent = /** @class */ (function () {
         this.selectedDay = new _angular_core__WEBPACK_IMPORTED_MODULE_0__["EventEmitter"]();
         this.numberOfDays = [];
         this.schedule = {};
+        this.subscribes = [];
     }
     CalendarComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.getMonthDays();
-        this.insertingTime.subscribe(function (resp) {
+        this.subscribes.push(this.insertingTime.subscribe(function (resp) {
             if (_this.currentElement) {
                 if (resp) {
                     _this.currentElement.classList.add('active-border');
                 }
                 else {
-                    _this.currentElement.classList.remove("active-border");
+                    _this.clearCalendar(false);
                 }
             }
-        });
-        this.insertingMonth.subscribe(function (resp) {
+        }));
+        this.subscribes.push(this.insertingMonth.subscribe(function (resp) {
             if (resp > 0 && resp <= 12) {
                 _this.clearCalendar();
                 _this.getMonthDays(resp);
             }
-        });
-        this.insertingSchedule.subscribe(function (resp) {
-            if (resp) {
-                _this.schedule = resp;
-            }
-            console.log(resp);
-        });
+        }));
+        this.subscribes.push(this.insertingSchedule.subscribe(function (resp) {
+            _this.schedule = resp;
+        }));
+    };
+    CalendarComponent.prototype.ngOnDestroy = function () {
+        this.unsubscribe();
     };
     CalendarComponent.prototype.onSelectDay = function (event) {
         var currentElement = event.target.closest('li');
         if (currentElement) {
             this.currentElement = currentElement;
             this.selectedDay.emit(this.currentElement.innerText);
-            this.clearCalendar();
+            this.clearCalendar(false);
             currentElement.classList.add('selectedCalendarItem');
         }
     };
@@ -117,18 +118,24 @@ var CalendarComponent = /** @class */ (function () {
         }
     };
     CalendarComponent.prototype.isDayActive = function (day) {
-        console.log(this.schedule);
-        console.log(day);
-        return this.schedule && this.schedule[day + 1];
+        return !!(this.schedule && this.schedule[day + 1]);
     };
-    CalendarComponent.prototype.clearCalendar = function () {
+    CalendarComponent.prototype.clearCalendar = function (clearBorder) {
+        if (clearBorder === void 0) { clearBorder = true; }
         var days = document.getElementsByClassName('days').item(0)
             .getElementsByTagName('li');
         Object.keys(days).forEach(function (item) {
             if (typeof days[item] !== 'undefined') {
                 days[item].classList.remove('selectedCalendarItem');
-                days[item].classList.remove('active-border');
+                if (clearBorder) {
+                    days[item].classList.remove('active-border');
+                }
             }
+        });
+    };
+    CalendarComponent.prototype.unsubscribe = function () {
+        this.subscribes.map(function (subscr) {
+            subscr.unsubscribe();
         });
     };
     __decorate([
@@ -388,11 +395,9 @@ var ProgramCreateComponent = /** @class */ (function () {
     }
     ProgramCreateComponent.prototype.ngOnInit = function () {
         var bodyHeight = document.getElementsByTagName('body').item(0).clientHeight;
-        console.log(bodyHeight);
         if (bodyHeight < 800) {
             this.renderer.setStyle(this.host.nativeElement, 'height', bodyHeight - 50 + 'px');
         }
-        console.log(new Date().getMonth());
     };
     ProgramCreateComponent.prototype.onCreate = function () {
         if (this.program_name.nativeElement.value < 0) {
@@ -421,26 +426,26 @@ var ProgramCreateComponent = /** @class */ (function () {
     ProgramCreateComponent.prototype.onSelectedDay = function (value) {
         if (value) {
             this.selectedDay = value;
-            if (this.schedule[this.selectedDay]) {
-                this.time.nativeElement.value = this.schedule[this.selectedDay];
+            if (this.schedule && this.schedule[this.currentMonth] && this.schedule[this.currentMonth][this.selectedDay]) {
+                this.time.nativeElement.value = this.schedule[this.currentMonth][this.selectedDay];
             }
             else {
-                this.time.nativeElement.value = this.schedule[this.selectedDay];
+                this.time.nativeElement.value = '';
             }
         }
     };
     ProgramCreateComponent.prototype.onMonthToRight = function () {
         this.currentMonth -= 1;
+        this.time.nativeElement.value = '';
         this.monthsNumber.next(this.currentMonth);
         this.moveMonthsCarousel.next('right');
-        console.log(this.schedule[this.currentMonth]);
         this.monthsSchedule.next(this.schedule[this.currentMonth]);
     };
     ProgramCreateComponent.prototype.onMonthToLeft = function () {
         this.currentMonth += 1;
+        this.time.nativeElement.value = '';
         this.monthsNumber.next(this.currentMonth);
         this.moveMonthsCarousel.next('left');
-        console.log(this.schedule[this.currentMonth]);
         this.monthsSchedule.next(this.schedule[this.currentMonth]);
     };
     ProgramCreateComponent.prototype.setSchedule = function (time) {

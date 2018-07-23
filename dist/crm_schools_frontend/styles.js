@@ -539,7 +539,7 @@ if(false) {}
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /home/evgen/www/crm_schools/crm_schools_frontend/src/styles.scss */"./src/styles.scss");
+module.exports = __webpack_require__(/*! /data/crm_schools/httpdocs_angular/src/styles.scss */"./src/styles.scss");
 
 
 /***/ })
