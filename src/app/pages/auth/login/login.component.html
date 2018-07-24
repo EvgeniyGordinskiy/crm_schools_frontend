@@ -1,14 +1,15 @@
-<mat-card>
+<mat-card class="login-modal">
   <mat-card-header>
-    <mat-card-title>Login</mat-card-title>
+    <mat-card-title>Log In</mat-card-title>
   </mat-card-header>
   <mat-card-content>
     <form [formGroup]="signinForm" (ngSubmit)="login()">
       <table cellspacing="0">
         <tr>
           <td>
-            <mat-form-field>
-              <input matInput placeholder="Email"
+            <span class="form-field-header">Enter Email</span>
+            <mat-form-field >
+              <input matInput
                      name="email"
                      formControlName="email"
               >
@@ -23,12 +24,22 @@
         </tr>
         <tr>
           <td>
+            <span class="form-field-header">Password</span>
             <mat-form-field>
-            <input matInput placeholder="Password"
+            <input matInput
                    formControlName="password"
                    type="password"
                    name="password" required>
           </mat-form-field>
+            <div class="additional-options">
+              <mat-checkbox
+                class="remember-me-checkbox"
+              (change)="rememberMe = !rememberMe">
+                Remember me
+              </mat-checkbox>
+              <a [routerLink]="['/auth/forgotPassword']" class="forgot-pass">Forgot password?</a>
+            </div>
+
             <div
               *ngIf="!signinForm.get('password').valid && signinForm.get('password').touched"
               class="help-block">
@@ -36,14 +47,26 @@
             </div>
           </td>
         </tr>
-      </table>
       <mat-card-actions>
         <button mat-raised-button
                 color="primary"
                 [disabled]="!signinForm.valid && signinForm.touched || !signinForm.touched
-    ">Login</button>
-        <a mat-button [routerLink]="['/auth/register']">Register</a>
+    ">Sign In</button>
       </mat-card-actions>
+      </table>
     </form>
+    <h4 class="line-with-text"><span>OR</span></h4>
+    <div class="social-button fbButton">
+      <img src="../../../../assets/fbLogo26White.png">
+      <span>Sign In with FaceBook</span>
+    </div>
+    <div class="social-button gButton">
+      <img src="../../../../assets/gLogo.png">
+      <span>Sign In with Google</span>
+    </div>
+    <div class="noAcc">
+      <span>Don't have an account?</span>
+      <a [routerLink]="['/auth/register']">Sign Up</a>
+    </div>
   </mat-card-content>
 </mat-card>

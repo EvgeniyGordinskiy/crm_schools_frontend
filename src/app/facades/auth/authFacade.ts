@@ -6,16 +6,22 @@ import {Injectable} from '@angular/core';
 export class AuthFacade {
   private static prefix = 'auth_schools_';
 
+  private notAuthnticatePages = [
+    '/auth/register',
+    '/auth/login',
+    '/auth/resetPassword'
+  ];
+
   public constructor(
     private router: Router,
   ) {}
 
-  static setToken = (token: string) => {
-    localStorage.setItem(AuthFacade.prefix + 'token', token);
+  static setToken = (token: string, prefix = AuthFacade.prefix) => {
+    localStorage.setItem(prefix + 'token', token);
   }
 
-  static getToken = (): string => {
-    return localStorage.getItem(AuthFacade.prefix + 'token');
+  static getToken = (prefix = AuthFacade.prefix): string => {
+    return localStorage.getItem(prefix + 'token');
   }
 
   static setUser = (user: User) => {
@@ -38,7 +44,7 @@ export class AuthFacade {
     setTimeout(() => {
       if (AuthFacade.getAuthStatus() && this.router.url === '/auth/login') {
         this.router.navigate(['/home']);
-      } else if (!AuthFacade.getAuthStatus() && this.router.url !== '/auth/login' && this.router.url !== '/auth/register') {
+      } else if (!AuthFacade.getAuthStatus() && !this.notAuthnticatePages.includes(this.router.url.split('?')[0])) {
         this.router.navigate(['/auth/login']);
       }
     }, 45);

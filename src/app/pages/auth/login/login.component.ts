@@ -31,7 +31,7 @@ import {PermissionFacade} from '@facades/permission/permissionFacade';
 })
 export class LoginComponent implements OnInit, OnDestroy {
   signinForm: FormGroup;
-
+  rememberMe = false;
   /**
    * Component state.
    * @type {boolean}
@@ -64,7 +64,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   login(): void {
-    this.authService.login({email: this.signinForm.value.email, password: this.signinForm.value.password})
+    this.authService.login({email: this.signinForm.value.email, password: this.signinForm.value.password, rememberMe: this.rememberMe})
       .subscribe(
         (resp: AuthenticateResponseInterface) => {
           if (resp.data.token) {

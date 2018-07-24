@@ -8,6 +8,20 @@
   float:right;
 }
 
+.line-with-text{
+  width:100%;
+  text-align:center;
+  border-bottom: 1px solid $grey;
+  line-height:0.1em;
+  margin:10px 0 20px;
+  span {
+    background:#fff;
+    padding:0 10px;
+    color: $dark_grey;
+    font-weight: 100;
+  }
+}
+
 .grey-border{
   border: $grey solid 1.5px;
 }

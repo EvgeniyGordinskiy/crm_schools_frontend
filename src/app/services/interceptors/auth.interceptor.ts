@@ -16,6 +16,7 @@ import * as AuthReducer from '@store/auth/reducers';
 import {StopSpinner} from '@store/spinner/actions';
 import {SignOut} from '@store/auth/actions';
 import {Router} from '@angular/router';
+import {ResetPasswordComponent} from '@pages/auth/reset-password/reset-password.component';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -28,7 +29,12 @@ export class AuthInterceptor implements HttpInterceptor {
   ) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const token = AuthFacade.getToken();
+    let token: string;
+    if(this.router.url.split('?')[0] === '/auth/resetPassword') {
+      token = AuthFacade.getToken(ResetPasswordComponent.getTokenPrefix());
+    } else {
+      token = AuthFacade.getToken();
+    }
 
     if (token) {
       req = req.clone({

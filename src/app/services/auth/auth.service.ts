@@ -17,13 +17,28 @@ export class AuthService {
     private store: Store<SpinnerReducer.SpinnerState>
   ) { }
 
-  login({email, password}) {
+  login({email, password, rememberMe}) {
     this.store.dispatch(new StartSpinner());
-    return  this.httpClient.post('auth', {email, password});
+    return  this.httpClient.post('auth', {email, password, rememberMe});
   }
 
   register({name, email, password, password_confirmation}) {
     this.store.dispatch(new StartSpinner());
     return  this.httpClient.post('auth/register', {name, email, password, password_confirmation});
+  }
+
+  sendEmailForResettingPassword(email: string) {
+    // this.store.dispatch(new StartSpinner());
+    return  this.httpClient.post('password/change', {email: email});
+  }
+
+  resetPassword({password, password_confirmation}) {
+    // this.store.dispatch(new StartSpinner());
+    return  this.httpClient.post('password/reset', {password, password_confirmation});
+  }
+
+  checkResetPasswordToken(token: string) {
+    // this.store.dispatch(new StartSpinner());
+    return  this.httpClient.post('password/checkToken', {token: token});
   }
 }

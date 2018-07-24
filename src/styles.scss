@@ -20,7 +20,10 @@ app-root {
 .mat-primary{
   color: $base_color !important;
 }
-
+.mat-raised-button.mat-primary{
+  background-color: $base_color !important;
+  color: white !important;
+}
 .help-block{
   color: red;
 }

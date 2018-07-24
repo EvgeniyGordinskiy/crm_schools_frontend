@@ -3,7 +3,7 @@
     <div class="first-header-content">
       <p *ngIf="schools.length === 1; else manySchools">{{schools[0].name}}</p>
       <ng-template #manySchools>
-        <mat-select #schoolSelect onselect="onSelectedSchools(schoolSelect)" [value]="schools[0].id">
+        <mat-select #schoolSelect onselect="onSelectedSchools(schoolSelect)" [value]="schools[0]?.id">
           <mat-option *ngFor="let school of schools" [value]="school.id">{{school.name}}</mat-option>
         </mat-select>
       </ng-template>

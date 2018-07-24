@@ -14,6 +14,8 @@ import * as SpinnerReducer from '@store/spinner/reducers';
 import {StartSpinner, StopSpinner} from '@store/spinner/actions';
 import {AuthFacade} from '@app/facades/auth/authFacade';
 import {SchoolService} from '@services/school/school.service';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 
 @NgModule({
@@ -22,7 +24,7 @@ import {SchoolService} from '@services/school/school.service';
     SharedModule,
     AuthRoutingModule
   ],
-  declarations: [LoginComponent, RegisterComponent, AuthWrapperComponent],
+  declarations: [LoginComponent, RegisterComponent, AuthWrapperComponent, ForgotPasswordComponent, ResetPasswordComponent],
   providers: [AuthService, SchoolService, AccountService]
 })
 export class AuthModule implements OnDestroy, OnInit {
