@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import {UserComponent} from '@layouts/user/user.component';
+import {SchoolModule} from '@pages/layout/school/school.module';
 
 const routes: Routes = [
   {
@@ -14,6 +15,10 @@ const routes: Routes = [
       {
         path: 'home',
         loadChildren: './pages/layout/home/home.module#HomeModule'
+      },
+      {
+        path: 'school',
+        loadChildren: './pages/layout/school/school.module#SchoolModule'
       },
       {
         path: 'dashboard',

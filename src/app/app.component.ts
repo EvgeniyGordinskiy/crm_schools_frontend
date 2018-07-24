@@ -27,7 +27,10 @@ export class AppComponent {
     private authStore: Store<AuthenticateReducer.AuthState>,
     private authFacade: AuthFacade,
   ) {
-    this.authStore.dispatch(new RefreshAuthState());
+  }
+
+  beforeRoute() {
     this.authFacade.checkAuthStatusAndRedirect();
+    this.authStore.dispatch(new RefreshAuthState());
   }
 }

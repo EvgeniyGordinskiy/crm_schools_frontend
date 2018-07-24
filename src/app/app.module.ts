@@ -26,6 +26,8 @@ import {AuthService} from '@services/auth/auth.service';
 import {ToastrModule} from 'ngx-toastr';
 import {AuthFacade} from '@app/facades/auth/authFacade';
 import {MainMenuComponent} from '@components/main-menu/main-menu.component';
+import {CreateSchoolComponent} from '@pages/layout/school/create-school/create-school.component';
+import {SchoolService} from '@services/school/school.service';
 export const metaReducers: MetaReducer<any>[] = environment.production
   ? []
   : []; // [storeFreeze]
@@ -38,6 +40,7 @@ export const metaReducers: MetaReducer<any>[] = environment.production
     TableComponent,
     MainSpinnerComponent,
     MainMenuComponent,
+    CreateSchoolComponent
   ],
   imports: [
     BrowserModule,
@@ -56,10 +59,12 @@ export const metaReducers: MetaReducer<any>[] = environment.production
   ],
   providers: [
     AuthService,
+    SchoolService,
     AuthFacade,
     { provide: HTTP_INTERCEPTORS, useClass: MainInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [CreateSchoolComponent],
 })
 export class AppModule { }

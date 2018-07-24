@@ -10,8 +10,26 @@
         display: flex;
         font-size: $base_font;
         justify-content: space-between;
+        align-items: center;
         min-width: 335px;
         margin-left: auto;
+        mat-select{
+          width: 340px;
+          height: 30px;
+          border: $grey solid 1px;
+          border-radius: 20px;
+          padding: 0 10px;
+          margin-top: 5px;
+          ::ng-deep .mat-select-arrow{
+            display: inline-block;
+            padding: 3px;
+            margin-bottom: 3px;
+            border: $base_color solid;
+            border-width: 0 1.5px 1.5px 0;
+            transform: rotate(45deg);
+            -webkit-transform: rotate(45deg);
+          }
+        }
         .add-gym-button{
           border-radius: 20px;
           width: 175px;
@@ -31,9 +49,12 @@
           display: flex;
           justify-content: center;
           width: 60%;
+          align-items: center;
           img{
             margin-right: 9px;
             border-radius: 50%;
+            width: 35px;
+            height: 35px;
           }
         }
       }

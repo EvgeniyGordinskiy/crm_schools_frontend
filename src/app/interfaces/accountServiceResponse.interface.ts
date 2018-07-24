@@ -1,4 +1,5 @@
 import {Permission} from '@models/permission';
+import {School} from '@models/shool';
 
 export interface AccountServiceResponseInterface {
   data: {
@@ -7,5 +8,6 @@ export interface AccountServiceResponseInterface {
     name: string;
     role: string;
     permissions: [Permission];
+    schools: [School]
   };
 }

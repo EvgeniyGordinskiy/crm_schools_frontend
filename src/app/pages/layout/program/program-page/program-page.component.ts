@@ -1,4 +1,4 @@
-import {Component, ElementRef, HostListener, OnInit, Renderer2} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material';
 import {ProgramCreateComponent} from '../program-create/program-create.component';
 import {Subject} from 'rxjs/Subject';
@@ -253,7 +253,7 @@ export class ProgramPageComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       dialogRef.close();
-      console.log('The dialog was closed');
-    });  }
+    });
+  }
 
 }

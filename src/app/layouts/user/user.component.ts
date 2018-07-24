@@ -4,6 +4,8 @@ import * as AuthReducer from '@store/auth/reducers';
 import {Store} from '@ngrx/store';
 import {SignOut} from '@store/auth/actions';
 import {AuthFacade} from '@app/facades/auth/authFacade';
+import {MatDialog} from '@angular/material';
+import {CreateSchoolComponent} from '@pages/layout/school/create-school/create-school.component';
 
 @Component({
   selector: 'app-user',
@@ -13,7 +15,9 @@ import {AuthFacade} from '@app/facades/auth/authFacade';
 export class UserComponent implements OnInit {
   email: string;
   name: string;
+  schools = [];
   constructor(
+    public dialog: MatDialog,
     private authFacade: AuthFacade,
     private authStore: Store<AuthReducer.AuthState>
   ) { }
@@ -21,9 +25,11 @@ export class UserComponent implements OnInit {
   ngOnInit() {
     this.authStore.select('auth').subscribe(
       (val) => {
+        console.log(val, 'user component');
         if (val.user) {
           this.name = val.user.name;
           this.email = val.user.email;
+          this.schools = val.user.schools ? val.user.schools : [];
         }
       }
     );
@@ -31,6 +37,18 @@ export class UserComponent implements OnInit {
 
   onLogout() {
     this.authStore.dispatch(new SignOut(this.authFacade));
+  }
+
+  onSelectedSchools(val) {
+    console.log(val, 'school was selected');
+  }
+
+
+  openCreateModal() {
+    const dialogRef = this.dialog.open(CreateSchoolComponent);
+    dialogRef.afterClosed().subscribe(result => {
+      dialogRef.close();
+    });
   }
 
 }

@@ -3,6 +3,8 @@ import * as fromApp from '@app/store/app.reducers';
 
 import { User } from '@models/user';
 import {ActionInterface} from '@app/interfaces/action.interface';
+import {isArray} from 'util';
+import {AuthFacade} from '@facades/auth/authFacade';
 
 export interface AuthState extends fromApp.AppState {
   authenticated: false;
@@ -82,6 +84,23 @@ export function reducer(state: any = initialState, action: ActionInterface) {
         loading: false,
         user: user
       };
+      case ActionTypes.UPDATE_AUTH_USER:
+        const properties = action.payload;
+          Object.keys(properties).map(prop => {
+            switch (prop) {
+              case 'schools':
+                state.user[prop].push(properties[prop]);
+                break;
+              case 'permissions':
+                break;
+              default:
+                state.user[prop] = properties[prop];
+                break;
+            }
+          });
+          AuthFacade.setUser(state.user);
+          console.log(state);
+      return state;
 
     case ActionTypes.SIGN_OUT:
       return {

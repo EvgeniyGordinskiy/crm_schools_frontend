@@ -17,6 +17,7 @@ export class User implements UserInterface {
     this.name = params.name;
     this.role = params.role;
     this.permissions = params.permissions;
+    this.schools = params.schools;
     this.id = params.id ? params : 'null';
   }
 }

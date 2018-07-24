@@ -1,4 +1,5 @@
 import {Permission} from '@models/permission';
+import {School} from '@models/shool';
 
 export interface UserInterface {
   id?: string;
@@ -8,4 +9,5 @@ export interface UserInterface {
   permissions: {
     key?: [Permission]
   };
+  schools?: [School];
 }

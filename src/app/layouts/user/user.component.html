@@ -1,8 +1,13 @@
 <mat-toolbar>
   <mat-toolbar-row class="first-header">
     <div class="first-header-content">
-      <a>Manage my Gyms</a>
-      <button mat-stroked-button class="mat-primary add-gym-button">
+      <p *ngIf="schools.length === 1; else manySchools">{{schools[0].name}}</p>
+      <ng-template #manySchools>
+        <mat-select #schoolSelect onselect="onSelectedSchools(schoolSelect)" [value]="schools[0].id">
+          <mat-option *ngFor="let school of schools" [value]="school.id">{{school.name}}</mat-option>
+        </mat-select>
+      </ng-template>
+      <button mat-stroked-button class="mat-primary add-gym-button" (click)="openCreateModal()">
         <mat-icon>add</mat-icon>
         Add Gym
       </button>

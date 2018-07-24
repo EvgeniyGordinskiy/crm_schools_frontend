@@ -8,6 +8,9 @@
   float:right;
 }
 
+.grey-border{
+  border: $grey solid 1.5px;
+}
 .grey-border-left{
   border-left: $grey solid 1.5px;
 }

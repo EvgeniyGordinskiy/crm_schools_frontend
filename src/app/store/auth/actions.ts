@@ -30,6 +30,7 @@ export const ActionTypes = {
   SIGN_UP_ERROR: uniqueType('Sign up error'),
   SIGN_UP_SUCCESS: uniqueType('Sign up success'),
   REFRESH_AUTH_STATE: uniqueType('REFRESH_AUTH_STATE'),
+  UPDATE_AUTH_USER: uniqueType('UPDATE_AUTH_USER'),
 };
 
 /**
@@ -66,7 +67,6 @@ export class AuthenticatedSuccessAction implements Action {
   constructor(public payload: {authenticated: boolean, user: User}) {
     AuthFacade.setUser(payload.user);
     AuthFacade.setAuthStatus(payload.authenticated);
-
   }
 }
 
@@ -101,36 +101,6 @@ export class AuthenticationSuccessAction implements Action {
   readonly type: string = ActionTypes.AUTHENTICATE_SUCCESS;
 
   constructor(public payload: { user: User }) {}
-}
-
-/**
- * Sign out.
- * @class SignOutAction
- * @implements {Action}
- */
-export class SignOutAction implements Action {
-  readonly type: string = ActionTypes.SIGN_OUT;
-  constructor(public payload?: any) {}
-}
-
-/**
- * Sign out error.
- * @class SignOutErrorAction
- * @implements {Action}
- */
-export class SignOutErrorAction implements Action {
-  readonly type: string = ActionTypes.SIGN_OUT_SUCCESS;
-  constructor(public payload?: any) {}
-}
-
-/**
- * Sign out success.
- * @class SignOutSuccessAction
- * @implements {Action}
- */
-export class SignOutSuccessAction implements Action {
-  readonly type: string = ActionTypes.SIGN_OUT_SUCCESS;
-  constructor(public payload?: any) {}
 }
 
 /**
@@ -189,6 +159,11 @@ export class RefreshAuthState implements Action {
   }
 }
 
+export class UpdateAuthUser implements Action {
+  readonly type: string = ActionTypes.UPDATE_AUTH_USER;
+  constructor(public payload: object) {}
+}
+
 export class SignOut implements Action {
   readonly type: string = ActionTypes.SIGN_OUT;
   constructor(
@@ -214,4 +189,5 @@ export type Actions
   | SignUpErrorAction
   | SignUpSuccessAction
   | RefreshAuthState
+  | UpdateAuthUser
   | SignOut;

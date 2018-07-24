@@ -1,0 +1,33 @@
+<div class="create-school-wrapper">
+  <h2>Create Gym</h2>
+      <form [formGroup]="crateSchoolForm" (ngSubmit)="create()">
+        <mat-form-field>
+          <input matInput placeholder="Name"
+                 name="name"
+                 formControlName="name"
+          >
+        </mat-form-field>
+        <div
+          *ngIf="!crateSchoolForm.get('name').valid && crateSchoolForm.get('name').touched"
+          class="help-block">
+          <span *ngIf="crateSchoolForm.get('name').errors['required']">This field is required!</span>
+        </div>
+        <mat-form-field>
+                <textarea matInput placeholder="Description"
+                          formControlName="description"
+                          name="description">
+                </textarea>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput placeholder="Address"
+                 name="address"
+                 formControlName="address"
+          >
+        </mat-form-field>
+
+          <button mat-raised-button
+                  color="primary"
+                  [disabled]="!crateSchoolForm.valid && crateSchoolForm.touched || !crateSchoolForm.touched
+      ">Create</button>
+      </form>
+</div>
