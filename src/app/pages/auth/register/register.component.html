@@ -5,7 +5,7 @@
         <p>Almost Finish</p>
         <p class="sub-title color-text-middle-grey">Please set up empty rows.</p>
         <img src="{{user.avatar}}" class="avatar">
-        <img src="{{usedAuthSocial === 'facebook'? '../../../../assets/fbLogo.png' : '../../../../assets/gLogo.png'}}" class="icon-social">
+        <img src="{{usedAuthSocial === 'facebook' ? '../../../../assets/fbLogo.png' : '../../../../assets/gLogo.png'}}" class="icon-social">
         <div *ngIf="user.name !== null" class="sub-title">Evgeniy Gordinskiy</div>
         <div *ngIf="user.email !== null" class="sub-title color-text-middle-grey">evgeniytt@gmail.com</div>
       </div>
@@ -52,22 +52,6 @@
         </tr>
         <tr>
           <td>
-            <span class="form-field-header">Phone Number</span>
-            <mat-form-field>
-              <input matInput
-                     formControlName="phoneNumber"
-                     name="phoneNumber" required>
-            </mat-form-field>
-            <div
-              *ngIf="!signupForm.get('phoneNumber').valid && signupForm.get('phoneNumber').touched"
-              class="help-block">
-              <span *ngIf="signupForm.get('phoneNumber').errors['phoneNumber']">This email is invalid!</span>
-              <span *ngIf="signupForm.get('phoneNumber').errors['required']">This field is required!</span>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <td>
             <span class="form-field-header">Password</span>
             <mat-form-field>
               <input matInput
@@ -96,6 +80,72 @@
               class="help-block">
               <span *ngIf="signupForm.get('confirm_password').errors['confirmedPassword']">Password not confirmed!</span>
               <span *ngIf="signupForm.get('confirm_password').errors['required']">This field is required!</span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td formGroupName ="phone">
+            <span class="form-field-header">Phone Number</span>
+            <div class="phoneNumberGroup">
+              <div class="plus">
+               <span>+</span>
+              </div>
+              <mat-form-field
+                floatLabel="never">
+                <input matInput
+                       formControlName="country"
+                       [maxlength]="2"
+                       (keydown)="numberOnly($event, 'country')"
+                       placeholder="2">
+              </mat-form-field>
+
+              <mat-form-field
+                floatLabel="never">
+                <input matInput
+                       formControlName="area"
+                       [maxlength]="3"
+                       (keydown)="numberOnly($event, 'area')"
+                       placeholder="777">
+              </mat-form-field>
+              <mat-form-field
+                floatLabel="never">
+                <input matInput
+                       formControlName="prefix"
+                       [maxlength]="3"
+                       (keydown)="numberOnly($event, 'prefix')"
+                       placeholder="777">
+              </mat-form-field>
+              <mat-form-field
+                floatLabel="never"
+              >
+                <input matInput
+                       formControlName="line"
+                       [maxlength]="4"
+                       (keydown)="numberOnly($event, 'line')"
+                       placeholder="7777">
+              </mat-form-field>
+            </div>
+            <div
+              *ngIf="!signupForm.get('phone.country').valid && signupForm.get('phone.country').dirty"
+              class="help-block">
+              <span *ngIf="signupForm.get('phone.country').errors['range']">This field should have until 1 number.</span>
+            </div>
+            <div
+              *ngIf="!signupForm.get('phone.area').valid && signupForm.get('phone.area').dirty"
+              class="help-block">
+              <span *ngIf="signupForm.get('phone.area').errors['range']">This field should have 3 numbers.</span>
+            </div>
+            <div
+              *ngIf="!signupForm.get('phone.prefix').valid && signupForm.get('phone.prefix').dirty"
+              class="help-block">
+              <span *ngIf="signupForm.get('phone.prefix').errors['required']">This field is required!</span>
+              <span *ngIf="signupForm.get('phone.prefix').errors['range']">This field should have 3 numbers.</span>
+            </div>
+            <div
+              *ngIf="!signupForm.get('phone.line').valid && signupForm.get('phone.line').dirty"
+              class="help-block">
+              <span *ngIf="signupForm.get('phone.line').errors['required']">This field is required!</span>
+              <span *ngIf="signupForm.get('phone.line').errors['range']">This field should have 4 numbers.</span>
             </div>
           </td>
         </tr>

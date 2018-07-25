@@ -10,4 +10,5 @@ export interface UserInterface {
     key?: [Permission]
   };
   schools?: [School];
+  avatar?: string;
 }
