@@ -1,6 +1,132 @@
+@import "../../../../assets/scss/variables";
+
 .auth-wrapper{
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100%;
+  ::ng-deep .auth-modal{
+    width: 242px;
+    padding: 24px 47px;
+    .mat-card-header{
+      justify-content: center;
+      .mat-card-title{
+        font-size: 17px;
+        font-weight: bold;
+        color: $dark_grey;
+        text-align: center;
+      }
+    }
+    form{
+      table {
+        width: 100%;
+        .form-field-header{
+          font-size: 18px;
+          color: $black;
+        }
+        .mat-form-field{
+          width: 100%;
+          margin-bottom: 8px;
+          ::ng-deep .mat-form-field-wrapper{
+            border: rgba(53, 49, 49, 0.44) solid 1px;
+            border-radius: 2px;
+            height: 35px;
+            padding-bottom: 0;
+            .mat-form-field-infix{
+              bottom: 8px;
+              width: auto;
+              padding-left: 10px;
+              padding-right: 10px;
+            }
+          }
+          ::ng-deep .mat-form-field-underline{
+            display: none;
+          }
+        }
+        .mat-card-actions{
+          margin-right: 0;
+          margin-left: 0;
+          margin-bottom: 7px;
+          button{
+            width: 100%;
+            height: 30px;
+            margin-top: 20px;
+            ::ng-deep span{
+              position: relative;
+              bottom: 4px;
+            }
+          }
+        }
+        .additional-options{
+          display: flex;
+          justify-content: space-between;
+          font-size: 11px;
+          color: $dark_grey;
+          .mat-checkbox{
+            color: $dark_grey;
+            ::ng-deep .mat-checkbox-inner-container{
+              height: 15px;
+              width: 15px;
+              .mat-checkbox-frame{
+                border-width: 1px;
+              }
+            }
+          }
+          .forgot-pass{
+            margin-top: 8px;
+            color: $link_color;
+            &:hover{
+              cursor: pointer;
+            }
+          }
+        }
+      }
+    }
+    .social-button{
+      display: flex;
+      justify-content: space-between;
+      height: 28px;
+      border-radius: 3px;
+      margin-bottom: 20px;
+      &:hover{
+        cursor: pointer;
+      }
+      span{
+        width: 80%;
+        align-self: center;
+        color: white;
+      }
+      img{
+        position: relative;
+        left: 6px;
+        width: 26px;
+        height: 26px;
+      }
+    }
+    .fbButton{
+      background-color: #4b6fa5;
+    }
+    .gButton{
+      background-color: #ffffff;
+      border: #ccc solid 1px;
+      color: black;
+      img{
+        width: 24px;
+        height: 24px;
+        top: 2px;
+      }
+      span{
+        color: $black;
+      }
+    }
+    .noAcc{
+      color: $black;
+      text-align: center;
+      a{
+        color: $link_color;
+        text-decoration: none;
+        margin-left: 4px;
+      }
+    }
+  }
 }

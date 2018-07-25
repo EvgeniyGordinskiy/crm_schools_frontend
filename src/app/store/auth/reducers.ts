@@ -3,7 +3,6 @@ import * as fromApp from '@app/store/app.reducers';
 
 import { User } from '@models/user';
 import {ActionInterface} from '@app/interfaces/action.interface';
-import {isArray} from 'util';
 import {AuthFacade} from '@facades/auth/authFacade';
 
 export interface AuthState extends fromApp.AppState {
@@ -18,6 +17,7 @@ export interface AuthState extends fromApp.AppState {
  */
 export interface State {
   authenticated: boolean;
+  usedAuthSocial: boolean|string;
   error?: string;
   user?: User;
 }
@@ -27,6 +27,7 @@ export interface State {
  */
 const initialState: State = {
   authenticated: false,
+  usedAuthSocial: false
 };
 
 /**
@@ -99,7 +100,7 @@ export function reducer(state: any = initialState, action: ActionInterface) {
             }
           });
           AuthFacade.setUser(state.user);
-          console.log(state);
+          console.log(state, 'UPDATE_AUTH_USER');
       return state;
 
     case ActionTypes.SIGN_OUT:
@@ -127,7 +128,13 @@ export function reducer(state: any = initialState, action: ActionInterface) {
         loading: true
       };
 
+      case ActionTypes.TOOGLE_AUTH_USED:
+        state.usedAuthSocial =  action.payload.provider;
+        console.log(state, 'TOOGLE_AUTH_USED');
+        return state;
+
     default:
+      console.log(state, 'default');
       return state;
   }
 }

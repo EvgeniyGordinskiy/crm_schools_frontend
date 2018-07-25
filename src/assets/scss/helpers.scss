@@ -21,7 +21,9 @@
     font-weight: 100;
   }
 }
-
+.inputs_border{
+  border: $light_black solid 1px;
+}
 .grey-border{
   border: $grey solid 1.5px;
 }
@@ -47,7 +49,15 @@
   font-weight: bold;
   color: #464646;
 }
+.sub-title{
+  font-size: 13px;
+  color: $dark_grey;
+  font-weight: 300;
+}
 
+.color-text-middle-grey{
+  color: $middle-grey
+}
 .buttons-are-small{
   .mat-button{
     width: 34px;

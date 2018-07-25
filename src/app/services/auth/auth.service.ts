@@ -22,23 +22,27 @@ export class AuthService {
     return  this.httpClient.post('auth', {email, password, rememberMe});
   }
 
-  register({name, email, password, password_confirmation}) {
+  loginBySocialAcc(provider: string, token: string) {
+    return this.httpClient.post(`social/${provider}`, {token: token})
+  }
+
+  register({name, email, password, password_confirmation, role_name}) {
     this.store.dispatch(new StartSpinner());
-    return  this.httpClient.post('auth/register', {name, email, password, password_confirmation});
+    return  this.httpClient.post('auth/register', {name, email, password, password_confirmation, role_name});
   }
 
   sendEmailForResettingPassword(email: string) {
-    // this.store.dispatch(new StartSpinner());
+    this.store.dispatch(new StartSpinner());
     return  this.httpClient.post('password/change', {email: email});
   }
 
   resetPassword({password, password_confirmation}) {
-    // this.store.dispatch(new StartSpinner());
+    this.store.dispatch(new StartSpinner());
     return  this.httpClient.post('password/reset', {password, password_confirmation});
   }
 
   checkResetPasswordToken(token: string) {
-    // this.store.dispatch(new StartSpinner());
+    this.store.dispatch(new StartSpinner());
     return  this.httpClient.post('password/checkToken', {token: token});
   }
 }

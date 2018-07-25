@@ -11,7 +11,7 @@ import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/takeWhile';
 
 // actions
-import {AuthenticateAction, AuthenticatedSuccessAction} from '@store/auth/actions';
+import {AuthenticateAction, AuthenticatedSuccessAction, ToggleUsedAuthSocial, UpdateAuthUser} from '@store/auth/actions';
 import * as AuthenticateReducer from '@store/auth/reducers';
 
 // reducers
@@ -23,6 +23,7 @@ import {User} from '@models/user';
 import {AccountServiceResponseInterface} from '@app/interfaces/accountServiceResponse.interface';
 import {AuthFacade} from '@app/facades/auth/authFacade';
 import {PermissionFacade} from '@facades/permission/permissionFacade';
+import {AuthService as AuthServiceSocial, FacebookLoginProvider, GoogleLoginProvider} from 'angular5-social-login';
 
 @Component({
   selector: 'app-login',
@@ -41,6 +42,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     private router: Router,
     private authFacade: AuthFacade,
     private authService: AuthService,
+    private socialAuthService: AuthServiceSocial,
     private accountService: AccountService,
     private store: Store<AuthenticateReducer.AuthState>,
     private spinnerStore: Store<SpinnerReducer.SpinnerState>
@@ -86,6 +88,34 @@ export class LoginComponent implements OnInit, OnDestroy {
           }
           this.spinnerStore.dispatch(new StopSpinner());
         });
+  }
+
+  loginBySocialAcc(provider: string) {
+    let socialPlatformProvider;
+    if (provider === 'facebook') {
+      socialPlatformProvider = FacebookLoginProvider.PROVIDER_ID;
+    } else if (provider === 'google') {
+      socialPlatformProvider = GoogleLoginProvider.PROVIDER_ID;
+    }
+    this.socialAuthService.signIn(socialPlatformProvider).then(
+    resp => {
+      this.authService.loginBySocialAcc(provider, resp.token)
+        .subscribe(
+          (resp: {data: {status: number, authUser: {name: string, email: string, avatar: string}}}) => {
+            console.log(resp);
+            if(resp.data.status && resp.data.status === 206) {
+              const user = resp.data.authUser;
+               this.store.dispatch(new UpdateAuthUser({
+                 name: user.name,
+                 email: user.email,
+                 avatar: user.avatar,
+               }));
+              this.store.dispatch(new ToggleUsedAuthSocial({provider: provider}));
+              this.router.navigate(['auth/register']);
+            }
+          }
+        )
+    });
   }
 
 }

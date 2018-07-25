@@ -19,6 +19,17 @@ import {AuthenticateResponseInterface} from '@interfaces/authenticateResponse.in
 export class RegisterComponent implements OnInit {
   signupForm: FormGroup;
   addASchool = false;
+  usedAuthSocial : boolean|string= false;
+  rememberMe = false;
+  user: {
+    name: string|null,
+    email: string|null,
+    avatar: string|null,
+  } = {
+    name: null,
+    email: null,
+    avatar: null
+  };
 
   constructor(
     private router: Router,
@@ -30,9 +41,21 @@ export class RegisterComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.authStore.select('auth').subscribe(
+      (val) => {
+        this.usedAuthSocial = val.usedAuthSocial;
+        if (val.user) {
+          this.user['name'] = val.user.name && val.user.name.length > 0 ? val.user.name : null;
+          this.user['email'] = val.user.email && val.user.email.length > 0 ? val.user.email : null;
+          this.user['avatar'] = val.user.avatar && val.user.avatar.length > 0 ? val.user.avatar : null;
+        }
+      }
+    );
     this.signupForm = new FormGroup({
-      'name': new FormControl(null, [Validators.required]),
-      'email': new FormControl(null, [Validators.required, Validators.email]),
+      'name': new FormControl(this.user.name, [Validators.required]),
+      'phoneNumber': new FormControl(null, [Validators.required]),
+      'avatar': new FormControl(this.user.avatar, ),
+      'email': new FormControl(this.user.email, [Validators.required, Validators.email]),
       'password': new FormControl(null, [Validators.required]),
       'confirm_password': new FormControl(null, [Validators.required, this.confirmedPassword.bind(this)]),
       'gym_name': new FormControl(null, [this.requiredCustom.bind(this)]),
@@ -72,6 +95,7 @@ export class RegisterComponent implements OnInit {
     this.spinnerStore.dispatch(new StartSpinner());
     this.authService.register({name: this.signupForm.get('name').value,
                               email: this.signupForm.get('email').value,
+                              role_name: 'admin',
                               password: this.signupForm.get('password').value,
                               password_confirmation: this.signupForm.get('confirm_password').value})
       .subscribe(

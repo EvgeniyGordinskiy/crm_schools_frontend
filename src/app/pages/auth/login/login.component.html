@@ -1,4 +1,4 @@
-<mat-card class="login-modal">
+<mat-card class="auth-modal">
   <mat-card-header>
     <mat-card-title>Log In</mat-card-title>
   </mat-card-header>
@@ -56,11 +56,11 @@
       </table>
     </form>
     <h4 class="line-with-text"><span>OR</span></h4>
-    <div class="social-button fbButton">
+    <div class="social-button fbButton" (click)="loginBySocialAcc('facebook')">
       <img src="../../../../assets/fbLogo26White.png">
       <span>Sign In with FaceBook</span>
     </div>
-    <div class="social-button gButton">
+    <div class="social-button gButton" (click)="loginBySocialAcc('google')">
       <img src="../../../../assets/gLogo.png">
       <span>Sign In with Google</span>
     </div>

@@ -31,6 +31,7 @@ export const ActionTypes = {
   SIGN_UP_SUCCESS: uniqueType('Sign up success'),
   REFRESH_AUTH_STATE: uniqueType('REFRESH_AUTH_STATE'),
   UPDATE_AUTH_USER: uniqueType('UPDATE_AUTH_USER'),
+  TOOGLE_AUTH_USED: uniqueType('TOOGLE_AUTH_USED'),
 };
 
 /**
@@ -164,6 +165,11 @@ export class UpdateAuthUser implements Action {
   constructor(public payload: object) {}
 }
 
+export class ToggleUsedAuthSocial implements Action {
+  readonly type: string = ActionTypes.TOOGLE_AUTH_USED;
+  constructor(public payload: {provider: string} ) {}
+}
+
 export class SignOut implements Action {
   readonly type: string = ActionTypes.SIGN_OUT;
   constructor(
@@ -190,4 +196,5 @@ export type Actions
   | SignUpSuccessAction
   | RefreshAuthState
   | UpdateAuthUser
+  | ToggleUsedAuthSocial
   | SignOut;

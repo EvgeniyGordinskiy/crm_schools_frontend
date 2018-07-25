@@ -25,7 +25,6 @@ export class UserComponent implements OnInit {
   ngOnInit() {
     this.authStore.select('auth').subscribe(
       (val) => {
-        console.log(val, 'user component');
         if (val.user) {
           this.name = val.user.name;
           this.email = val.user.email;

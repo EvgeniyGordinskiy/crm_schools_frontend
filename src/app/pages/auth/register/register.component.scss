@@ -1,0 +1,29 @@
+@import "../../../../assets/scss/variables";
+
+.auth-modal{
+  padding-top: 6px;
+  .mat-card-title{
+    img{
+      margin-top: 20px;
+      border-radius: 50%;
+    }
+    .avatar{
+      width: 60px;
+      height: 60px;
+    }
+    .icon-social{
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      border: white solid 1px;
+      border-radius: 3px;
+      background: white;
+      top: 146px;
+      right: 134px;
+    }
+  }
+  .noAcc{
+    font-size: 10px;
+    color: $light_black;
+  }
+}
