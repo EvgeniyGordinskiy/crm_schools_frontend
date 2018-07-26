@@ -40,8 +40,9 @@ export class AppComponent {
   beforeRoute() {
     // this.router.navigate(['/auth/emailSent']);
     console.log(this.router.url);
-     if (!this.user || !PermissionFacade.checkPermissionsToAccessPage(this.router.url.split('?')[0], this.user)) {
-       this.router.navigate(['/auth/login'])
+    console.log(!PermissionFacade.checkPermissionsToAccessPage(this.router.url.split('?')[0], this.user));
+     if (!PermissionFacade.checkPermissionsToAccessPage(this.router.url.split('?')[0], this.user)) {
+       this.router.navigate(['/auth/login']);
      }
     this.authFacade.checkAuthStatusAndRedirect();
     this.authStore.dispatch(new RefreshAuthState());

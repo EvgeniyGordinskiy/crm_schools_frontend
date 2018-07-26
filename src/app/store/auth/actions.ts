@@ -149,14 +149,8 @@ export class RefreshAuthState implements Action {
     const userAuth = AuthFacade.getUser();
     const token = AuthFacade.getToken();
     const authStatusAuth = AuthFacade.getAuthStatus();
-    if (
-      userAuth &&
-      token &&
-      authStatusAuth
-    ) {
-      this.payload.user = new User(userAuth);
-      this.payload.authStatus = authStatusAuth;
-    }
+    this.payload.user = new User(userAuth);
+    this.payload.authStatus = authStatusAuth;
   }
 }
 

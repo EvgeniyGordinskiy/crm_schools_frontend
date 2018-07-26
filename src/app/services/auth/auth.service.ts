@@ -41,6 +41,11 @@ export class AuthService {
     return  this.httpClient.post('verify/email', {email: email, redirectPath: redirect});
   }
 
+  sendSms(email: string) {
+    this.store.dispatch(new StartSpinner());
+    return  this.httpClient.post('verify/sms', {email: email});
+  }
+
   resetPassword({password, password_confirmation}) {
     this.store.dispatch(new StartSpinner());
     return  this.httpClient.post('password/reset', {password, password_confirmation});

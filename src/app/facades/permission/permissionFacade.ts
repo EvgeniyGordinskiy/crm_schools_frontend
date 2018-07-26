@@ -15,6 +15,7 @@ export class PermissionFacade {
     '/school': 'canAccessPageSchool',
     '/dashboard': 'canAccessPageDashboard',
     '/program': 'canAccessPageProgram',
+    '/auth/setup': 'canAccessPageSetup',
     '/permissions': 'canAccessPagePermissions',
   };
 
@@ -108,6 +109,10 @@ export class PermissionFacade {
   }
 
   static canAccessPagePermissions(user: User) {
+    return true;
+  }
+
+  static canAccessPageSetup(user: User) {
     return true;
   }
 }

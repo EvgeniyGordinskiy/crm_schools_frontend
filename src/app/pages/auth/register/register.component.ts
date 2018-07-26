@@ -32,15 +32,9 @@ import {ErrorResponse} from '@interfaces/responses/error-response';
 export class RegisterComponent implements OnInit {
   signupForm: FormGroup;
   addASchool = false;
-  usedAuthSocial : boolean|string= false;
+  usedAuthSocial: boolean|string = false;
   rememberMe = false;
-  user: {
-    name: string,
-    avatar: string,
-    email: string,
-    provider_name: string,
-    provider_id: string
-  };
+  user: User;
 
   constructor(
     private router: Router,
@@ -53,16 +47,10 @@ export class RegisterComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.user = {
-      name: '',
-      avatar: '',
-      email: '',
-      provider_name: '',
-      provider_id: ''
-    };
+    this.user = new User();
     this.signupForm = new FormGroup({
       'name': new FormControl(this.user.name, [Validators.required]),
-      'phoneNumber': new FormControl(null, [Validators.required, this.checkLimit(11,11)]),
+      'phoneNumber': new FormControl(null, [Validators.required, this.checkLimit(12, 12)]),
       'avatar': new FormControl(this.user.avatar),
       'email': new FormControl(null, [Validators.required, Validators.email]),
       'password': new FormControl(null, [Validators.required]),
@@ -146,6 +134,7 @@ export class RegisterComponent implements OnInit {
             phone: formBody.phone,
             registerComplete: true,
           }));
+          AuthFacade.setUser(this.user);
           this.authService.sendEmail(formBody.email, '/auth/setup')
             .subscribe(
               resp => this.router.navigate(['/auth/emailSent'])

@@ -34,7 +34,8 @@ export class AuthInterceptor implements HttpInterceptor {
       '/auth/resetPassword',
       '/auth/setup',
     ];
-    if(pagesWithTekns.includes(this.router.url.split('?')[0])) {
+    console.log(this.router.url.split('?')[0], '******interceptor');
+    if (pagesWithTekns.includes(this.router.url.split('?')[0])) {
       token = AuthFacade.getToken(ResetPasswordComponent.getTokenPrefix());
     } else {
       token = AuthFacade.getToken();

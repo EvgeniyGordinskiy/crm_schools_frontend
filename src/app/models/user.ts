@@ -7,6 +7,7 @@ export class User implements UserInterface {
   email: string;
   name: string;
   role: string;
+  phone: string;
   emailVerified = false;
   phoneNumberVerified = false;
   registrationComplete = false;
@@ -19,17 +20,20 @@ export class User implements UserInterface {
   schools?: [School];
 
   constructor(params?: User) {
-    this.email = params.email;
-    this.name = params.name;
-    this.role = params.role;
-    this.avatar = params.avatar;
-    this.permissions = params.permissions;
-    this.schools = params.schools;
-    this.id = params.id ? params.id : 'null';
-    this.provider_id = params.provider_id ? params.provider_id : 'null';
-    this.provider_name = params.provider_name ? params.provider_name : 'null';
-    this.emailVerified = params.emailVerified ? params.emailVerified : false;
-    this.phoneNumberVerified = params.phoneNumberVerified ? params.phoneNumberVerified : false;
-    this.registrationComplete = params.registrationComplete ? params.registrationComplete : false;
+    if (params) {
+      this.email = params.email;
+      this.name = params.name;
+      this.role = params.role;
+      this.phone = params.phone;
+      this.avatar = params.avatar;
+      this.permissions = params.permissions;
+      this.schools = params.schools;
+      this.id = params.id ? params.id : 'null';
+      this.provider_id = params.provider_id ? params.provider_id : 'null';
+      this.provider_name = params.provider_name ? params.provider_name : 'null';
+      this.emailVerified = params.emailVerified ? params.emailVerified : false;
+      this.phoneNumberVerified = params.phoneNumberVerified ? params.phoneNumberVerified : false;
+      this.registrationComplete = params.registrationComplete ? params.registrationComplete : false;
+    }
   }
 }
