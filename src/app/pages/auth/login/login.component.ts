@@ -70,7 +70,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       .subscribe(
         (resp: AuthenticateResponseInterface) => {
           if (resp.data.token) {
-            this.authFacade.loginAndFetchUserData(resp.data.token);
+            this.authenticate(resp.data.token);
           }
           this.spinnerStore.dispatch(new StopSpinner());
         });
@@ -89,7 +89,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         .subscribe(
           (resp: AuthenticateResponseInterface) => {
             console.log(resp);
-            if(resp.data.status && resp.data.status === 206) {
+            if (resp.data.status && resp.data.status === 206) {
               const user = resp.data.authUser;
                this.store.dispatch(new UpdateAuthUser({
                  name: user.name,
@@ -99,10 +99,17 @@ export class LoginComponent implements OnInit, OnDestroy {
               this.store.dispatch(new ToggleUsedAuthSocial({provider: provider}));
               this.router.navigate(['auth/register']);
             } else {
-              this.authFacade.loginAndFetchUserData(resp.data.token);
+              this.authenticate(resp.data.token);
             }
           }
-        )
+        );
     });
+  }
+
+  private authenticate(token) {
+    this.store.dispatch(new AuthenticateAction(token));
+    const user = this.authFacade.loginAndFetchUserData();
+    this.store.dispatch(new AuthenticatedSuccessAction({authenticated: true, user: user}));
+    this.authFacade.checkAuthStatusAndRedirect();
   }
 }

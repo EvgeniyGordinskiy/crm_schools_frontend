@@ -7,7 +7,14 @@ import {Router} from '@angular/router';
 import {StartSpinner, StopSpinner} from '@store/spinner/actions';
 import {SchoolService} from '@services/school/school.service';
 import {AuthFacade} from '@facades/auth/authFacade';
-import {AuthenticateAction, RefreshAuthState, SignOut, ToggleUsedAuthSocial, UpdateAuthUser} from '@store/auth/actions';
+import {
+  AuthenticateAction,
+  AuthenticatedSuccessAction,
+  RefreshAuthState,
+  SignOut,
+  ToggleUsedAuthSocial,
+  UpdateAuthUser
+} from '@store/auth/actions';
 import * as AuthReducer from '@store/auth/reducers';
 import {AuthenticateResponseInterface} from '@interfaces/authenticateResponse.interface';
 import {AuthService as AuthServiceSocial, FacebookLoginProvider, GoogleLoginProvider} from 'angular5-social-login';
@@ -115,7 +122,7 @@ export class RegisterComponent implements OnInit {
       name: this.signupForm.get('name').value,
       avatar: this.signupForm.get('avatar').value,
       email: this.signupForm.get('email').value,
-      phone: this.signupForm.get('phoneNumber').value,
+      phone: '+' + this.signupForm.get('phoneNumber').value,
       fromSocial:{
         provider_name: '',
         provider_id: '',
@@ -145,13 +152,13 @@ export class RegisterComponent implements OnInit {
         );
           this.spinnerStore.dispatch(new StopSpinner());
         },
-      (err: ErrorResponse)=> {
+      (err: ErrorResponse) => {
           console.log(err);
           Object.keys(err.error.errors).map(item => {
             this.signupForm.controls[item].setErrors({'apiValidate': err.error.errors[item]})
           });
         }
-      )
+      );
   }
 
   loginBySocialAcc(provider: string) {
@@ -167,7 +174,7 @@ export class RegisterComponent implements OnInit {
           .subscribe(
             (resp: AuthenticateResponseInterface) => {
               console.log(resp);
-              if(resp.data.status && resp.data.status === 206) {
+              if (resp.data.status && resp.data.status === 206) {
                 const user = resp.data.authUser;
                 this.authStore.dispatch(new UpdateAuthUser({
                   name: user.name,
@@ -178,10 +185,13 @@ export class RegisterComponent implements OnInit {
                 }));
                 this.authStore.dispatch(new ToggleUsedAuthSocial({provider: provider}));
               } else {
-                this.authFacade.loginAndFetchUserData(resp.data.token);
+                this.authStore.dispatch(new AuthenticateAction(resp.data.token));
+                const user = this.authFacade.loginAndFetchUserData();
+                this.authStore.dispatch(new AuthenticatedSuccessAction({authenticated: true, user: user}));
+                this.authFacade.checkAuthStatusAndRedirect();
               }
             }
-          )
+          );
       });
   }
 }

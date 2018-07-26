@@ -66,32 +66,33 @@ export class AuthFacade {
   }
 
 
-  public loginAndFetchUserData(token) {
-    this.store.dispatch(new AuthenticateAction(token));
+  public loginAndFetchUserData(): User {
+    let user: User;
     this.accountService.getAccount().subscribe(
       (response: AccountServiceResponseInterface) => {
         const permissions = PermissionFacade.groupByModelName(response.data.permissions);
-        this.createUserAndStoring(response, permissions);
+        return this.createUser(response, permissions);
       },
       error => {
         console.log(error);
       }
     );
+    if (user) {
+      return user;
+    }
   }
 
-  private createUserAndStoring(response, permissions) {
-    const user = new User({
-      name: response.data.name,
-      email: response.data.email,
-      avatar: response.data.avatar,
-      role: response.data.role,
-      emailVerified: response.data.emailVerified,
-      phoneNumberVerified: response.data.phoneNumberVerified,
-      registrationComplete: response.data.registrationComplete,
-      permissions: permissions,
-    });
-    this.store.dispatch(new AuthenticatedSuccessAction({authenticated: true, user: user}));
-    this.checkAuthStatusAndRedirect();
+  private createUser(response, permissions): User {
+   return new User({
+     name: response.data.name,
+     email: response.data.email,
+     avatar: response.data.avatar,
+     role: response.data.role,
+     emailVerified: response.data.emailVerified,
+     phoneNumberVerified: response.data.phoneNumberVerified,
+     registrationComplete: response.data.registrationComplete,
+     permissions: permissions,
+   });
   }
 
 }

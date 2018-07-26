@@ -72,7 +72,7 @@ export class PermissionFacade {
 
 
   static canAccessPageEmailSent(user: User) {
-    return user.registerComplete === true && user.emailVerified === false && !this.userVerified(user);
+    return user.registrationComplete === true && user.emailVerified === false && !this.userVerified(user);
   }
 
   static canAccessPageLogin(user: User) {
