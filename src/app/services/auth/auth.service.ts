@@ -26,9 +26,9 @@ export class AuthService {
     return this.httpClient.post(`social/${provider}`, {token: token})
   }
 
-  register({name, email, password, password_confirmation, role_name}) {
+  register(body) {
     this.store.dispatch(new StartSpinner());
-    return  this.httpClient.post('auth/register', {name, email, password, password_confirmation, role_name});
+    return  this.httpClient.post('auth/register', body);
   }
 
   sendEmailForResettingPassword(email: string) {

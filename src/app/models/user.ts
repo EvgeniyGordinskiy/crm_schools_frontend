@@ -7,19 +7,22 @@ export class User implements UserInterface {
   email: string;
   name: string;
   role: string;
-  avatar: string;
+  avatar?: string;
+  provider_id?: string;
+  provider_name?: string;
   permissions: {
     key?: [Permission]
   };
   schools?: [School];
 
-  constructor(params) {
+  constructor(params?: User) {
     this.email = params.email;
     this.name = params.name;
     this.role = params.role;
     this.avatar = params.avatar;
     this.permissions = params.permissions;
     this.schools = params.schools;
-    this.id = params.id ? params : 'null';
-  }
+    this.id = params.id ? params.id : 'null';
+    this.provider_id = params.provider_id ? params.provider_id : 'null';
+    this.provider_name = params.provider_name ? params.provider_name : 'null';  }
 }

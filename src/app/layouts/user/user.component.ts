@@ -15,6 +15,7 @@ import {CreateSchoolComponent} from '@pages/layout/school/create-school/create-s
 export class UserComponent implements OnInit {
   email: string;
   name: string;
+  avatar: string;
   schools = [];
   constructor(
     public dialog: MatDialog,
@@ -23,12 +24,14 @@ export class UserComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.authStore.select('auth').subscribe(
+    this.authStore.subscribe(
       (val) => {
-        if (val.user) {
-          this.name = val.user.name;
-          this.email = val.user.email;
-          this.schools = val.user.schools ? val.user.schools : [];
+        const auth = val.auth;
+        if (auth && auth.user) {
+          this.name = auth.user.name;
+          this.email = auth.user.email;
+          this.avatar = auth.user.avatar;
+          this.schools = auth.user.schools ? auth.user.schools : [];
         }
       }
     );

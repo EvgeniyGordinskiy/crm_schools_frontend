@@ -7,12 +7,13 @@ import {Router} from '@angular/router';
 import {StartSpinner, StopSpinner} from '@store/spinner/actions';
 import {SchoolService} from '@services/school/school.service';
 import {AuthFacade} from '@facades/auth/authFacade';
-import {AuthenticateAction, SignOut, ToggleUsedAuthSocial, UpdateAuthUser} from '@store/auth/actions';
+import {AuthenticateAction, RefreshAuthState, SignOut, ToggleUsedAuthSocial, UpdateAuthUser} from '@store/auth/actions';
 import * as AuthReducer from '@store/auth/reducers';
 import {AuthenticateResponseInterface} from '@interfaces/authenticateResponse.interface';
 import {AuthService as AuthServiceSocial, FacebookLoginProvider, GoogleLoginProvider} from 'angular5-social-login';
 import {AuthState} from '@store/auth/reducers';
 import {State} from '@store/auth/reducers';
+import {User} from '@models/user';
 
 @Component({
   selector: 'app-register',
@@ -25,13 +26,11 @@ export class RegisterComponent implements OnInit {
   usedAuthSocial : boolean|string= false;
   rememberMe = false;
   user: {
-    name: string|null,
-    email: string|null,
-    avatar: string|null,
-  } = {
-    name: null,
-    email: null,
-    avatar: null
+    name: string,
+    avatar: string,
+    email: string,
+    provider_name: string,
+    provider_id: string
   };
 
   constructor(
@@ -45,25 +44,37 @@ export class RegisterComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.authStore.subscribe(
-      (val) => {
-        const auth = val.auth;
-        this.usedAuthSocial = auth.usedAuthSocial;
-        if (auth) {
-          this.user['name'] = auth.user.name && auth.user.name.length > 0 ? auth.user.name : null;
-          this.user['email'] = auth.user.email && auth.user.email.length > 0 ? auth.user.email : null;
-          this.user['avatar'] = auth.user.avatar && auth.user.avatar.length > 0 ? auth.user.avatar : null;
-        }
-      }
-    );
+    this.user = {
+      name: '',
+      avatar: '',
+      email: '',
+      provider_name: '',
+      provider_id: ''
+    };
     this.signupForm = new FormGroup({
       'name': new FormControl(this.user.name, [Validators.required]),
       'phoneNumber': new FormControl(null, [Validators.required, this.checkLimit(11,11)]),
-      'avatar': new FormControl(this.user.avatar, ),
+      'avatar': new FormControl(this.user.avatar),
       'email': new FormControl(this.user.email, [Validators.required, Validators.email]),
       'password': new FormControl(null, [Validators.required]),
       'confirm_password': new FormControl(null, [Validators.required, this.confirmedPassword.bind(this)]),
     });
+    this.authStore.subscribe(
+      (val) => {
+        const auth = val.auth;
+        this.usedAuthSocial = auth.usedAuthSocial;
+        if (auth && auth.user) {
+          this.user['name'] = auth.user.name && auth.user.name.length > 0 ? auth.user.name : null;
+          this.user['provider_name'] = auth.user.provider_name && auth.user.provider_name.length > 0 ? auth.user.provider_name : null;
+          this.user['provider_id'] = auth.user.provider_id && auth.user.provider_id.length > 0 ? auth.user.provider_id : null;
+          this.user['email'] = auth.user.email && auth.user.email.length > 0 ? auth.user.email : null;
+          this.user['avatar'] = auth.user.avatar && auth.user.avatar.length > 0 ? auth.user.avatar : null;
+          this.signupForm.get('name').setValue(this.user['name']);
+          this.signupForm.get('email').setValue(this.user['email']);
+          this.signupForm.get('avatar').setValue(this.user['avatar']);
+        }
+      }
+    );
   }
 
   confirmedPassword(control: FormControl): {[s: string]: boolean} {
@@ -96,31 +107,35 @@ export class RegisterComponent implements OnInit {
 
   register() {
     console.log(this.signupForm);
-    // this.spinnerStore.dispatch(new StartSpinner());
-    // this.authService.register({name: this.signupForm.get('name').value,
-    //                           email: this.signupForm.get('email').value,
-    //                           role_name: 'admin',
-    //                           password: this.signupForm.get('password').value,
-    //                           password_confirmation: this.signupForm.get('confirm_password').value})
-    //   .subscribe(
-    //     (resp: AuthenticateResponseInterface) => {
-    //       const schoolName = this.signupForm.get('gym_name').value;
-    //       if(schoolName && schoolName.length > 0) {
-    //         this.authStore.dispatch(new AuthenticateAction(resp.data.token));
-    //         this.schoolService.create({
-    //           name: this.signupForm.get('gym_name').value,
-    //           description: this.signupForm.get('gym_description').value,
-    //           address: this.signupForm.get('gym_address').value
-    //         }).subscribe(
-    //           resp => console.log(resp)
-    //         )
-    //       }
-    //       this.authStore.dispatch(new SignOut(this.authFacade));
-    //       this.spinnerStore.dispatch(new StopSpinner());
-    //       this.router.navigate(['/auth/login']);
-    //     }
-    //   )
+    let formBody = {
+      name: this.signupForm.get('name').value,
+      avatar: this.signupForm.get('avatar').value,
+      email: this.signupForm.get('email').value,
+      phone: this.signupForm.get('phoneNumber').value,
+      fromSocial:{
+        provider_name: '',
+        provider_id: '',
+      },
+      role_name: 'admin',
+      password: this.signupForm.get('password').value,
+      password_confirmation: this.signupForm.get('confirm_password').value
+    };
+    if (this.usedAuthSocial) {
+      formBody['fromSocial']['provider_name'] = this.user.provider_name,
+      formBody['fromSocial']['provider_id'] = this.user.provider_id
+
+    }
+    this.spinnerStore.dispatch(new StartSpinner());
+    this.authService.register(formBody)
+      .subscribe(
+        (resp: AuthenticateResponseInterface) => {
+          this.authStore.dispatch(new SignOut(this.authFacade));
+          this.spinnerStore.dispatch(new StopSpinner());
+          this.router.navigate(['/auth/login']);
+        }
+      )
   }
+
   loginBySocialAcc(provider: string) {
     let socialPlatformProvider;
     if (provider === 'facebook') {
@@ -132,7 +147,7 @@ export class RegisterComponent implements OnInit {
       resp => {
         this.authService.loginBySocialAcc(provider, resp.token)
           .subscribe(
-            (resp: {data: {status: number, authUser: {name: string, email: string, avatar: string}}}) => {
+            (resp: {data: {status: number, authUser: {name: string, email: string, avatar: string, id: string}}}) => {
               console.log(resp);
               if(resp.data.status && resp.data.status === 206) {
                 const user = resp.data.authUser;
@@ -140,6 +155,8 @@ export class RegisterComponent implements OnInit {
                   name: user.name,
                   email: user.email,
                   avatar: user.avatar,
+                  provider_id: user.id,
+                  provider_name: provider,
                 }));
                 this.authStore.dispatch(new ToggleUsedAuthSocial({provider: provider}));
               }
