@@ -52,22 +52,6 @@
         </tr>
         <tr>
           <td>
-            <span class="form-field-header">Phone Number</span>
-            <mat-form-field>
-              <input matInput
-                     formControlName="phoneNumber"
-                     name="phoneNumber" required>
-            </mat-form-field>
-            <div
-              *ngIf="!signupForm.get('phoneNumber').valid && signupForm.get('phoneNumber').touched"
-              class="help-block">
-              <span *ngIf="signupForm.get('phoneNumber').errors['phoneNumber']">This email is invalid!</span>
-              <span *ngIf="signupForm.get('phoneNumber').errors['required']">This field is required!</span>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <td>
             <span class="form-field-header">Password</span>
             <mat-form-field>
               <input matInput
@@ -99,13 +83,24 @@
             </div>
           </td>
         </tr>
-        <div class="additional-options">
-          <mat-checkbox
-            class="remember-me-checkbox"
-            (change)="rememberMe = !rememberMe">
-            Remember me
-          </mat-checkbox>
-        </div>
+        <tr>
+          <td>
+            <span class="form-field-header">Enter Phone Number</span>
+            <mat-form-field>
+              <input matInput
+                     formControlName="phoneNumber"
+                     type='text' prefix="+ "
+                     mask="0 000 000 00 00"
+                     name="phoneNumber" required>
+            </mat-form-field>
+            <div
+              *ngIf="!signupForm.get('phoneNumber').valid && signupForm.get('phoneNumber').touched"
+              class="help-block">
+              <span *ngIf="signupForm.get('phoneNumber').errors['range']">Phone Number should have next format: '3 777 777 77 77'</span>
+              <span *ngIf="signupForm.get('phoneNumber').errors['required']">This field is required!</span>
+            </div>
+          </td>
+        </tr>
         <mat-card-actions>
           <button mat-raised-button
                   color="primary"
@@ -114,7 +109,20 @@
         </mat-card-actions>
       </table>
     </form>
-    <div class="noAcc">
+    <h4 class="line-with-text"><span>OR</span></h4>
+    <div class="social-button fbButton" (click)="loginBySocialAcc('facebook')">
+      <img src="../../../../assets/fbLogo26White.png">
+      <span>Sign In with FaceBook</span>
+    </div>
+    <div class="social-button gButton" (click)="loginBySocialAcc('google')">
+      <img src="../../../../assets/gLogo.png">
+      <span>Sign In with Google</span>
+    </div>
+    <div class="noAcc" *ngIf="usedAuthSocial === false">
+      <span>Already have an account?</span>
+      <a [routerLink]="['/auth/login']">Log In</a>
+    </div>
+    <div class="noAcc noAccUsedAuthSocial" *ngIf="usedAuthSocial !== false">
       <span>By signing up, you agree to the <b>Terms</b> and <b>Conditions</b> and <b>Privacy Policy</b>.
       You also agree to receive product-related email from CC you can unsubscribe at any time.</span>
     </div>

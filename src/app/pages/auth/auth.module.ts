@@ -16,10 +16,12 @@ import {AuthFacade} from '@app/facades/auth/authFacade';
 import {SchoolService} from '@services/school/school.service';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import {NgxMaskModule} from 'ngx-mask';
 
 
 @NgModule({
   imports: [
+    NgxMaskModule.forRoot(),
     CommonModule,
     SharedModule,
     AuthRoutingModule

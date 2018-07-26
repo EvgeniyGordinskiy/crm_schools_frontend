@@ -7,6 +7,7 @@ export class User implements UserInterface {
   email: string;
   name: string;
   role: string;
+  avatar: string;
   permissions: {
     key?: [Permission]
   };
@@ -16,6 +17,7 @@ export class User implements UserInterface {
     this.email = params.email;
     this.name = params.name;
     this.role = params.role;
+    this.avatar = params.avatar;
     this.permissions = params.permissions;
     this.schools = params.schools;
     this.id = params.id ? params : 'null';
