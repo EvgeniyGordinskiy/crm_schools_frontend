@@ -1,6 +1,12 @@
 import {User} from '@models/user';
 import {Router} from '@angular/router';
 import {Injectable} from '@angular/core';
+import {AuthenticateAction, AuthenticatedSuccessAction} from '@store/auth/actions';
+import {AccountServiceResponseInterface} from '@interfaces/accountServiceResponse.interface';
+import {PermissionFacade} from '@facades/permission/permissionFacade';
+import {Store} from '@ngrx/store';
+import * as AuthenticateReducer from '@store/auth/reducers';
+import {AccountService} from '@services/account/account.service';
 
 @Injectable()
 export class AuthFacade {
@@ -14,6 +20,8 @@ export class AuthFacade {
 
   public constructor(
     private router: Router,
+    private store: Store<AuthenticateReducer.AuthState>,
+    private accountService: AccountService,
   ) {}
 
   static setToken = (token: string, prefix = AuthFacade.prefix) => {
@@ -42,7 +50,7 @@ export class AuthFacade {
 
   checkAuthStatusAndRedirect() {
     setTimeout(() => {
-      if (AuthFacade.getAuthStatus() && this.router.url === '/auth/login') {
+      if (AuthFacade.getAuthStatus() && this.notAuthnticatePages.includes(this.router.url.split('?')[0])) {
         this.router.navigate(['/home']);
       } else if (!AuthFacade.getAuthStatus() && !this.notAuthnticatePages.includes(this.router.url.split('?')[0])) {
         this.router.navigate(['/auth/login']);
@@ -57,5 +65,33 @@ export class AuthFacade {
     this.router.navigate(['/auth/login']);
   }
 
+
+  public loginAndFetchUserData(token) {
+    this.store.dispatch(new AuthenticateAction(token));
+    this.accountService.getAccount().subscribe(
+      (response: AccountServiceResponseInterface) => {
+        const permissions = PermissionFacade.groupByModelName(response.data.permissions);
+        this.createUserAndStoring(response, permissions);
+      },
+      error => {
+        console.log(error);
+      }
+    );
+  }
+
+  private createUserAndStoring(response, permissions) {
+    const user = new User({
+      name: response.data.name,
+      email: response.data.email,
+      avatar: response.data.avatar,
+      role: response.data.role,
+      emailVerified: response.data.emailVerified,
+      phoneNumberVerified: response.data.phoneNumberVerified,
+      registrationComplete: response.data.registrationComplete,
+      permissions: permissions,
+    });
+    this.store.dispatch(new AuthenticatedSuccessAction({authenticated: true, user: user}));
+    this.checkAuthStatusAndRedirect();
+  }
 
 }

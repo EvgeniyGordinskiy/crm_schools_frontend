@@ -1,0 +1,23 @@
+@import "../../../../assets/scss/variables";
+
+::ng-deep .auth-wrapper .email-sent-wrapper {
+  .auth-modal {
+    width: 456px;
+    text-align: center;
+    box-shadow: none;
+    border-radius: 6px;
+    border: $grey solid 1px;
+    .mat-card-content{
+      color: $light_black;
+      line-height: 1.6;
+      form > table {
+        width: 242px;
+        margin: auto;
+        .mat-card-actions > button {
+          background-color: $base_color;
+          color: white;
+        }
+      }
+    }
+  }
+}

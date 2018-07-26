@@ -31,9 +31,14 @@ export class AuthService {
     return  this.httpClient.post('auth/register', body);
   }
 
-  sendEmailForResettingPassword(email: string) {
+  sendEmailForResettingPassword(email: string, redirect: string) {
     this.store.dispatch(new StartSpinner());
-    return  this.httpClient.post('password/change', {email: email});
+    return  this.httpClient.post('password/change', {email: email, redirectPath: redirect});
+  }
+
+  sendEmail(email: string, redirect: string) {
+    this.store.dispatch(new StartSpinner());
+    return  this.httpClient.post('verify/email', {email: email, redirectPath: redirect});
   }
 
   resetPassword({password, password_confirmation}) {

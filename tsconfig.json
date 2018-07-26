@@ -14,7 +14,8 @@
       "@store/*": ["app/store/*"],
       "@utils/*": ["app/utils/*"],
       "@facades/*": ["app/facades/*"],
-      "@interfaces/*": ["app/interfaces/*"]
+      "@interfaces/*": ["app/interfaces/*"],
+      "@assets/*": ["assets/*"]
     },
     "sourceMap": true,
     "declaration": false,

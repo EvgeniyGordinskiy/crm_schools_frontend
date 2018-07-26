@@ -39,6 +39,8 @@ const initialState: State = {
 export function reducer(state: any = initialState, action: ActionInterface) {
   switch (action.type) {
     case ActionTypes.AUTHENTICATE:
+      console.log(state, 'AUTHENTICATE');
+
       return {
         ...state,
         error: false,
@@ -54,6 +56,8 @@ export function reducer(state: any = initialState, action: ActionInterface) {
       };
 
     case ActionTypes.AUTHENTICATED_SUCCESS:
+      console.log(state, 'AUTHENTICATED_SUCCESS');
+
       return {
         ...state,
         authenticated: action.payload.authenticated,
@@ -69,22 +73,23 @@ export function reducer(state: any = initialState, action: ActionInterface) {
         error: action.payload.error.message,
         loading: false
       };
-
-    case ActionTypes.AUTHENTICATE_SUCCESS:
-    case ActionTypes.SIGN_UP_SUCCESS:
-      const user: User = action.payload.user;
-      // verify user is not null
-      if (user === null) {
-        return state;
-      }
-
-      return {
-        ...state,
-        authenticated: true,
-        error: undefined,
-        loading: false,
-        user: user
-      };
+    //
+    // case ActionTypes.AUTHENTICATE_SUCCESS:
+    // case ActionTypes.SIGN_UP_SUCCESS:
+    //   const user: User = action.payload.user;
+    //   // verify user is not null
+    //   if (user === null) {
+    //     return state;
+    //   }
+    //   console.log(state, 'SIGN_UP_SUCCESS, AUTHENTICATE_SUCCESS');
+    //
+    //   return {
+    //     ...state,
+    //     authenticated: true,
+    //     error: undefined,
+    //     loading: false,
+    //     user: user
+    //   };
       case ActionTypes.UPDATE_AUTH_USER:
         const properties = action.payload;
           Object.keys(properties).map(prop => {

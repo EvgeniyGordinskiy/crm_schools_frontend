@@ -16,7 +16,7 @@ export class ResetPasswordComponent implements OnInit {
   resetPasswordForm: FormGroup;
   tokenWasChecked = false;
   token: string;
-  private static resetTokenPrefix = 'reset_token_prefix';
+  static resetTokenPrefix = 'reset_token_prefix';
 
   constructor(
     private route: ActivatedRoute,

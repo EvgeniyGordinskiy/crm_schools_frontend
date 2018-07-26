@@ -5,6 +5,7 @@ import {RegisterComponent} from './register/register.component';
 import {AuthWrapperComponent} from './auth-wrapper/auth-wrapper.component';
 import {ForgotPasswordComponent} from '@pages/auth/forgot-password/forgot-password.component';
 import {ResetPasswordComponent} from '@pages/auth/reset-password/reset-password.component';
+import {EmailSentComponent} from '@pages/auth/email-sent/email-sent.component';
 
 const routes: Routes = [
   {
@@ -22,6 +23,9 @@ const routes: Routes = [
       },
       {
         path: 'resetPassword', component: ResetPasswordComponent,
+      },
+      {
+        path: 'emailSent', component: EmailSentComponent,
       },
     ]
   },

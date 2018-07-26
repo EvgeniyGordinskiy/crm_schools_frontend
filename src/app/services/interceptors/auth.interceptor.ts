@@ -30,7 +30,11 @@ export class AuthInterceptor implements HttpInterceptor {
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     let token: string;
-    if(this.router.url.split('?')[0] === '/auth/resetPassword') {
+    const pagesWithTekns = [
+      '/auth/resetPassword',
+      '/auth/setup',
+    ];
+    if(pagesWithTekns.includes(this.router.url.split('?')[0])) {
       token = AuthFacade.getToken(ResetPasswordComponent.getTokenPrefix());
     } else {
       token = AuthFacade.getToken();
@@ -44,7 +48,11 @@ export class AuthInterceptor implements HttpInterceptor {
         })
       });
     }
-    return next.handle(req).do((event: HttpEvent<any>) => {}, (err: any) => {
+    return next.handle(req).do(
+      (event: HttpEvent<any>) => {
+      this.store.dispatch(new StopSpinner());
+    },
+      (err: any) => {
       if (err instanceof HttpErrorResponse) {
         this.store.dispatch(new StopSpinner());
         if (err.status && err.status === 401 && this.router.url !== '/auth/login') {

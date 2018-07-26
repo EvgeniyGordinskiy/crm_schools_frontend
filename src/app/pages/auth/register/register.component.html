@@ -6,8 +6,8 @@
         <p class="sub-title color-text-middle-grey">Please set up empty rows.</p>
         <img src="{{user.avatar}}" class="avatar">
         <img src="{{usedAuthSocial === 'facebook'? '../../../../assets/fbLogo.png' : '../../../../assets/gLogo.png'}}" class="icon-social">
-        <div *ngIf="user.name !== null" class="sub-title">Evgeniy Gordinskiy</div>
-        <div *ngIf="user.email !== null" class="sub-title color-text-middle-grey">evgeniytt@gmail.com</div>
+        <div *ngIf="user.name !== null" class="sub-title">{{user.name}}</div>
+        <div *ngIf="user.email !== null" class="sub-title color-text-middle-grey">{{user.email}}</div>
       </div>
       <div  *ngIf="usedAuthSocial === false">
         <span>New account registration</span>
@@ -33,7 +33,7 @@
             </div>
           </td>
         </tr>
-        <tr *ngIf="user.email === null">
+        <tr *ngIf="user.email === null || user.email.length === 0 || !user">
           <td>
             <span class="form-field-header">Email</span>
             <mat-form-field>
@@ -47,6 +47,7 @@
               class="help-block">
               <span *ngIf="signupForm.get('email').errors['email']">This email is invalid!</span>
               <span *ngIf="signupForm.get('email').errors['required']">This field is required!</span>
+              <span *ngIf="signupForm.get('email').errors['apiValidate']">{{signupForm.get('email').errors['apiValidate']}}</span>
             </div>
           </td>
         </tr>

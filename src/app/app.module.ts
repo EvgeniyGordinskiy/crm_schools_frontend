@@ -30,6 +30,7 @@ import {AuthFacade} from '@app/facades/auth/authFacade';
 import {MainMenuComponent} from '@components/main-menu/main-menu.component';
 import {CreateSchoolComponent} from '@pages/layout/school/create-school/create-school.component';
 import {SchoolService} from '@services/school/school.service';
+import {AccountService} from '@services/account/account.service';
 
 export const metaReducers: MetaReducer<any>[] = environment.production
   ? []
@@ -80,6 +81,7 @@ export function getAuthServiceConfigs() {
   ],
   providers: [
     AuthService,
+    AccountService,
     SchoolService,
     AuthFacade,
     { provide: HTTP_INTERCEPTORS, useClass: MainInterceptor, multi: true },

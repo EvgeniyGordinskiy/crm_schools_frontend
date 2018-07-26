@@ -17,6 +17,8 @@ import {SchoolService} from '@services/school/school.service';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import {NgxMaskModule} from 'ngx-mask';
+import { EmailSentComponent } from './email-sent/email-sent.component';
+import { SetupComponent } from './setup/setup.component';
 
 
 @NgModule({
@@ -26,7 +28,7 @@ import {NgxMaskModule} from 'ngx-mask';
     SharedModule,
     AuthRoutingModule
   ],
-  declarations: [LoginComponent, RegisterComponent, AuthWrapperComponent, ForgotPasswordComponent, ResetPasswordComponent],
+  declarations: [LoginComponent, RegisterComponent, AuthWrapperComponent, ForgotPasswordComponent, ResetPasswordComponent, EmailSentComponent, SetupComponent],
   providers: [AuthService, SchoolService, AccountService]
 })
 export class AuthModule implements OnDestroy, OnInit {

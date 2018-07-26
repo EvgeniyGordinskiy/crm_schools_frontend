@@ -7,6 +7,9 @@ export interface UserInterface {
   avatar?: string;
   provider_id?: string;
   provider_name?: string;
+  emailVerified: boolean;
+  phoneNumberVerified: boolean;
+  registrationComplete: boolean;
   name: string;
   role: string;
   permissions: {

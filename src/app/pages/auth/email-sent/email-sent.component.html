@@ -1,0 +1,23 @@
+<div class="email-sent-wrapper">
+  <mat-card class="auth-modal">
+    <mat-card-header>
+      <mat-card-title>Thank's</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      You need to confirm your email to prove authenticity.
+      <br>
+      Please, check your email: <b class="link text_under_line">{{email}}</b>
+      <br>
+      If yo don't see the confirmation email, check your spam folder or send confirmation mail again.
+      <form>
+        <table cellspacing="0">
+          <mat-card-actions>
+            <button mat-button (click)="resendEmail()">
+              Send again
+            </button>
+          </mat-card-actions>
+        </table>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

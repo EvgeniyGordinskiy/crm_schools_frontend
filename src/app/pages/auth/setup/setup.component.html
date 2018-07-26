@@ -1,0 +1,75 @@
+<div class="email-sent-wrapper">
+  <mat-card class="auth-modal">
+    <mat-card-header>
+      <mat-card-title>Set Up Yor Account</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-tab-group>
+        <mat-tab label="Confirm Phone">
+          <div class="tab-text">
+            <p>
+              Thank you for registration in our system.
+              <br>
+              Verification of email was successful. Please, follow next steps to set up your account.
+            </p>
+            <p>
+              We just send a text message with a code to +{{phone}}. Please enter the code to confirm you phone.
+            </p>
+          </div>
+          <form [formGroup]="setUpForm" *ngIf="permissionForm">
+            <table>
+              <span class="form-field-header">Enter Code</span>
+              <mat-form-field class="confirm-phone">
+                <input mat-input
+                     formControlName="phone_code">
+              </mat-form-field>
+            </table>
+          </form>
+        </mat-tab>
+        <mat-tab label="Payment">
+          <div class="tab-text">
+            <p>
+              Thank you for registration in our system.
+              <br>
+              Verification of email was successful. Please, follow next steps to set up your account.
+            </p>
+            <p>
+              We just send a text message with a code to +{{phone}}. Please enter the code to confirm you phone.
+            </p>
+          </div>
+          <form [formGroup]="setUpForm" *ngIf="permissionForm">
+            <table>
+              <span class="form-field-header">Enter Code</span>
+              <mat-form-field class="confirm-phone">
+                <input mat-input
+                     formControlName="phone_code">
+              </mat-form-field>
+            </table>
+          </form>
+        </mat-tab>
+        <mat-tab label="GYMs">
+          <div class="tab-text">
+            <p>
+              Thank you for registration in our system.
+              <br>
+              Verification of email was successful. Please, follow next steps to set up your account.
+            </p>
+            <p>
+              We just send a text message with a code to +{{phone}}. Please enter the code to confirm you phone.
+            </p>
+          </div>
+          <form [formGroup]="setUpForm" *ngIf="permissionForm">
+            <table>
+              <span class="form-field-header">Enter Code</span>
+              <mat-form-field class="confirm-phone">
+                <input mat-input
+                     formControlName="phone_code">
+              </mat-form-field>
+            </table>
+          </form>
+        </mat-tab>
+      </mat-tab-group>
+      <button mat-raised-button  (click)="next($event)">Next</button>
+    </mat-card-content>
+  </mat-card>
+</div>

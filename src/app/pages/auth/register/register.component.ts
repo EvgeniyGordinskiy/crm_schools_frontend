@@ -14,6 +14,8 @@ import {AuthService as AuthServiceSocial, FacebookLoginProvider, GoogleLoginProv
 import {AuthState} from '@store/auth/reducers';
 import {State} from '@store/auth/reducers';
 import {User} from '@models/user';
+import {HttpErrorResponse} from '@angular/common/http';
+import {ErrorResponse} from '@interfaces/responses/error-response';
 
 @Component({
   selector: 'app-register',
@@ -55,7 +57,7 @@ export class RegisterComponent implements OnInit {
       'name': new FormControl(this.user.name, [Validators.required]),
       'phoneNumber': new FormControl(null, [Validators.required, this.checkLimit(11,11)]),
       'avatar': new FormControl(this.user.avatar),
-      'email': new FormControl(this.user.email, [Validators.required, Validators.email]),
+      'email': new FormControl(null, [Validators.required, Validators.email]),
       'password': new FormControl(null, [Validators.required]),
       'confirm_password': new FormControl(null, [Validators.required, this.confirmedPassword.bind(this)]),
     });
@@ -67,10 +69,12 @@ export class RegisterComponent implements OnInit {
           this.user['name'] = auth.user.name && auth.user.name.length > 0 ? auth.user.name : null;
           this.user['provider_name'] = auth.user.provider_name && auth.user.provider_name.length > 0 ? auth.user.provider_name : null;
           this.user['provider_id'] = auth.user.provider_id && auth.user.provider_id.length > 0 ? auth.user.provider_id : null;
-          this.user['email'] = auth.user.email && auth.user.email.length > 0 ? auth.user.email : null;
+          if ( auth.user.email && auth.user.email.length > 0 &&  auth.user.email !== null) {
+            this.user['email'] = auth.user.email;
+            this.signupForm.get('email').setValue(this.user['email']);
+          }
           this.user['avatar'] = auth.user.avatar && auth.user.avatar.length > 0 ? auth.user.avatar : null;
           this.signupForm.get('name').setValue(this.user['name']);
-          this.signupForm.get('email').setValue(this.user['email']);
           this.signupForm.get('avatar').setValue(this.user['avatar']);
         }
       }
@@ -129,9 +133,23 @@ export class RegisterComponent implements OnInit {
     this.authService.register(formBody)
       .subscribe(
         (resp: AuthenticateResponseInterface) => {
-          this.authStore.dispatch(new SignOut(this.authFacade));
+          // this.authStore.dispatch(new SignOut(this.authFacade));
+          this.authStore.dispatch(new UpdateAuthUser({
+            email: formBody.email,
+            phone: formBody.phone,
+            registerComplete: true,
+          }));
+          this.authService.sendEmail(formBody.email, '/auth/setup')
+            .subscribe(
+              resp => this.router.navigate(['/auth/emailSent'])
+        );
           this.spinnerStore.dispatch(new StopSpinner());
-          this.router.navigate(['/auth/login']);
+        },
+      (err: ErrorResponse)=> {
+          console.log(err);
+          Object.keys(err.error.errors).map(item => {
+            this.signupForm.controls[item].setErrors({'apiValidate': err.error.errors[item]})
+          });
         }
       )
   }
@@ -147,7 +165,7 @@ export class RegisterComponent implements OnInit {
       resp => {
         this.authService.loginBySocialAcc(provider, resp.token)
           .subscribe(
-            (resp: {data: {status: number, authUser: {name: string, email: string, avatar: string, id: string}}}) => {
+            (resp: AuthenticateResponseInterface) => {
               console.log(resp);
               if(resp.data.status && resp.data.status === 206) {
                 const user = resp.data.authUser;
@@ -159,6 +177,8 @@ export class RegisterComponent implements OnInit {
                   provider_name: provider,
                 }));
                 this.authStore.dispatch(new ToggleUsedAuthSocial({provider: provider}));
+              } else {
+                this.authFacade.loginAndFetchUserData(resp.data.token);
               }
             }
           )

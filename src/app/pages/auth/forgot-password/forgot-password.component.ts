@@ -25,7 +25,7 @@ export class ForgotPasswordComponent implements OnInit {
   }
 
   sendEmail() {
-    this.authService.sendEmailForResettingPassword( this.forgotPasswordForm.get('email').value)
+    this.authService.sendEmailForResettingPassword( this.forgotPasswordForm.get('email').value, 'uth/resetPassword')
       .subscribe(
         (resp: SuccessResponse) => {
           this.notificationManager.success(resp.success.message ? resp.success.message : 'Password successfully', 'Success' );

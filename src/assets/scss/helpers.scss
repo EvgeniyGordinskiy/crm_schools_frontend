@@ -8,6 +8,15 @@
   float:right;
 }
 
+.link{
+  color: $link_color;
+  cursor: pointer;
+}
+
+.text_under_line{
+  text-decoration: underline;
+}
+
 .line-with-text{
   width:100%;
   text-align:center;

@@ -70,21 +70,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       .subscribe(
         (resp: AuthenticateResponseInterface) => {
           if (resp.data.token) {
-            this.store.dispatch(new AuthenticateAction(resp.data.token));
-            this.accountService.getAccount().subscribe(
-              (response: AccountServiceResponseInterface) => {
-                const permissions = PermissionFacade.groupByModelName(response.data.permissions);
-                const user = new User(response.data);
-                if (permissions) {
-                  user.permissions = permissions;
-                }
-                  this.store.dispatch(new AuthenticatedSuccessAction({authenticated: true, user: user}));
-                  this.authFacade.checkAuthStatusAndRedirect();
-              },
-              error => {
-                console.log(error);
-              }
-            );
+            this.authFacade.loginAndFetchUserData(resp.data.token);
           }
           this.spinnerStore.dispatch(new StopSpinner());
         });
@@ -101,7 +87,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     resp => {
       this.authService.loginBySocialAcc(provider, resp.token)
         .subscribe(
-          (resp: {data: {status: number, authUser: {name: string, email: string, avatar: string}}}) => {
+          (resp: AuthenticateResponseInterface) => {
             console.log(resp);
             if(resp.data.status && resp.data.status === 206) {
               const user = resp.data.authUser;
@@ -112,10 +98,11 @@ export class LoginComponent implements OnInit, OnDestroy {
                }));
               this.store.dispatch(new ToggleUsedAuthSocial({provider: provider}));
               this.router.navigate(['auth/register']);
+            } else {
+              this.authFacade.loginAndFetchUserData(resp.data.token);
             }
           }
         )
     });
   }
-
 }
