@@ -84,17 +84,6 @@ export class RegisterComponent implements OnInit {
     }
   }
 
-  requiredCustom(control: FormControl): {[s: string]: boolean} {
-    if (control.value && control.value.length !== 0) {
-      control.markAsTouched();
-    }
-    if (this.addASchool && control.touched && (!control.value || control.value.length === 0)) {
-      return {'required_custom': true};
-    } else {
-      return null;
-    }
-  }
-
   checkLimit(min: number, max: number): ValidatorFn {
     return (c: AbstractControl): { [key: string]: boolean } | null => {
       if (c.value !== null && (c.value.length < min || c.value.length > max)) {
@@ -135,10 +124,7 @@ export class RegisterComponent implements OnInit {
             registerComplete: true,
           }));
           AuthFacade.setUser(this.user);
-          this.authService.sendEmail(formBody.email, '/auth/setup')
-            .subscribe(
-              resp => this.router.navigate(['/auth/emailSent'])
-        );
+          this.router.navigate(['/auth/emailSent']);
           this.spinnerStore.dispatch(new StopSpinner());
         },
       (err: ErrorResponse) => {
@@ -164,7 +150,7 @@ export class RegisterComponent implements OnInit {
             (resp: AuthenticateResponseInterface) => {
               console.log(resp);
               if (resp.data.status && resp.data.status === 206) {
-                const user = resp.data.authUser;
+                const user = resp.data.authUser.data;
                 this.authStore.dispatch(new UpdateAuthUser({
                   name: user.name,
                   email: user.email,

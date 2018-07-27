@@ -90,7 +90,7 @@ export class LoginComponent implements OnInit, OnDestroy {
           (resp: AuthenticateResponseInterface) => {
             console.log(resp);
             if (resp.data.status && resp.data.status === 206) {
-              const user = resp.data.authUser;
+              const user = resp.data.authUser.data;
                this.store.dispatch(new UpdateAuthUser({
                  name: user.name,
                  email: user.email,
@@ -107,9 +107,26 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   private authenticate(token) {
+    console.log(token);
     this.store.dispatch(new AuthenticateAction(token));
-    const user = this.authFacade.loginAndFetchUserData();
-    this.store.dispatch(new AuthenticatedSuccessAction({authenticated: true, user: user}));
-    this.authFacade.checkAuthStatusAndRedirect();
+    this.accountService.getAccount().subscribe(
+      (response: AccountServiceResponseInterface) => {
+        const permissions = PermissionFacade.groupByModelName(response.data.permissions);
+        const user =  this.authFacade.createUser(response, permissions);
+        this.store.dispatch(new UpdateAuthUser(user));
+        if (user.emailVerified === false) {
+          this.router.navigate(['auth/emailSent']);
+        } else if(user.phoneNumberVerified === false || user.paymentSettingVerified === false || !user.schools.length ) {
+          this.router.navigate(['auth/setup']);
+        } else {
+          this.store.dispatch(new AuthenticatedSuccessAction({authenticated: true, user: user}));
+          this.authFacade.checkAuthStatusAndRedirect();
+        }
+      },
+      error => {
+        console.log(error);
+      }
+    );
+
   }
 }

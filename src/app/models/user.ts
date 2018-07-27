@@ -11,6 +11,7 @@ export class User implements UserInterface {
   emailVerified = false;
   phoneNumberVerified = false;
   registrationComplete = false;
+  paymentSettingVerified = false;
   avatar?: string;
   provider_id?: string;
   provider_name?: string;
@@ -34,6 +35,7 @@ export class User implements UserInterface {
       this.emailVerified = params.emailVerified ? params.emailVerified : false;
       this.phoneNumberVerified = params.phoneNumberVerified ? params.phoneNumberVerified : false;
       this.registrationComplete = params.registrationComplete ? params.registrationComplete : false;
+      this.paymentSettingVerified = params.paymentSettingVerified ? params.paymentSettingVerified : false;
     }
   }
 }

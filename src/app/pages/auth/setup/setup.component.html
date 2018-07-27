@@ -1,75 +1,111 @@
-<div class="email-sent-wrapper">
+<div class="setup-acc-wrapper"  *ngIf="tokenWasChecked">
   <mat-card class="auth-modal">
     <mat-card-header>
       <mat-card-title>Set Up Yor Account</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-      <mat-tab-group>
-        <mat-tab label="Confirm Phone">
-          <div class="tab-text">
+      <mat-tab-group [selectedIndex]="currentIndex">
+        <mat-tab label="Confirm Phone" [disabled]='currentIndex !== 0'>
+          <div class="tab-text tab-text-code">
             <p>
               Thank you for registration in our system.
               <br>
               Verification of email was successful. Please, follow next steps to set up your account.
             </p>
-            <p>
-              We just send a text message with a code to +{{phone}}. Please enter the code to confirm you phone.
+            <p *ngIf="!codeWasChecked">
+              We just send a text message with a code to {{user.phone}}. Please enter the code to confirm you phone.
             </p>
           </div>
-          <form [formGroup]="setUpForm" *ngIf="permissionForm">
+          <form [formGroup]="setUpForm" class="form-phone-code" *ngIf="!codeWasChecked">
             <table>
               <span class="form-field-header">Enter Code</span>
               <mat-form-field class="confirm-phone">
-                <input mat-input
-                     formControlName="phone_code">
+                <input matInput
+                       type="password"
+                     formControlName="code">
+              </mat-form-field>
+              <div
+                *ngIf="!setUpForm.get('code').valid && setUpForm.get('code').touched"
+                class="help-block">
+                <span *ngIf="setUpForm.get('code').errors['wrongCode']">Wrong Code</span>
+                <button class="resend" (click)="sendSms()">Resend SMS</button>
+              </div>
+            </table>
+          </form>
+        </mat-tab>
+        <mat-tab label="Payment" [disabled]='currentIndex !== 1'>
+          <div class="tab-text payment-text">
+            <p *ngIf="!paymentSettingVerified">
+              Enter your payment details to operate
+              <br>
+              transactions in your gyms.
+            </p>
+            <p *ngIf="paymentSettingVerified">
+              Your payment settings was saved succesfully.
+              <br>
+              You can re-enter them to update.
+            </p>
+          </div>
+          <form [formGroup]="setUpForm">
+            <table>
+              <span class="form-field-header">Card Number</span>
+              <mat-form-field>
+                <input matInput
+                       type="password"
+                       mask="000 000 000 000"
+                       formControlName="card_number">
+              </mat-form-field>
+              <span class="form-field-header">Expire Date</span>
+              <mat-form-field [floatLabel]="never">
+                <input matInput
+                       mask="00/00"
+                       placeholder="MM/YY"
+                       formControlName="exp_date">
+              </mat-form-field>
+              <span class="form-field-header">CVV</span>
+              <mat-form-field>
+              <input matInput
+                     type="password"
+                     formControlName="cvv">
               </mat-form-field>
             </table>
           </form>
         </mat-tab>
-        <mat-tab label="Payment">
+        <mat-tab label="GYMs" [disabled]='currentIndex !== 2'>
           <div class="tab-text">
             <p>
-              Thank you for registration in our system.
-              <br>
-              Verification of email was successful. Please, follow next steps to set up your account.
-            </p>
-            <p>
-              We just send a text message with a code to +{{phone}}. Please enter the code to confirm you phone.
+              Add your gyms to get started
             </p>
           </div>
-          <form [formGroup]="setUpForm" *ngIf="permissionForm">
+          <form [formGroup]="setUpForm">
             <table>
-              <span class="form-field-header">Enter Code</span>
-              <mat-form-field class="confirm-phone">
-                <input mat-input
-                     formControlName="phone_code">
-              </mat-form-field>
-            </table>
-          </form>
-        </mat-tab>
-        <mat-tab label="GYMs">
-          <div class="tab-text">
-            <p>
-              Thank you for registration in our system.
-              <br>
-              Verification of email was successful. Please, follow next steps to set up your account.
-            </p>
-            <p>
-              We just send a text message with a code to +{{phone}}. Please enter the code to confirm you phone.
-            </p>
-          </div>
-          <form [formGroup]="setUpForm" *ngIf="permissionForm">
-            <table>
-              <span class="form-field-header">Enter Code</span>
-              <mat-form-field class="confirm-phone">
-                <input mat-input
-                     formControlName="phone_code">
-              </mat-form-field>
+              <div class="gym">
+                <span class="form-field-header">Gym Name</span>
+                <mat-form-field>
+                  <input matInput
+                       formControlName="gym_name">
+                </mat-form-field>
+                <span class="form-field-header">Gym Address</span>
+                <mat-form-field>
+                  <input matInput
+                       formControlName="gym_address">
+                </mat-form-field>
+                <span class="form-field-header">Gym Phone</span>
+                <mat-form-field>
+                  <input matInput
+                       formControlName="gym_phone">
+                </mat-form-field>
+              </div>
             </table>
           </form>
         </mat-tab>
       </mat-tab-group>
-      <button mat-raised-button  (click)="next($event)">Next</button>
+      <mat-card-actions>
+        <button mat-raised-button  class="mat-primary" (click)="prev($event)" *ngIf="currentIndex > 0">Back</button>
+        <button mat-raised-button class="mat-primary" (click)="checkTokenThanNext()" *ngIf="currentIndex === 0">Next</button>
+        <button mat-raised-button  class="mat-primary" (click)="savePaymentSettings()" *ngIf="currentIndex === 1">Next</button>
+        <button mat-raised-button  class="mat-primary" (click)="saveGyms()" *ngIf="currentIndex === 2">Save</button>
+      </mat-card-actions>
     </mat-card-content>
   </mat-card>
 </div>

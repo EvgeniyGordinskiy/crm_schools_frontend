@@ -1,0 +1,89 @@
+@import "../../../../assets/scss/variables";
+
+.setup-acc-wrapper{
+  .auth-modal{
+    width: 600px;
+    .mat-card-header{
+      margin-bottom: -20px;
+    }
+    .mat-card-content{
+      & > .mat-primary {
+        color: $dark_grey !important;
+      }
+      ::ng-deep .mat-tab-labels {
+        display: flex;
+        justify-content: space-around;
+      }
+      ::ng-deep .mat-tab-body{
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        height: 367px;
+        border-bottom: #ccc solid 1px;
+        .mat-tab-body-content{
+          .tab-text-code{
+            p:last-child{
+              margin-top: 20px;
+            }
+          }
+          .tab-text {
+            padding-left: 140px;
+            padding-right: 140px;
+            margin-top: 80px;
+            margin-bottom: 10px;
+          }
+          .payment-text{
+            margin-top: 40px;
+          }
+          form:not(.form-phone-code){
+            padding-left: 170px;
+            padding-right: 170px;
+            margin-top: 32px;
+            .form-field-header{
+              margin-top:10px;
+            }
+            .mat-form-field{
+              height:30px;
+            }
+
+          }
+          .form-phone-code{
+            width: 240px;
+            margin: auto;
+            .resend{
+              width: 71px;
+              font-size: 10px;
+              padding: 5px 0;
+              border: none;
+              border-radius: 4px;
+              color: white;
+              background-color: #2e7e88;
+              float: right;
+              &:hover{
+                cursor: pointer;
+              }
+            }
+          }
+          ::ng-deep .form-field-header{
+            float: left;
+          }
+        }
+      }
+      .mat-card-actions{
+        display: flex;
+        justify-content: flex-end;
+        padding-right: 13px;
+        button{
+          height: 28px;
+          position: relative;
+          top: 14px;
+         ::ng-deep span{
+            position: relative;
+            bottom: 4px;
+          }
+        }
+      }
+    }
+  }
+}

@@ -92,19 +92,23 @@ export function reducer(state: any = initialState, action: ActionInterface) {
     //   };
       case ActionTypes.UPDATE_AUTH_USER:
         const properties = action.payload;
+        if (state.user) {
           Object.keys(properties).map(prop => {
-            switch (prop) {
-              case 'schools':
-                state.user[prop].push(properties[prop]);
-                break;
-              case 'permissions':
-                break;
-              default:
-                state.user[prop] = properties[prop];
-                break;
+            if (properties[prop]) {
+              switch (prop) {
+                case 'schools':
+                  state.user[prop] = properties[prop];
+                  break;
+                case 'permissions':
+                  break;
+                default:
+                  state.user[prop] = properties[prop];
+                  break;
+              }
             }
           });
-          AuthFacade.setUser(state.user);
+        }
+        AuthFacade.setUser(state.user);
           console.log(state, 'UPDATE_AUTH_USER');
       return state;
 

@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {Store} from '@ngrx/store';
 import * as AuthReducer from '@store/auth/reducers';
 import {AuthService} from '@services/auth/auth.service';
+import {User} from '@models/user';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-email-sent',
@@ -10,8 +12,9 @@ import {AuthService} from '@services/auth/auth.service';
 })
 
 export class EmailSentComponent implements OnInit {
-  email: string;
+  user: User;
   constructor(
+    private router: Router,
     private authStore: Store<AuthReducer.AuthState>,
     private authService: AuthService,
   ) { }
@@ -21,14 +24,19 @@ export class EmailSentComponent implements OnInit {
       (val) => {
         const auth = val.auth;
         if (auth && auth.user) {
-          this.email = auth.user.email;
+          this.user = auth.user;
         }
       }
     );
+    this.resendEmail();
   }
 
   resendEmail() {
-    this.authService.sendEmail(this.email, 'auth/setup')
+    let redirect = 'auth/login';
+    if(this.user.phoneNumberVerified === false || this.user.paymentSettingVerified === false || !this.user.schools.length ) {
+      this.router.navigate(['auth/setup']);
+    }
+    this.authService.sendEmail(this.user.email, redirect)
       .subscribe(
         resp => {
           console.log(resp);

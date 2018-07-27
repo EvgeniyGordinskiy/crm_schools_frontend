@@ -19,6 +19,7 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
 import {NgxMaskModule} from 'ngx-mask';
 import { EmailSentComponent } from './email-sent/email-sent.component';
 import { SetupComponent } from './setup/setup.component';
+import {PaymentService} from '@services/payment/payment.service';
 
 
 @NgModule({
@@ -26,10 +27,10 @@ import { SetupComponent } from './setup/setup.component';
     NgxMaskModule.forRoot(),
     CommonModule,
     SharedModule,
-    AuthRoutingModule
+    AuthRoutingModule,
   ],
   declarations: [LoginComponent, RegisterComponent, AuthWrapperComponent, ForgotPasswordComponent, ResetPasswordComponent, EmailSentComponent, SetupComponent],
-  providers: [AuthService, SchoolService, AccountService]
+  providers: [AuthService, SchoolService, AccountService, PaymentService]
 })
 export class AuthModule implements OnDestroy, OnInit {
 

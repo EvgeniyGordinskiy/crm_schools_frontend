@@ -11,6 +11,7 @@ export interface UserInterface {
   emailVerified: boolean;
   phoneNumberVerified: boolean;
   registrationComplete: boolean;
+  paymentSettingVerified: boolean;
   name: string;
   role: string;
   permissions: {

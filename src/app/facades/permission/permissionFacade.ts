@@ -65,7 +65,9 @@ export class PermissionFacade {
 
   static checkPermissionsToAccessPage(page: string, user: User) {
     const method = this.pageAccessMethods[page];
-    if (method) {
+    console.log(method);
+    console.log(this[method](user));
+    if (typeof method !== 'undefined') {
       return this[method](user);
     }
     return false;

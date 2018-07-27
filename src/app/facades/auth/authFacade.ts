@@ -7,16 +7,18 @@ import {PermissionFacade} from '@facades/permission/permissionFacade';
 import {Store} from '@ngrx/store';
 import * as AuthenticateReducer from '@store/auth/reducers';
 import {AccountService} from '@services/account/account.service';
+import {School} from '@models/shool';
 
 @Injectable()
 export class AuthFacade {
   private static prefix = 'auth_schools_';
 
-  private notAuthnticatePages = [
-    '/auth/register',
-    '/auth/login',
-    '/auth/resetPassword'
-  ];
+  static getUser = () => {
+    const userJsn = localStorage.getItem(AuthFacade.prefix + 'user');
+    if(typeof userJsn !== 'undefined' && userJsn !== 'undefined') {
+      return JSON.parse(localStorage.getItem(AuthFacade.prefix + 'user'));
+    }
+  }
 
   public constructor(
     private router: Router,
@@ -35,10 +37,12 @@ export class AuthFacade {
   static setUser = (user: User) => {
     localStorage.setItem(AuthFacade.prefix + 'user', JSON.stringify(user));
   }
-
-  static getUser = () => {
-    return JSON.parse(localStorage.getItem(AuthFacade.prefix + 'user'));
-  }
+  private notAuthnticatePages = [
+    '/auth/register',
+    '/auth/login',
+    '/auth/resetPassword',
+    '/auth/setup'
+  ];
 
   static setAuthStatus = (status: boolean) => {
     localStorage.setItem(AuthFacade.prefix + 'status', status.toString());
@@ -56,6 +60,10 @@ export class AuthFacade {
         this.router.navigate(['/auth/login']);
       }
     }, 45);
+  }
+
+  pageNeedAuth() {
+    return !this.notAuthnticatePages.includes(this.router.url.split('?')[0]);
   }
 
   endSession() {
@@ -77,13 +85,13 @@ export class AuthFacade {
         console.log(error);
       }
     );
-    if (user) {
+    if (typeof user !== 'undefined') {
       return user;
     }
   }
 
-  private createUser(response, permissions): User {
-   return new User({
+  public createUser(response: AccountServiceResponseInterface, permissions = {}): User {
+    return new User({
      name: response.data.name,
      email: response.data.email,
      avatar: response.data.avatar,
@@ -92,7 +100,10 @@ export class AuthFacade {
      phoneNumberVerified: response.data.phoneNumberVerified,
      registrationComplete: response.data.registrationComplete,
      permissions: permissions,
-   });
+     phone: response.data.phone,
+     schools: response.data.schools,
+     paymentSettingVerified: response.data.paymentSettingVerified
+  });
   }
 
 }
