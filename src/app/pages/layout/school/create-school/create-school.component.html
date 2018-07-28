@@ -24,7 +24,18 @@
                  formControlName="address"
           >
         </mat-form-field>
-
+        <mat-form-field>
+          <input matInput placeholder="Phone"
+                 name="address"
+                 formControlName="phone"
+          >
+        </mat-form-field>
+        <div
+          *ngIf="!crateSchoolForm.get('phone').valid && crateSchoolForm.get('phone').touched"
+          class="help-block">
+          <span *ngIf="crateSchoolForm.get('phone').errors['required']">This field is required!</span>
+          <span *ngIf="crateSchoolForm.get('phone').errors['range']">Phone Number should have next format: '3 777 777 77 77'</span>
+        </div>
           <button mat-raised-button
                   color="primary"
                   [disabled]="!crateSchoolForm.valid && crateSchoolForm.touched || !crateSchoolForm.touched

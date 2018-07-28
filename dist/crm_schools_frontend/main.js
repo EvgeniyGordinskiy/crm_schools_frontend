@@ -27,6 +27,10 @@ var map = {
 	"./pages/layout/program/program.module": [
 		"./src/app/pages/layout/program/program.module.ts",
 		"pages-layout-program-program-module"
+	],
+	"./pages/layout/school/school.module": [
+		"./src/app/pages/layout/school/school.module.ts",
+		"pages-layout-school-school-module"
 	]
 };
 function webpackAsyncContext(req) {
@@ -87,6 +91,10 @@ var routes = [
                 loadChildren: './pages/layout/home/home.module#HomeModule'
             },
             {
+                path: 'school',
+                loadChildren: './pages/layout/school/school.module#SchoolModule'
+            },
+            {
                 path: 'dashboard',
                 loadChildren: './pages/layout/dashboard/dashboard.module#DashboardModule'
             },
@@ -133,7 +141,7 @@ var AppRoutingModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<router-outlet></router-outlet>\n<app-main-spinner></app-main-spinner>\n\n"
+module.exports = "<router-outlet (activate)=\"beforeRoute()\"></router-outlet>\n<app-main-spinner></app-main-spinner>\n\n"
 
 /***/ }),
 
@@ -165,6 +173,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _store_auth_actions__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @store/auth/actions */ "./src/app/store/auth/actions.ts");
 /* harmony import */ var _app_facades_auth_authFacade__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @app/facades/auth/authFacade */ "./src/app/facades/auth/authFacade.ts");
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
+/* harmony import */ var _facades_permission_permissionFacade__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @facades/permission/permissionFacade */ "./src/app/facades/permission/permissionFacade.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -177,7 +186,7 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 // @ngrx
 
-// rxjs
+
 
 
 
@@ -185,12 +194,30 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 var AppComponent = /** @class */ (function () {
     function AppComponent(router, authStore, authFacade) {
+        var _this = this;
         this.router = router;
         this.authStore = authStore;
         this.authFacade = authFacade;
-        this.authStore.dispatch(new _store_auth_actions__WEBPACK_IMPORTED_MODULE_4__["RefreshAuthState"]());
-        this.authFacade.checkAuthStatusAndRedirect();
+        this.authStore.subscribe(function (val) {
+            var auth = val.auth;
+            if (auth && auth.user) {
+                _this.user = auth.user;
+            }
+        });
     }
+    AppComponent.prototype.beforeRoute = function () {
+        // this.router.navigate(['/auth/emailSent']);
+        if (this.authFacade.pageNeedAuth() && !_facades_permission_permissionFacade__WEBPACK_IMPORTED_MODULE_7__["PermissionFacade"].checkPermissionsToAccessPage(this.router.url.split('?')[0], this.user)) {
+            if (_app_facades_auth_authFacade__WEBPACK_IMPORTED_MODULE_5__["AuthFacade"].getAuthStatus()) {
+                this.router.navigate(['/home']);
+            }
+            else {
+                this.router.navigate(['/auth/login']);
+            }
+        }
+        this.authFacade.checkAuthStatusAndRedirect();
+        this.authStore.dispatch(new _store_auth_actions__WEBPACK_IMPORTED_MODULE_4__["RefreshAuthState"]());
+    };
     AppComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'app-root',
@@ -213,37 +240,43 @@ var AppComponent = /** @class */ (function () {
 /*!*******************************!*\
   !*** ./src/app/app.module.ts ***!
   \*******************************/
-/*! exports provided: metaReducers, AppModule */
+/*! exports provided: metaReducers, getAuthServiceConfigs, AppModule */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "metaReducers", function() { return metaReducers; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getAuthServiceConfigs", function() { return getAuthServiceConfigs; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AppModule", function() { return AppModule; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _ngrx_router_store__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @ngrx/router-store */ "./node_modules/@ngrx/router-store/fesm5/router-store.js");
 /* harmony import */ var _store_app_reducers__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @store/app.reducers */ "./src/app/store/app.reducers.ts");
-/* harmony import */ var _app_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./app.component */ "./src/app/app.component.ts");
-/* harmony import */ var _angular_cdk_layout__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/cdk/layout */ "./node_modules/@angular/cdk/esm5/layout.es5.js");
-/* harmony import */ var _layouts_user_user_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @layouts/user/user.component */ "./src/app/layouts/user/user.component.ts");
-/* harmony import */ var _components_dashboard_dashboard_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @components/dashboard/dashboard.component */ "./src/app/components/dashboard/dashboard.component.ts");
-/* harmony import */ var _components_table_table_component__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @components/table/table.component */ "./src/app/components/table/table.component.ts");
-/* harmony import */ var _components_main_spinner_main_spinner_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @components/main-spinner/main-spinner.component */ "./src/app/components/main-spinner/main-spinner.component.ts");
-/* harmony import */ var _app_routing_module__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./app-routing.module */ "./src/app/app-routing.module.ts");
-/* harmony import */ var _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @angular/platform-browser/animations */ "./node_modules/@angular/platform-browser/fesm5/animations.js");
-/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm5/forms.js");
-/* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @angular/platform-browser */ "./node_modules/@angular/platform-browser/fesm5/platform-browser.js");
-/* harmony import */ var _sharedModules_shared_module_shared_module_module__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @sharedModules/shared-module/shared-module.module */ "./src/app/shared-modules/shared-module/shared-module.module.ts");
-/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
-/* harmony import */ var _services_interceptors_main_interceptor__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! @services/interceptors/main.interceptor */ "./src/app/services/interceptors/main.interceptor.ts");
-/* harmony import */ var _services_interceptors_auth_interceptor__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! @services/interceptors/auth.interceptor */ "./src/app/services/interceptors/auth.interceptor.ts");
-/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
-/* harmony import */ var _environments_environment__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ../environments/environment */ "./src/environments/environment.ts");
-/* harmony import */ var _ngrx_store_devtools__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! @ngrx/store-devtools */ "./node_modules/@ngrx/store-devtools/fesm5/store-devtools.js");
-/* harmony import */ var _services_auth_auth_service__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! @services/auth/auth.service */ "./src/app/services/auth/auth.service.ts");
-/* harmony import */ var ngx_toastr__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ngx-toastr */ "./node_modules/ngx-toastr/fesm5/ngx-toastr.js");
-/* harmony import */ var _app_facades_auth_authFacade__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! @app/facades/auth/authFacade */ "./src/app/facades/auth/authFacade.ts");
-/* harmony import */ var _components_main_menu_main_menu_component__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! @components/main-menu/main-menu.component */ "./src/app/components/main-menu/main-menu.component.ts");
+/* harmony import */ var angular5_social_login__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! angular5-social-login */ "./node_modules/angular5-social-login/angular5-social-login.umd.js");
+/* harmony import */ var angular5_social_login__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(angular5_social_login__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _app_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./app.component */ "./src/app/app.component.ts");
+/* harmony import */ var _angular_cdk_layout__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/cdk/layout */ "./node_modules/@angular/cdk/esm5/layout.es5.js");
+/* harmony import */ var _layouts_user_user_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @layouts/user/user.component */ "./src/app/layouts/user/user.component.ts");
+/* harmony import */ var _components_dashboard_dashboard_component__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @components/dashboard/dashboard.component */ "./src/app/components/dashboard/dashboard.component.ts");
+/* harmony import */ var _components_table_table_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @components/table/table.component */ "./src/app/components/table/table.component.ts");
+/* harmony import */ var _components_main_spinner_main_spinner_component__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @components/main-spinner/main-spinner.component */ "./src/app/components/main-spinner/main-spinner.component.ts");
+/* harmony import */ var _app_routing_module__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./app-routing.module */ "./src/app/app-routing.module.ts");
+/* harmony import */ var _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @angular/platform-browser/animations */ "./node_modules/@angular/platform-browser/fesm5/animations.js");
+/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm5/forms.js");
+/* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @angular/platform-browser */ "./node_modules/@angular/platform-browser/fesm5/platform-browser.js");
+/* harmony import */ var _sharedModules_shared_module_shared_module_module__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @sharedModules/shared-module/shared-module.module */ "./src/app/shared-modules/shared-module/shared-module.module.ts");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
+/* harmony import */ var _services_interceptors_main_interceptor__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! @services/interceptors/main.interceptor */ "./src/app/services/interceptors/main.interceptor.ts");
+/* harmony import */ var _services_interceptors_auth_interceptor__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! @services/interceptors/auth.interceptor */ "./src/app/services/interceptors/auth.interceptor.ts");
+/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
+/* harmony import */ var _environments_environment__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ../environments/environment */ "./src/environments/environment.ts");
+/* harmony import */ var _ngrx_store_devtools__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! @ngrx/store-devtools */ "./node_modules/@ngrx/store-devtools/fesm5/store-devtools.js");
+/* harmony import */ var _services_auth_auth_service__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! @services/auth/auth.service */ "./src/app/services/auth/auth.service.ts");
+/* harmony import */ var ngx_toastr__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ngx-toastr */ "./node_modules/ngx-toastr/fesm5/ngx-toastr.js");
+/* harmony import */ var _app_facades_auth_authFacade__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! @app/facades/auth/authFacade */ "./src/app/facades/auth/authFacade.ts");
+/* harmony import */ var _components_main_menu_main_menu_component__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! @components/main-menu/main-menu.component */ "./src/app/components/main-menu/main-menu.component.ts");
+/* harmony import */ var _pages_layout_school_create_school_create_school_component__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! @pages/layout/school/create-school/create-school.component */ "./src/app/pages/layout/school/create-school/create-school.component.ts");
+/* harmony import */ var _services_school_school_service__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! @services/school/school.service */ "./src/app/services/school/school.service.ts");
+/* harmony import */ var _services_account_account_service__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! @services/account/account.service */ "./src/app/services/account/account.service.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -274,44 +307,67 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 
 
 
-var metaReducers = _environments_environment__WEBPACK_IMPORTED_MODULE_18__["environment"].production
+
+
+
+
+var metaReducers = _environments_environment__WEBPACK_IMPORTED_MODULE_19__["environment"].production
     ? []
     : []; // [storeFreeze]
+function getAuthServiceConfigs() {
+    var config = new angular5_social_login__WEBPACK_IMPORTED_MODULE_3__["AuthServiceConfig"]([
+        {
+            id: angular5_social_login__WEBPACK_IMPORTED_MODULE_3__["FacebookLoginProvider"].PROVIDER_ID,
+            provider: new angular5_social_login__WEBPACK_IMPORTED_MODULE_3__["FacebookLoginProvider"]('1067030930126580')
+        },
+        {
+            id: angular5_social_login__WEBPACK_IMPORTED_MODULE_3__["GoogleLoginProvider"].PROVIDER_ID,
+            provider: new angular5_social_login__WEBPACK_IMPORTED_MODULE_3__["GoogleLoginProvider"]('546559305145-v5dcga0nvvcgst2vtl8ed3lvdhco5s3u.apps.googleusercontent.com')
+        },
+    ]);
+    return config;
+}
 var AppModule = /** @class */ (function () {
     function AppModule() {
     }
     AppModule = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["NgModule"])({
             declarations: [
-                _app_component__WEBPACK_IMPORTED_MODULE_3__["AppComponent"],
-                _layouts_user_user_component__WEBPACK_IMPORTED_MODULE_5__["UserComponent"],
-                _components_dashboard_dashboard_component__WEBPACK_IMPORTED_MODULE_6__["DashboardComponent"],
-                _components_table_table_component__WEBPACK_IMPORTED_MODULE_7__["TableComponent"],
-                _components_main_spinner_main_spinner_component__WEBPACK_IMPORTED_MODULE_8__["MainSpinnerComponent"],
-                _components_main_menu_main_menu_component__WEBPACK_IMPORTED_MODULE_23__["MainMenuComponent"],
+                _app_component__WEBPACK_IMPORTED_MODULE_4__["AppComponent"],
+                _layouts_user_user_component__WEBPACK_IMPORTED_MODULE_6__["UserComponent"],
+                _components_dashboard_dashboard_component__WEBPACK_IMPORTED_MODULE_7__["DashboardComponent"],
+                _components_table_table_component__WEBPACK_IMPORTED_MODULE_8__["TableComponent"],
+                _components_main_spinner_main_spinner_component__WEBPACK_IMPORTED_MODULE_9__["MainSpinnerComponent"],
+                _components_main_menu_main_menu_component__WEBPACK_IMPORTED_MODULE_24__["MainMenuComponent"],
+                _pages_layout_school_create_school_create_school_component__WEBPACK_IMPORTED_MODULE_25__["CreateSchoolComponent"]
             ],
             imports: [
-                _angular_platform_browser__WEBPACK_IMPORTED_MODULE_12__["BrowserModule"],
-                _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_10__["BrowserAnimationsModule"],
-                _angular_forms__WEBPACK_IMPORTED_MODULE_11__["FormsModule"],
-                _app_routing_module__WEBPACK_IMPORTED_MODULE_9__["AppRoutingModule"],
-                _angular_cdk_layout__WEBPACK_IMPORTED_MODULE_4__["LayoutModule"],
-                _sharedModules_shared_module_shared_module_module__WEBPACK_IMPORTED_MODULE_13__["SharedModule"],
-                _angular_common_http__WEBPACK_IMPORTED_MODULE_14__["HttpClientModule"],
+                _angular_platform_browser__WEBPACK_IMPORTED_MODULE_13__["BrowserModule"],
+                _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_11__["BrowserAnimationsModule"],
+                _angular_forms__WEBPACK_IMPORTED_MODULE_12__["FormsModule"],
+                _app_routing_module__WEBPACK_IMPORTED_MODULE_10__["AppRoutingModule"],
+                _angular_cdk_layout__WEBPACK_IMPORTED_MODULE_5__["LayoutModule"],
+                _sharedModules_shared_module_shared_module_module__WEBPACK_IMPORTED_MODULE_14__["SharedModule"],
+                _angular_common_http__WEBPACK_IMPORTED_MODULE_15__["HttpClientModule"],
                 _ngrx_router_store__WEBPACK_IMPORTED_MODULE_1__["StoreRouterConnectingModule"],
-                _ngrx_store__WEBPACK_IMPORTED_MODULE_17__["StoreModule"].forRoot(_store_app_reducers__WEBPACK_IMPORTED_MODULE_2__["reducers"], { metaReducers: metaReducers }),
-                !_environments_environment__WEBPACK_IMPORTED_MODULE_18__["environment"].production
-                    ? _ngrx_store_devtools__WEBPACK_IMPORTED_MODULE_19__["StoreDevtoolsModule"].instrument({ maxAge: 50 })
+                _ngrx_store__WEBPACK_IMPORTED_MODULE_18__["StoreModule"].forRoot(_store_app_reducers__WEBPACK_IMPORTED_MODULE_2__["reducers"], { metaReducers: metaReducers }),
+                !_environments_environment__WEBPACK_IMPORTED_MODULE_19__["environment"].production
+                    ? _ngrx_store_devtools__WEBPACK_IMPORTED_MODULE_20__["StoreDevtoolsModule"].instrument({ maxAge: 50 })
                     : [],
-                ngx_toastr__WEBPACK_IMPORTED_MODULE_21__["ToastrModule"].forRoot(),
+                ngx_toastr__WEBPACK_IMPORTED_MODULE_22__["ToastrModule"].forRoot(),
+                angular5_social_login__WEBPACK_IMPORTED_MODULE_3__["SocialLoginModule"],
             ],
             providers: [
-                _services_auth_auth_service__WEBPACK_IMPORTED_MODULE_20__["AuthService"],
-                _app_facades_auth_authFacade__WEBPACK_IMPORTED_MODULE_22__["AuthFacade"],
-                { provide: _angular_common_http__WEBPACK_IMPORTED_MODULE_14__["HTTP_INTERCEPTORS"], useClass: _services_interceptors_main_interceptor__WEBPACK_IMPORTED_MODULE_15__["MainInterceptor"], multi: true },
-                { provide: _angular_common_http__WEBPACK_IMPORTED_MODULE_14__["HTTP_INTERCEPTORS"], useClass: _services_interceptors_auth_interceptor__WEBPACK_IMPORTED_MODULE_16__["AuthInterceptor"], multi: true },
+                _services_auth_auth_service__WEBPACK_IMPORTED_MODULE_21__["AuthService"],
+                _services_account_account_service__WEBPACK_IMPORTED_MODULE_27__["AccountService"],
+                _services_school_school_service__WEBPACK_IMPORTED_MODULE_26__["SchoolService"],
+                _app_facades_auth_authFacade__WEBPACK_IMPORTED_MODULE_23__["AuthFacade"],
+                { provide: _angular_common_http__WEBPACK_IMPORTED_MODULE_15__["HTTP_INTERCEPTORS"], useClass: _services_interceptors_main_interceptor__WEBPACK_IMPORTED_MODULE_16__["MainInterceptor"], multi: true },
+                { provide: _angular_common_http__WEBPACK_IMPORTED_MODULE_15__["HTTP_INTERCEPTORS"], useClass: _services_interceptors_auth_interceptor__WEBPACK_IMPORTED_MODULE_17__["AuthInterceptor"], multi: true },
+                { provide: angular5_social_login__WEBPACK_IMPORTED_MODULE_3__["AuthServiceConfig"], useFactory: getAuthServiceConfigs },
             ],
-            bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_3__["AppComponent"]]
+            bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_4__["AppComponent"]],
+            entryComponents: [_pages_layout_school_create_school_create_school_component__WEBPACK_IMPORTED_MODULE_25__["CreateSchoolComponent"]],
         })
     ], AppModule);
     return AppModule;
@@ -616,8 +672,12 @@ var TableComponent = /** @class */ (function () {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AuthFacade", function() { return AuthFacade; });
-/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _models_user__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @models/user */ "./src/app/models/user.ts");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _facades_permission_permissionFacade__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @facades/permission/permissionFacade */ "./src/app/facades/permission/permissionFacade.ts");
+/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
+/* harmony import */ var _services_account_account_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @services/account/account.service */ "./src/app/services/account/account.service.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -629,21 +689,36 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 };
 
 
+
+
+
+
 var AuthFacade = /** @class */ (function () {
-    function AuthFacade(router) {
+    function AuthFacade(router, store, accountService) {
         this.router = router;
+        this.store = store;
+        this.accountService = accountService;
+        this.notAuthnticatePages = [
+            '/auth/register',
+            '/auth/login',
+            '/auth/resetPassword',
+            '/auth/setup'
+        ];
     }
     AuthFacade_1 = AuthFacade;
     AuthFacade.prototype.checkAuthStatusAndRedirect = function () {
         var _this = this;
         setTimeout(function () {
-            if (AuthFacade_1.getAuthStatus() && _this.router.url === '/auth/login') {
+            if (AuthFacade_1.getAuthStatus() && _this.notAuthnticatePages.includes(_this.router.url.split('?')[0])) {
                 _this.router.navigate(['/home']);
             }
-            else if (!AuthFacade_1.getAuthStatus() && _this.router.url !== '/auth/login' && _this.router.url !== '/auth/register') {
+            else if (!AuthFacade_1.getAuthStatus() && !_this.notAuthnticatePages.includes(_this.router.url.split('?')[0])) {
                 _this.router.navigate(['/auth/login']);
             }
         }, 45);
+    };
+    AuthFacade.prototype.pageNeedAuth = function () {
+        return !this.notAuthnticatePages.includes(this.router.url.split('?')[0]);
     };
     AuthFacade.prototype.endSession = function () {
         localStorage.removeItem(AuthFacade_1.prefix + 'user');
@@ -651,18 +726,53 @@ var AuthFacade = /** @class */ (function () {
         localStorage.removeItem(AuthFacade_1.prefix + 'status');
         this.router.navigate(['/auth/login']);
     };
-    AuthFacade.prefix = 'auth_schools_';
-    AuthFacade.setToken = function (token) {
-        localStorage.setItem(AuthFacade_1.prefix + 'token', token);
+    AuthFacade.prototype.loginAndFetchUserData = function () {
+        var _this = this;
+        var user;
+        this.accountService.getAccount().subscribe(function (response) {
+            var permissions = _facades_permission_permissionFacade__WEBPACK_IMPORTED_MODULE_3__["PermissionFacade"].groupByModelName(response.data.permissions);
+            return _this.createUser(response, permissions);
+        }, function (error) {
+            console.log(error);
+        });
+        if (typeof user !== 'undefined') {
+            return user;
+        }
     };
-    AuthFacade.getToken = function () {
-        return localStorage.getItem(AuthFacade_1.prefix + 'token');
+    AuthFacade.prototype.createUser = function (response, permissions) {
+        if (permissions === void 0) { permissions = {}; }
+        return new _models_user__WEBPACK_IMPORTED_MODULE_0__["User"]({
+            name: response.data.name,
+            email: response.data.email,
+            avatar: response.data.avatar,
+            role: response.data.role,
+            emailVerified: response.data.emailVerified,
+            phoneNumberVerified: response.data.phoneNumberVerified,
+            registrationComplete: response.data.registrationComplete,
+            permissions: permissions,
+            phone: response.data.phone,
+            schools: response.data.schools,
+            paymentSettingVerified: response.data.paymentSettingVerified,
+            usedAuthSocial: response.data.usedAuthSocial ? response.data.usedAuthSocial : false
+        });
+    };
+    AuthFacade.prefix = 'auth_schools_';
+    AuthFacade.getUser = function () {
+        var userJsn = localStorage.getItem(AuthFacade_1.prefix + 'user');
+        if (typeof userJsn !== 'undefined' && userJsn !== 'undefined') {
+            return JSON.parse(localStorage.getItem(AuthFacade_1.prefix + 'user'));
+        }
+    };
+    AuthFacade.setToken = function (token, prefix) {
+        if (prefix === void 0) { prefix = AuthFacade_1.prefix; }
+        localStorage.setItem(prefix + 'token', token);
+    };
+    AuthFacade.getToken = function (prefix) {
+        if (prefix === void 0) { prefix = AuthFacade_1.prefix; }
+        return localStorage.getItem(prefix + 'token');
     };
     AuthFacade.setUser = function (user) {
         localStorage.setItem(AuthFacade_1.prefix + 'user', JSON.stringify(user));
-    };
-    AuthFacade.getUser = function () {
-        return JSON.parse(localStorage.getItem(AuthFacade_1.prefix + 'user'));
     };
     AuthFacade.setAuthStatus = function (status) {
         localStorage.setItem(AuthFacade_1.prefix + 'status', status.toString());
@@ -671,8 +781,10 @@ var AuthFacade = /** @class */ (function () {
         return localStorage.getItem(AuthFacade_1.prefix + 'status') === 'true';
     };
     AuthFacade = AuthFacade_1 = __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])(),
-        __metadata("design:paramtypes", [_angular_router__WEBPACK_IMPORTED_MODULE_0__["Router"]])
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_2__["Injectable"])(),
+        __metadata("design:paramtypes", [_angular_router__WEBPACK_IMPORTED_MODULE_1__["Router"],
+            _ngrx_store__WEBPACK_IMPORTED_MODULE_4__["Store"],
+            _services_account_account_service__WEBPACK_IMPORTED_MODULE_5__["AccountService"]])
     ], AuthFacade);
     return AuthFacade;
     var AuthFacade_1;
@@ -742,6 +854,64 @@ var PermissionFacade = /** @class */ (function () {
         }
         return finded;
     };
+    PermissionFacade.userVerified = function (user) {
+        return user.registerComplete === true && user.emailVerified === true && user.phoneNumberVerified === true;
+    };
+    PermissionFacade.checkPermissionsToAccessPage = function (page, user) {
+        var method = this.pageAccessMethods[page];
+        console.log(method);
+        console.log(this[method](user));
+        if (typeof method !== 'undefined') {
+            return this[method](user);
+        }
+        return false;
+    };
+    PermissionFacade.canAccessPageEmailSent = function (user) {
+        return user.registrationComplete === true && user.emailVerified === false && !this.userVerified(user);
+    };
+    PermissionFacade.canAccessPageLogin = function (user) {
+        return true;
+    };
+    PermissionFacade.canAccessPageRegister = function (user) {
+        return true;
+    };
+    PermissionFacade.canAccessPageForgotPassword = function (user) {
+        return true;
+    };
+    PermissionFacade.canAccessPageResetPassword = function (user) {
+        return true;
+    };
+    PermissionFacade.canAccessPageHome = function (user) {
+        return true;
+    };
+    PermissionFacade.canAccessPageSchool = function (user) {
+        return true;
+    };
+    PermissionFacade.canAccessPageDashboard = function (user) {
+        return true;
+    };
+    PermissionFacade.canAccessPageProgram = function (user) {
+        return true;
+    };
+    PermissionFacade.canAccessPagePermissions = function (user) {
+        return true;
+    };
+    PermissionFacade.canAccessPageSetup = function (user) {
+        return true;
+    };
+    PermissionFacade.pageAccessMethods = {
+        '/auth/emailSent': 'canAccessPageEmailSent',
+        '/auth/login': 'canAccessPageLogin',
+        '/auth/register': 'canAccessPageRegister',
+        '/auth/forgotPassword': 'canAccessPageForgotPassword',
+        '/auth/resetPassword': 'canAccessPageResetPassword',
+        '/home': 'canAccessPageHome',
+        '/school': 'canAccessPageSchool',
+        '/dashboard': 'canAccessPageDashboard',
+        '/program': 'canAccessPageProgram',
+        '/auth/setup': 'canAccessPageSetup',
+        '/permissions': 'canAccessPagePermissions',
+    };
     PermissionFacade = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])()
     ], PermissionFacade);
@@ -759,7 +929,7 @@ var PermissionFacade = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<mat-toolbar>\n  <mat-toolbar-row class=\"first-header\">\n    <div class=\"first-header-content\">\n      <a>Manage my Gyms</a>\n      <button mat-stroked-button class=\"mat-primary add-gym-button\">\n        <mat-icon>add</mat-icon>\n        Add Gym\n      </button>\n      <div class=\"profile-details inline_block\">\n        <img src=\"https://picsum.photos/40/30\">\n        <span>\n          {{name}}\n        </span>\n      </div>\n      <mat-menu #appMenu=\"matMenu\">\n        <button mat-menu-item>PricingHome</button>\n        <button mat-menu-item>My Details</button>\n        <button mat-menu-item>Pricing</button>\n        <button mat-menu-item (click)=\"onLogout()\">Logout</button>\n      </mat-menu>\n\n      <button mat-icon-button [matMenuTriggerFor]=\"appMenu\">\n        <mat-icon>menu</mat-icon>\n      </button>\n    </div>\n  </mat-toolbar-row>\n  <mat-toolbar-row class=\"second-header\">\n  <app-main-menu></app-main-menu>\n  </mat-toolbar-row>\n</mat-toolbar>\n<div class=\"content\">\n  <router-outlet></router-outlet>\n</div>\n"
+module.exports = "<mat-toolbar>\n  <mat-toolbar-row class=\"first-header\">\n    <div class=\"first-header-content\">\n      <p *ngIf=\"schools.length === 1\">{{schools[0].name}}</p>\n        <div class=\"noSchools\"  *ngIf=\"schools.length === 0\">\n          <span>You haven't any GYM yet</span>\n        </div>\n      <mat-select *ngIf=\"schools.length > 1\" #schoolSelect onselect=\"onSelectedSchools(schoolSelect)\" [value]=\"schools[0]?.id\">\n        <mat-option *ngFor=\"let school of schools\" [value]=\"school.id\">{{school.name}}</mat-option>\n      </mat-select>\n      <button mat-stroked-button class=\"mat-primary add-gym-button\" (click)=\"openCreateModal()\">\n        <mat-icon>add</mat-icon>\n        Add Gym\n      </button>\n      <div class=\"profile-details inline_block\">\n        <img src=\"{{avatar}}\">\n        <span>\n          {{name}}\n        </span>\n      </div>\n      <mat-menu #appMenu=\"matMenu\">\n        <button mat-menu-item>PricingHome</button>\n        <button mat-menu-item>My Details</button>\n        <button mat-menu-item>Pricing</button>\n        <button mat-menu-item (click)=\"onLogout()\">Logout</button>\n      </mat-menu>\n\n      <button mat-icon-button [matMenuTriggerFor]=\"appMenu\">\n        <mat-icon>menu</mat-icon>\n      </button>\n    </div>\n  </mat-toolbar-row>\n  <mat-toolbar-row class=\"second-header\">\n  <app-main-menu></app-main-menu>\n  </mat-toolbar-row>\n</mat-toolbar>\n<div class=\"content\">\n  <router-outlet></router-outlet>\n</div>\n"
 
 /***/ }),
 
@@ -770,7 +940,7 @@ module.exports = "<mat-toolbar>\n  <mat-toolbar-row class=\"first-header\">\n   
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ":host .mat-toolbar {\n  background: transparent; }\n  :host .mat-toolbar .first-header {\n    padding-right: 0;\n    height: 59px; }\n  :host .mat-toolbar .first-header .first-header-content {\n      display: flex;\n      font-size: 14px;\n      justify-content: space-between;\n      min-width: 335px;\n      margin-left: auto; }\n  :host .mat-toolbar .first-header .first-header-content .add-gym-button {\n        border-radius: 20px;\n        width: 175px;\n        height: 30px;\n        padding-left: 6px;\n        justify-content: center;\n        flex-direction: column;\n        margin-top: 5px;\n        margin-left: 50px; }\n  :host .mat-toolbar .first-header .first-header-content .add-gym-button .mat-icon {\n          font-size: 17px;\n          font-weight: bold;\n          margin-top: 7px; }\n  :host .mat-toolbar .first-header .first-header-content .profile-details {\n        display: flex;\n        justify-content: center;\n        width: 60%; }\n  :host .mat-toolbar .first-header .first-header-content .profile-details img {\n          margin-right: 9px;\n          border-radius: 50%; }\n  :host .mat-toolbar .second-header {\n    background-color: #7f7f7f;\n    height: 39px;\n    display: flex;\n    justify-content: center; }\n  :host .content {\n  margin: 0 auto;\n  height: 100%;\n  width: 70%;\n  -ms-grid-row-align: center;\n      align-self: center; }\n"
+module.exports = ":host .mat-toolbar {\n  background: transparent; }\n  :host .mat-toolbar .first-header {\n    padding-right: 0;\n    height: 59px; }\n  :host .mat-toolbar .first-header .first-header-content {\n      display: flex;\n      font-size: 14px;\n      justify-content: space-between;\n      align-items: center;\n      min-width: 335px;\n      margin-left: auto; }\n  :host .mat-toolbar .first-header .first-header-content mat-select {\n        width: 340px;\n        height: 30px;\n        border: rgba(155, 155, 155, 0.31) solid 1px;\n        border-radius: 20px;\n        padding: 0 10px;\n        margin-top: 5px; }\n  :host .mat-toolbar .first-header .first-header-content mat-select ::ng-deep .mat-select-arrow {\n          display: inline-block;\n          padding: 3px;\n          margin-bottom: 3px;\n          border: #2e7e88 solid;\n          border-width: 0 1.5px 1.5px 0;\n          transform: rotate(45deg);\n          -webkit-transform: rotate(45deg); }\n  :host .mat-toolbar .first-header .first-header-content .add-gym-button {\n        border-radius: 20px;\n        width: 175px;\n        height: 30px;\n        padding-left: 6px;\n        justify-content: center;\n        flex-direction: column;\n        margin-top: 5px;\n        margin-left: 50px; }\n  :host .mat-toolbar .first-header .first-header-content .add-gym-button .mat-icon {\n          font-size: 17px;\n          font-weight: bold;\n          margin-top: 7px; }\n  :host .mat-toolbar .first-header .first-header-content .profile-details {\n        display: flex;\n        justify-content: center;\n        width: 60%;\n        align-items: center; }\n  :host .mat-toolbar .first-header .first-header-content .profile-details img {\n          margin-right: 9px;\n          border-radius: 50%;\n          width: 35px;\n          height: 35px; }\n  :host .mat-toolbar .second-header {\n    background-color: #7f7f7f;\n    height: 39px;\n    display: flex;\n    justify-content: center; }\n  :host .content {\n  margin: 0 auto;\n  height: 100%;\n  width: 70%;\n  -ms-grid-row-align: center;\n      align-self: center; }\n"
 
 /***/ }),
 
@@ -788,6 +958,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
 /* harmony import */ var _store_auth_actions__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @store/auth/actions */ "./src/app/store/auth/actions.ts");
 /* harmony import */ var _app_facades_auth_authFacade__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @app/facades/auth/authFacade */ "./src/app/facades/auth/authFacade.ts");
+/* harmony import */ var _angular_material__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/material */ "./node_modules/@angular/material/esm5/material.es5.js");
+/* harmony import */ var _pages_layout_school_create_school_create_school_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @pages/layout/school/create-school/create-school.component */ "./src/app/pages/layout/school/create-school/create-school.component.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -801,22 +973,38 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
+
+
 var UserComponent = /** @class */ (function () {
-    function UserComponent(authFacade, authStore) {
+    function UserComponent(dialog, authFacade, authStore) {
+        this.dialog = dialog;
         this.authFacade = authFacade;
         this.authStore = authStore;
+        this.schools = [];
     }
     UserComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.authStore.select('auth').subscribe(function (val) {
-            if (val.user) {
-                _this.name = val.user.name;
-                _this.email = val.user.email;
+        this.authStore.subscribe(function (val) {
+            var auth = val.auth;
+            if (auth && auth.user) {
+                _this.name = auth.user.name;
+                _this.email = auth.user.email;
+                _this.avatar = auth.user.avatar;
+                _this.schools = auth.user.schools ? auth.user.schools : [];
             }
         });
     };
     UserComponent.prototype.onLogout = function () {
         this.authStore.dispatch(new _store_auth_actions__WEBPACK_IMPORTED_MODULE_2__["SignOut"](this.authFacade));
+    };
+    UserComponent.prototype.onSelectedSchools = function (val) {
+        console.log(val, 'school was selected');
+    };
+    UserComponent.prototype.openCreateModal = function () {
+        var dialogRef = this.dialog.open(_pages_layout_school_create_school_create_school_component__WEBPACK_IMPORTED_MODULE_5__["CreateSchoolComponent"]);
+        dialogRef.afterClosed().subscribe(function (result) {
+            dialogRef.close();
+        });
     };
     UserComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
@@ -824,7 +1012,8 @@ var UserComponent = /** @class */ (function () {
             template: __webpack_require__(/*! ./user.component.html */ "./src/app/layouts/user/user.component.html"),
             styles: [__webpack_require__(/*! ./user.component.scss */ "./src/app/layouts/user/user.component.scss")]
         }),
-        __metadata("design:paramtypes", [_app_facades_auth_authFacade__WEBPACK_IMPORTED_MODULE_3__["AuthFacade"],
+        __metadata("design:paramtypes", [_angular_material__WEBPACK_IMPORTED_MODULE_4__["MatDialog"],
+            _app_facades_auth_authFacade__WEBPACK_IMPORTED_MODULE_3__["AuthFacade"],
             _ngrx_store__WEBPACK_IMPORTED_MODULE_1__["Store"]])
     ], UserComponent);
     return UserComponent;
@@ -846,13 +1035,300 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "User", function() { return User; });
 var User = /** @class */ (function () {
     function User(params) {
-        this.email = params.email;
-        this.name = params.name;
-        this.role = params.role;
-        this.permissions = params.permissions;
-        this.id = params.id ? params : 'null';
+        this.emailVerified = false;
+        this.phoneNumberVerified = false;
+        this.registrationComplete = false;
+        this.paymentSettingVerified = false;
+        this.usedAuthSocial = false;
+        if (params) {
+            this.email = params.email;
+            this.name = params.name;
+            this.role = params.role;
+            this.phone = params.phone;
+            this.avatar = params.avatar;
+            this.permissions = params.permissions;
+            this.schools = params.schools;
+            this.id = params.id ? params.id : 'null';
+            this.provider_id = params.provider_id ? params.provider_id : 'null';
+            this.provider_name = params.provider_name ? params.provider_name : 'null';
+            this.emailVerified = params.emailVerified ? params.emailVerified : false;
+            this.phoneNumberVerified = params.phoneNumberVerified ? params.phoneNumberVerified : false;
+            this.registrationComplete = params.registrationComplete ? params.registrationComplete : false;
+            this.paymentSettingVerified = params.paymentSettingVerified ? params.paymentSettingVerified : false;
+        }
     }
     return User;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/pages/auth/reset-password/reset-password.component.html":
+/*!*************************************************************************!*\
+  !*** ./src/app/pages/auth/reset-password/reset-password.component.html ***!
+  \*************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<mat-card *ngIf=\"tokenWasChecked\">\n  <mat-card-header>\n    <mat-card-title>Reset password.</mat-card-title>\n  </mat-card-header>\n  <mat-card-content>\n    <form [formGroup]=\"resetPasswordForm\" (ngSubmit)=\"resetPassword()\">\n      <table cellspacing=\"0\">\n        <tr>\n          <td>\n            <mat-form-field>\n              <input matInput placeholder=\"Password\"\n                     formControlName=\"password\"\n                     type=\"password\"\n                     name=\"password\" required>\n            </mat-form-field>\n            <div\n              *ngIf=\"!resetPasswordForm.get('password').valid && resetPasswordForm.get('password').touched\"\n              class=\"help-block\">\n              <span *ngIf=\"resetPasswordForm.get('password').errors['required']\">This field is required!</span>\n            </div>\n          </td>\n        </tr>\n        <tr>\n          <td>\n            <mat-form-field>\n              <input matInput placeholder=\"Confirm password\"\n                     formControlName=\"confirm_password\"\n                     type=\"password\"\n                     name=\"confirm_password\" required>\n            </mat-form-field>\n            <div\n              *ngIf=\"!resetPasswordForm.get('confirm_password').valid && resetPasswordForm.get('confirm_password').touched\"\n              class=\"help-block\">\n              <span *ngIf=\"resetPasswordForm.get('confirm_password').errors['confirmedPassword']\">Password not confirmed!</span>\n              <span *ngIf=\"resetPasswordForm.get('confirm_password').errors['required']\">This field is required!</span>\n            </div>\n          </td>\n        </tr>\n      </table>\n      <mat-card-actions>\n        <button mat-raised-button\n                color=\"primary\"\n                [disabled]=\"!resetPasswordForm.valid && resetPasswordForm.touched || !resetPasswordForm.touched\n    \">Save</button>\n      </mat-card-actions>\n    </form>\n  </mat-card-content>\n</mat-card>\n"
+
+/***/ }),
+
+/***/ "./src/app/pages/auth/reset-password/reset-password.component.scss":
+/*!*************************************************************************!*\
+  !*** ./src/app/pages/auth/reset-password/reset-password.component.scss ***!
+  \*************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = ""
+
+/***/ }),
+
+/***/ "./src/app/pages/auth/reset-password/reset-password.component.ts":
+/*!***********************************************************************!*\
+  !*** ./src/app/pages/auth/reset-password/reset-password.component.ts ***!
+  \***********************************************************************/
+/*! exports provided: ResetPasswordComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ResetPasswordComponent", function() { return ResetPasswordComponent; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm5/forms.js");
+/* harmony import */ var ngx_toastr__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ngx-toastr */ "./node_modules/ngx-toastr/fesm5/ngx-toastr.js");
+/* harmony import */ var _services_auth_auth_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @services/auth/auth.service */ "./src/app/services/auth/auth.service.ts");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
+/* harmony import */ var _facades_auth_authFacade__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @facades/auth/authFacade */ "./src/app/facades/auth/authFacade.ts");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+
+var ResetPasswordComponent = /** @class */ (function () {
+    function ResetPasswordComponent(route, router, authService, notificationManager) {
+        var _this = this;
+        this.route = route;
+        this.router = router;
+        this.authService = authService;
+        this.notificationManager = notificationManager;
+        this.tokenWasChecked = false;
+        this.route.queryParams.subscribe(function (params) {
+            _this.token = params['token'];
+        });
+    }
+    ResetPasswordComponent_1 = ResetPasswordComponent;
+    ResetPasswordComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.authService.checkResetPasswordToken(this.token)
+            .subscribe(function (resp) {
+            console.log(resp);
+            if (resp.data.token && resp.data.token.length > 0) {
+                _this.tokenWasChecked = true;
+                _facades_auth_authFacade__WEBPACK_IMPORTED_MODULE_5__["AuthFacade"].setToken(resp.data.token, ResetPasswordComponent_1.resetTokenPrefix);
+            }
+        });
+        this.resetPasswordForm = new _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormGroup"]({
+            'password': new _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormControl"](null, [_angular_forms__WEBPACK_IMPORTED_MODULE_1__["Validators"].required]),
+            'confirm_password': new _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormControl"](null, [_angular_forms__WEBPACK_IMPORTED_MODULE_1__["Validators"].required, this.confirmedPassword.bind(this)]),
+        });
+    };
+    ResetPasswordComponent.prototype.confirmedPassword = function (control) {
+        if (this.resetPasswordForm && this.resetPasswordForm.get('password').value !== this.resetPasswordForm.get('confirm_password').value) {
+            return { 'confirmedPassword': true };
+        }
+        else {
+            return null;
+        }
+    };
+    ResetPasswordComponent.prototype.resetPassword = function () {
+        var _this = this;
+        this.authService.resetPassword({
+            password: this.resetPasswordForm.get('password').value,
+            password_confirmation: this.resetPasswordForm.get('confirm_password').value
+        })
+            .subscribe(function (resp) {
+            console.log(resp);
+            localStorage.removeItem(ResetPasswordComponent_1.resetTokenPrefix + 'token');
+            _this.notificationManager.success(resp.success.message ? resp.success.message : 'Password successfully', 'Success');
+            _this.router.navigate(['auth/login']);
+        });
+    };
+    ResetPasswordComponent.getTokenPrefix = function () {
+        return this.resetTokenPrefix;
+    };
+    ResetPasswordComponent.resetTokenPrefix = 'reset_token_prefix';
+    ResetPasswordComponent = ResetPasswordComponent_1 = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
+            selector: 'app-reset-password',
+            template: __webpack_require__(/*! ./reset-password.component.html */ "./src/app/pages/auth/reset-password/reset-password.component.html"),
+            styles: [__webpack_require__(/*! ./reset-password.component.scss */ "./src/app/pages/auth/reset-password/reset-password.component.scss")]
+        }),
+        __metadata("design:paramtypes", [_angular_router__WEBPACK_IMPORTED_MODULE_4__["ActivatedRoute"],
+            _angular_router__WEBPACK_IMPORTED_MODULE_4__["Router"],
+            _services_auth_auth_service__WEBPACK_IMPORTED_MODULE_3__["AuthService"],
+            ngx_toastr__WEBPACK_IMPORTED_MODULE_2__["ToastrService"]])
+    ], ResetPasswordComponent);
+    return ResetPasswordComponent;
+    var ResetPasswordComponent_1;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/pages/layout/school/create-school/create-school.component.html":
+/*!********************************************************************************!*\
+  !*** ./src/app/pages/layout/school/create-school/create-school.component.html ***!
+  \********************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"create-school-wrapper\">\n  <h2>Create Gym</h2>\n      <form [formGroup]=\"crateSchoolForm\" (ngSubmit)=\"create()\">\n        <mat-form-field>\n          <input matInput placeholder=\"Name\"\n                 name=\"name\"\n                 formControlName=\"name\"\n          >\n        </mat-form-field>\n        <div\n          *ngIf=\"!crateSchoolForm.get('name').valid && crateSchoolForm.get('name').touched\"\n          class=\"help-block\">\n          <span *ngIf=\"crateSchoolForm.get('name').errors['required']\">This field is required!</span>\n        </div>\n        <mat-form-field>\n                <textarea matInput placeholder=\"Description\"\n                          formControlName=\"description\"\n                          name=\"description\">\n                </textarea>\n        </mat-form-field>\n        <mat-form-field>\n          <input matInput placeholder=\"Address\"\n                 name=\"address\"\n                 formControlName=\"address\"\n          >\n        </mat-form-field>\n        <mat-form-field>\n          <input matInput placeholder=\"Phone\"\n                 name=\"address\"\n                 formControlName=\"phone\"\n          >\n        </mat-form-field>\n        <div\n          *ngIf=\"!crateSchoolForm.get('phone').valid && crateSchoolForm.get('phone').touched\"\n          class=\"help-block\">\n          <span *ngIf=\"crateSchoolForm.get('phone').errors['required']\">This field is required!</span>\n          <span *ngIf=\"crateSchoolForm.get('phone').errors['range']\">Phone Number should have next format: '3 777 777 77 77'</span>\n        </div>\n          <button mat-raised-button\n                  color=\"primary\"\n                  [disabled]=\"!crateSchoolForm.valid && crateSchoolForm.touched || !crateSchoolForm.touched\n      \">Create</button>\n      </form>\n</div>\n"
+
+/***/ }),
+
+/***/ "./src/app/pages/layout/school/create-school/create-school.component.scss":
+/*!********************************************************************************!*\
+  !*** ./src/app/pages/layout/school/create-school/create-school.component.scss ***!
+  \********************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = ".create-school-wrapper {\n  display: flex;\n  justify-content: center;\n  flex-direction: column;\n  align-items: center; }\n  .create-school-wrapper form {\n    display: flex;\n    flex-direction: column; }\n"
+
+/***/ }),
+
+/***/ "./src/app/pages/layout/school/create-school/create-school.component.ts":
+/*!******************************************************************************!*\
+  !*** ./src/app/pages/layout/school/create-school/create-school.component.ts ***!
+  \******************************************************************************/
+/*! exports provided: CreateSchoolComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CreateSchoolComponent", function() { return CreateSchoolComponent; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm5/forms.js");
+/* harmony import */ var _services_school_school_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @services/school/school.service */ "./src/app/services/school/school.service.ts");
+/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
+/* harmony import */ var _store_auth_actions__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @store/auth/actions */ "./src/app/store/auth/actions.ts");
+/* harmony import */ var _angular_material__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/material */ "./node_modules/@angular/material/esm5/material.es5.js");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+
+var CreateSchoolComponent = /** @class */ (function () {
+    function CreateSchoolComponent(dialog, schoolService, authStore) {
+        this.dialog = dialog;
+        this.schoolService = schoolService;
+        this.authStore = authStore;
+    }
+    CreateSchoolComponent.prototype.ngOnInit = function () {
+        this.crateSchoolForm = new _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormGroup"]({
+            'name': new _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormControl"](null, [_angular_forms__WEBPACK_IMPORTED_MODULE_1__["Validators"].required]),
+            'description': new _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormControl"](null),
+            'address': new _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormControl"](null),
+            'phone': new _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormControl"](null, [_angular_forms__WEBPACK_IMPORTED_MODULE_1__["Validators"].required, this.checkLimit(12, 12)]),
+        });
+    };
+    CreateSchoolComponent.prototype.checkLimit = function (min, max) {
+        return function (c) {
+            if (c.value !== null && (c.value.length < min || c.value.length > max)) {
+                return { 'range': true };
+            }
+            return null;
+        };
+    };
+    CreateSchoolComponent.prototype.create = function () {
+        var _this = this;
+        this.schoolService.create({
+            name: this.crateSchoolForm.get('name').value,
+            description: this.crateSchoolForm.get('description').value,
+            address: this.crateSchoolForm.get('address').value,
+            phone: this.crateSchoolForm.get('phone').value
+        }).subscribe(function (resp) {
+            _this.authStore.dispatch(new _store_auth_actions__WEBPACK_IMPORTED_MODULE_4__["UpdateAuthUser"]({ schools: resp.data }));
+            _this.dialog.closeAll();
+        });
+    };
+    CreateSchoolComponent = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
+            selector: 'app-create-school',
+            template: __webpack_require__(/*! ./create-school.component.html */ "./src/app/pages/layout/school/create-school/create-school.component.html"),
+            styles: [__webpack_require__(/*! ./create-school.component.scss */ "./src/app/pages/layout/school/create-school/create-school.component.scss")]
+        }),
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])(),
+        __metadata("design:paramtypes", [_angular_material__WEBPACK_IMPORTED_MODULE_5__["MatDialog"],
+            _services_school_school_service__WEBPACK_IMPORTED_MODULE_2__["SchoolService"],
+            _ngrx_store__WEBPACK_IMPORTED_MODULE_3__["Store"]])
+    ], CreateSchoolComponent);
+    return CreateSchoolComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/services/account/account.service.ts":
+/*!*****************************************************!*\
+  !*** ./src/app/services/account/account.service.ts ***!
+  \*****************************************************/
+/*! exports provided: AccountService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AccountService", function() { return AccountService; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var AccountService = /** @class */ (function () {
+    function AccountService(httpClient) {
+        this.httpClient = httpClient;
+    }
+    AccountService.prototype.getAccount = function () {
+        return this.httpClient.get('account');
+    };
+    AccountService = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])(),
+        __metadata("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpClient"]])
+    ], AccountService);
+    return AccountService;
 }());
 
 
@@ -898,14 +1374,37 @@ var AuthService = /** @class */ (function () {
         this.store = store;
     }
     AuthService.prototype.login = function (_a) {
-        var email = _a.email, password = _a.password;
+        var email = _a.email, password = _a.password, rememberMe = _a.rememberMe;
         this.store.dispatch(new _store_spinner_actions__WEBPACK_IMPORTED_MODULE_5__["StartSpinner"]());
-        return this.httpClient.post('auth', { email: email, password: password });
+        return this.httpClient.post('auth', { email: email, password: password, rememberMe: rememberMe });
     };
-    AuthService.prototype.register = function (_a) {
-        var name = _a.name, email = _a.email, password = _a.password, password_confirmation = _a.password_confirmation;
+    AuthService.prototype.loginBySocialAcc = function (provider, token) {
+        return this.httpClient.post("social/" + provider, { token: token });
+    };
+    AuthService.prototype.register = function (body) {
         this.store.dispatch(new _store_spinner_actions__WEBPACK_IMPORTED_MODULE_5__["StartSpinner"]());
-        return this.httpClient.post('auth/register', { name: name, email: email, password: password, password_confirmation: password_confirmation });
+        return this.httpClient.post('auth/register', body);
+    };
+    AuthService.prototype.sendEmailForResettingPassword = function (email, redirect) {
+        this.store.dispatch(new _store_spinner_actions__WEBPACK_IMPORTED_MODULE_5__["StartSpinner"]());
+        return this.httpClient.post('password/change', { email: email, redirectPath: redirect });
+    };
+    AuthService.prototype.sendEmail = function (email, redirect) {
+        this.store.dispatch(new _store_spinner_actions__WEBPACK_IMPORTED_MODULE_5__["StartSpinner"]());
+        return this.httpClient.post('verify/email', { email: email, redirectPath: redirect });
+    };
+    AuthService.prototype.sendSms = function (email) {
+        this.store.dispatch(new _store_spinner_actions__WEBPACK_IMPORTED_MODULE_5__["StartSpinner"]());
+        return this.httpClient.post('verify/sms', { email: email });
+    };
+    AuthService.prototype.resetPassword = function (_a) {
+        var password = _a.password, password_confirmation = _a.password_confirmation;
+        this.store.dispatch(new _store_spinner_actions__WEBPACK_IMPORTED_MODULE_5__["StartSpinner"]());
+        return this.httpClient.post('password/reset', { password: password, password_confirmation: password_confirmation });
+    };
+    AuthService.prototype.checkResetPasswordToken = function (token) {
+        this.store.dispatch(new _store_spinner_actions__WEBPACK_IMPORTED_MODULE_5__["StartSpinner"]());
+        return this.httpClient.post('password/checkToken', { token: token });
     };
     AuthService = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])(),
@@ -940,6 +1439,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _store_spinner_actions__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @store/spinner/actions */ "./src/app/store/spinner/actions.ts");
 /* harmony import */ var _store_auth_actions__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @store/auth/actions */ "./src/app/store/auth/actions.ts");
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
+/* harmony import */ var _pages_auth_reset_password_reset_password_component__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @pages/auth/reset-password/reset-password.component */ "./src/app/pages/auth/reset-password/reset-password.component.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -962,6 +1462,7 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
+
 var AuthInterceptor = /** @class */ (function () {
     function AuthInterceptor(notificationManager, store, authStore, authFacade, router) {
         this.notificationManager = notificationManager;
@@ -972,7 +1473,17 @@ var AuthInterceptor = /** @class */ (function () {
     }
     AuthInterceptor.prototype.intercept = function (req, next) {
         var _this = this;
-        var token = _app_facades_auth_authFacade__WEBPACK_IMPORTED_MODULE_2__["AuthFacade"].getToken();
+        var token;
+        var pagesWithTekns = [
+            '/auth/resetPassword',
+            '/auth/setup',
+        ];
+        if (pagesWithTekns.includes(this.router.url.split('?')[0])) {
+            token = _app_facades_auth_authFacade__WEBPACK_IMPORTED_MODULE_2__["AuthFacade"].getToken(_pages_auth_reset_password_reset_password_component__WEBPACK_IMPORTED_MODULE_11__["ResetPasswordComponent"].getTokenPrefix());
+        }
+        else {
+            token = _app_facades_auth_authFacade__WEBPACK_IMPORTED_MODULE_2__["AuthFacade"].getToken();
+        }
         if (token) {
             req = req.clone({
                 headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_0__["HttpHeaders"]({
@@ -981,10 +1492,13 @@ var AuthInterceptor = /** @class */ (function () {
                 })
             });
         }
-        return next.handle(req).do(function (event) { }, function (err) {
+        return next.handle(req).do(function (event) {
+            _this.store.dispatch(new _store_spinner_actions__WEBPACK_IMPORTED_MODULE_8__["StopSpinner"]());
+        }, function (err) {
             if (err instanceof _angular_common_http__WEBPACK_IMPORTED_MODULE_0__["HttpErrorResponse"]) {
                 _this.store.dispatch(new _store_spinner_actions__WEBPACK_IMPORTED_MODULE_8__["StopSpinner"]());
                 if (err.status && err.status === 401 && _this.router.url !== '/auth/login') {
+                    _this.notificationManager.error('User is not authorised', 'Error');
                     _this.authStore.dispatch(new _store_auth_actions__WEBPACK_IMPORTED_MODULE_9__["SignOut"](_this.authFacade));
                 }
                 else if (err.error.error) {
@@ -1044,6 +1558,47 @@ var MainInterceptor = /** @class */ (function () {
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])()
     ], MainInterceptor);
     return MainInterceptor;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/services/school/school.service.ts":
+/*!***************************************************!*\
+  !*** ./src/app/services/school/school.service.ts ***!
+  \***************************************************/
+/*! exports provided: SchoolService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SchoolService", function() { return SchoolService; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var SchoolService = /** @class */ (function () {
+    function SchoolService(httpClient) {
+        this.httpClient = httpClient;
+    }
+    SchoolService.prototype.create = function (body) {
+        return this.httpClient.post('school', body);
+    };
+    SchoolService = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])(),
+        __metadata("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpClient"]])
+    ], SchoolService);
+    return SchoolService;
 }());
 
 
@@ -1196,7 +1751,7 @@ var reducers = {
 /*!***************************************!*\
   !*** ./src/app/store/auth/actions.ts ***!
   \***************************************/
-/*! exports provided: ActionTypes, AuthenticateAction, AuthenticatedAction, AuthenticatedSuccessAction, AuthenticatedErrorAction, AuthenticationErrorAction, AuthenticationSuccessAction, SignOutAction, SignOutErrorAction, SignOutSuccessAction, SignUpAction, SignUpErrorAction, SignUpSuccessAction, RefreshAuthState, SignOut */
+/*! exports provided: ActionTypes, AuthenticateAction, AuthenticatedAction, AuthenticatedSuccessAction, AuthenticatedErrorAction, AuthenticationErrorAction, AuthenticationSuccessAction, SignUpAction, SignUpErrorAction, SignUpSuccessAction, RefreshAuthState, UpdateAuthUser, ToggleUsedAuthSocial, SignOut */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1208,13 +1763,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AuthenticatedErrorAction", function() { return AuthenticatedErrorAction; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AuthenticationErrorAction", function() { return AuthenticationErrorAction; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AuthenticationSuccessAction", function() { return AuthenticationSuccessAction; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SignOutAction", function() { return SignOutAction; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SignOutErrorAction", function() { return SignOutErrorAction; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SignOutSuccessAction", function() { return SignOutSuccessAction; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SignUpAction", function() { return SignUpAction; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SignUpErrorAction", function() { return SignUpErrorAction; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SignUpSuccessAction", function() { return SignUpSuccessAction; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RefreshAuthState", function() { return RefreshAuthState; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UpdateAuthUser", function() { return UpdateAuthUser; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ToggleUsedAuthSocial", function() { return ToggleUsedAuthSocial; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SignOut", function() { return SignOut; });
 /* harmony import */ var rxjs_add_operator_filter__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! rxjs/add/operator/filter */ "./node_modules/rxjs-compat/_esm5/add/operator/filter.js");
 /* harmony import */ var rxjs_add_operator_takeWhile__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! rxjs/add/operator/takeWhile */ "./node_modules/rxjs-compat/_esm5/add/operator/takeWhile.js");
@@ -1243,6 +1797,8 @@ var ActionTypes = {
     SIGN_UP_ERROR: Object(_utils_uniqueType__WEBPACK_IMPORTED_MODULE_2__["uniqueType"])('Sign up error'),
     SIGN_UP_SUCCESS: Object(_utils_uniqueType__WEBPACK_IMPORTED_MODULE_2__["uniqueType"])('Sign up success'),
     REFRESH_AUTH_STATE: Object(_utils_uniqueType__WEBPACK_IMPORTED_MODULE_2__["uniqueType"])('REFRESH_AUTH_STATE'),
+    UPDATE_AUTH_USER: Object(_utils_uniqueType__WEBPACK_IMPORTED_MODULE_2__["uniqueType"])('UPDATE_AUTH_USER'),
+    TOOGLE_AUTH_USED: Object(_utils_uniqueType__WEBPACK_IMPORTED_MODULE_2__["uniqueType"])('TOOGLE_AUTH_USED'),
 };
 /**
  * Authenticate.
@@ -1325,45 +1881,6 @@ var AuthenticationSuccessAction = /** @class */ (function () {
 }());
 
 /**
- * Sign out.
- * @class SignOutAction
- * @implements {Action}
- */
-var SignOutAction = /** @class */ (function () {
-    function SignOutAction(payload) {
-        this.payload = payload;
-        this.type = ActionTypes.SIGN_OUT;
-    }
-    return SignOutAction;
-}());
-
-/**
- * Sign out error.
- * @class SignOutErrorAction
- * @implements {Action}
- */
-var SignOutErrorAction = /** @class */ (function () {
-    function SignOutErrorAction(payload) {
-        this.payload = payload;
-        this.type = ActionTypes.SIGN_OUT_SUCCESS;
-    }
-    return SignOutErrorAction;
-}());
-
-/**
- * Sign out success.
- * @class SignOutSuccessAction
- * @implements {Action}
- */
-var SignOutSuccessAction = /** @class */ (function () {
-    function SignOutSuccessAction(payload) {
-        this.payload = payload;
-        this.type = ActionTypes.SIGN_OUT_SUCCESS;
-    }
-    return SignOutSuccessAction;
-}());
-
-/**
  * Sign up.
  * @class SignUpAction
  * @implements {Action}
@@ -1417,14 +1934,26 @@ var RefreshAuthState = /** @class */ (function () {
         var userAuth = _app_facades_auth_authFacade__WEBPACK_IMPORTED_MODULE_4__["AuthFacade"].getUser();
         var token = _app_facades_auth_authFacade__WEBPACK_IMPORTED_MODULE_4__["AuthFacade"].getToken();
         var authStatusAuth = _app_facades_auth_authFacade__WEBPACK_IMPORTED_MODULE_4__["AuthFacade"].getAuthStatus();
-        if (userAuth &&
-            token &&
-            authStatusAuth) {
-            this.payload.user = new _models_user__WEBPACK_IMPORTED_MODULE_3__["User"](userAuth);
-            this.payload.authStatus = authStatusAuth;
-        }
+        this.payload.user = new _models_user__WEBPACK_IMPORTED_MODULE_3__["User"](userAuth);
+        this.payload.authStatus = authStatusAuth;
     }
     return RefreshAuthState;
+}());
+
+var UpdateAuthUser = /** @class */ (function () {
+    function UpdateAuthUser(payload) {
+        this.payload = payload;
+        this.type = ActionTypes.UPDATE_AUTH_USER;
+    }
+    return UpdateAuthUser;
+}());
+
+var ToggleUsedAuthSocial = /** @class */ (function () {
+    function ToggleUsedAuthSocial(payload) {
+        this.payload = payload;
+        this.type = ActionTypes.TOOGLE_AUTH_USED;
+    }
+    return ToggleUsedAuthSocial;
 }());
 
 var SignOut = /** @class */ (function () {
@@ -1456,6 +1985,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getSignOutError", function() { return getSignOutError; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getSignUpError", function() { return getSignUpError; });
 /* harmony import */ var _actions__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./actions */ "./src/app/store/auth/actions.ts");
+/* harmony import */ var _models_user__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @models/user */ "./src/app/models/user.ts");
+/* harmony import */ var _facades_auth_authFacade__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @facades/auth/authFacade */ "./src/app/facades/auth/authFacade.ts");
 var __assign = (undefined && undefined.__assign) || Object.assign || function(t) {
     for (var s, i = 1, n = arguments.length; i < n; i++) {
         s = arguments[i];
@@ -1465,11 +1996,14 @@ var __assign = (undefined && undefined.__assign) || Object.assign || function(t)
     return t;
 };
 
+
+
 /**
  * The initial state.
  */
 var initialState = {
     authenticated: false,
+    user: new _models_user__WEBPACK_IMPORTED_MODULE_1__["User"]()
 };
 /**
  * The reducer function.
@@ -1481,29 +2015,73 @@ function reducer(state, action) {
     if (state === void 0) { state = initialState; }
     switch (action.type) {
         case _actions__WEBPACK_IMPORTED_MODULE_0__["ActionTypes"].AUTHENTICATE:
+            console.log(state, 'AUTHENTICATE');
             return __assign({}, state, { error: false, loading: true });
         case _actions__WEBPACK_IMPORTED_MODULE_0__["ActionTypes"].AUTHENTICATED_ERROR:
             return __assign({}, state, { authenticated: false, error: action.payload.error.message, loaded: true });
         case _actions__WEBPACK_IMPORTED_MODULE_0__["ActionTypes"].AUTHENTICATED_SUCCESS:
+            console.log(state, 'AUTHENTICATED_SUCCESS');
             return __assign({}, state, { authenticated: action.payload.authenticated, loaded: true, user: action.payload.user });
         case _actions__WEBPACK_IMPORTED_MODULE_0__["ActionTypes"].AUTHENTICATE_ERROR:
         case _actions__WEBPACK_IMPORTED_MODULE_0__["ActionTypes"].SIGN_UP_ERROR:
             return __assign({}, state, { authenticated: false, error: action.payload.error.message, loading: false });
-        case _actions__WEBPACK_IMPORTED_MODULE_0__["ActionTypes"].AUTHENTICATE_SUCCESS:
-        case _actions__WEBPACK_IMPORTED_MODULE_0__["ActionTypes"].SIGN_UP_SUCCESS:
-            var user = action.payload.user;
-            // verify user is not null
-            if (user === null) {
-                return state;
+        //
+        // case ActionTypes.AUTHENTICATE_SUCCESS:
+        // case ActionTypes.SIGN_UP_SUCCESS:
+        //   const user: User = action.payload.user;
+        //   // verify user is not null
+        //   if (user === null) {
+        //     return state;
+        //   }
+        //   console.log(state, 'SIGN_UP_SUCCESS, AUTHENTICATE_SUCCESS');
+        //
+        //   return {
+        //     ...state,
+        //     authenticated: true,
+        //     error: undefined,
+        //     loading: false,
+        //     user: user
+        //   };
+        case _actions__WEBPACK_IMPORTED_MODULE_0__["ActionTypes"].UPDATE_AUTH_USER:
+            var properties_1 = action.payload;
+            if (!state.user) {
+                state.user = new _models_user__WEBPACK_IMPORTED_MODULE_1__["User"]();
             }
-            return __assign({}, state, { authenticated: true, error: undefined, loading: false, user: user });
+            Object.keys(properties_1).map(function (prop) {
+                if (typeof properties_1[prop] !== 'undefined') {
+                    switch (prop) {
+                        case 'schools':
+                            if (!state.user[prop]) {
+                                state.user[prop] = [];
+                            }
+                            state.user[prop].push(properties_1[prop]);
+                            break;
+                        case 'permissions':
+                            break;
+                        default:
+                            state.user[prop] = properties_1[prop];
+                            break;
+                    }
+                }
+            });
+            _facades_auth_authFacade__WEBPACK_IMPORTED_MODULE_2__["AuthFacade"].setUser(state.user);
+            console.log(state, 'UPDATE_AUTH_USER');
+            return state;
         case _actions__WEBPACK_IMPORTED_MODULE_0__["ActionTypes"].SIGN_OUT:
             return __assign({}, state, { authenticated: false, error: undefined, user: undefined });
         case _actions__WEBPACK_IMPORTED_MODULE_0__["ActionTypes"].SIGN_UP:
             return __assign({}, state, { authenticated: false, error: undefined, loading: true });
         case _actions__WEBPACK_IMPORTED_MODULE_0__["ActionTypes"].REFRESH_AUTH_STATE:
-            return __assign({}, state, { authenticated: action.payload.authStatus, user: action.payload.user, error: undefined, loading: true });
+            var uState = __assign({}, state, { authenticated: action.payload.authStatus, user: action.payload.user, error: undefined, loading: true });
+            console.log(uState, 'REFRESH_AUTH_STATE');
+            return uState;
+        case _actions__WEBPACK_IMPORTED_MODULE_0__["ActionTypes"].TOOGLE_AUTH_USED:
+            state.user.usedAuthSocial = action.payload.provider;
+            _facades_auth_authFacade__WEBPACK_IMPORTED_MODULE_2__["AuthFacade"].setUser(state.user);
+            console.log(state, 'TOOGLE_AUTH_USED');
+            return state;
         default:
+            console.log(state, 'default');
             return state;
     }
 }

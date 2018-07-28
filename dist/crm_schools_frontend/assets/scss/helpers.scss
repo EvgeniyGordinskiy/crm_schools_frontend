@@ -8,6 +8,34 @@
   float:right;
 }
 
+.link{
+  color: $link_color;
+  cursor: pointer;
+}
+
+.text_under_line{
+  text-decoration: underline;
+}
+
+.line-with-text{
+  width:100%;
+  text-align:center;
+  border-bottom: 1px solid $grey;
+  line-height:0.1em;
+  margin:10px 0 20px;
+  span {
+    background:#fff;
+    padding:0 10px;
+    color: $dark_grey;
+    font-weight: 100;
+  }
+}
+.inputs_border{
+  border: $light_black solid 1px;
+}
+.grey-border{
+  border: $grey solid 1.5px;
+}
 .grey-border-left{
   border-left: $grey solid 1.5px;
 }
@@ -30,7 +58,15 @@
   font-weight: bold;
   color: #464646;
 }
+.sub-title{
+  font-size: 13px;
+  color: $dark_grey;
+  font-weight: 300;
+}
 
+.color-text-middle-grey{
+  color: $middle-grey
+}
 .buttons-are-small{
   .mat-button{
     width: 34px;
