@@ -32,7 +32,7 @@ export class AuthInterceptor implements HttpInterceptor {
     let token: string;
     const pagesWithTekns = [
       '/auth/resetPassword',
-      // '/auth/setup',
+      '/auth/setup',
     ];
     if (pagesWithTekns.includes(this.router.url.split('?')[0])) {
       token = AuthFacade.getToken(ResetPasswordComponent.getTokenPrefix());
@@ -56,6 +56,7 @@ export class AuthInterceptor implements HttpInterceptor {
       if (err instanceof HttpErrorResponse) {
         this.store.dispatch(new StopSpinner());
         if (err.status && err.status === 401 && this.router.url !== '/auth/login') {
+          this.notificationManager.error('User is not authorised', 'Error');
           this.authStore.dispatch(new SignOut(this.authFacade));
         } else if (err.error.error) {
           this.notificationManager.error(err.error.error.message, 'Error' );

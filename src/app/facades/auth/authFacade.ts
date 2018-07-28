@@ -15,7 +15,7 @@ export class AuthFacade {
 
   static getUser = () => {
     const userJsn = localStorage.getItem(AuthFacade.prefix + 'user');
-    if(typeof userJsn !== 'undefined' && userJsn !== 'undefined') {
+    if (typeof userJsn !== 'undefined' && userJsn !== 'undefined') {
       return JSON.parse(localStorage.getItem(AuthFacade.prefix + 'user'));
     }
   }
@@ -102,7 +102,8 @@ export class AuthFacade {
      permissions: permissions,
      phone: response.data.phone,
      schools: response.data.schools,
-     paymentSettingVerified: response.data.paymentSettingVerified
+     paymentSettingVerified: response.data.paymentSettingVerified,
+     usedAuthSocial: response.data.usedAuthSocial ? response.data.usedAuthSocial : false
   });
   }
 

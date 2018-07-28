@@ -10,6 +10,6 @@ export class SchoolService {
   ) { }
 
   create(body: CreateSchool) {
-    return this.httpClient.post('school', body)
+    return this.httpClient.post('school', body);
   }
 }

@@ -1,11 +1,11 @@
 <mat-card class="auth-modal">
   <mat-card-header>
     <mat-card-title>
-      <div class="social-data" *ngIf="usedAuthSocial !== false">
+      <div class="social-data" *ngIf="user.provider_name !== null">
         <p>Almost Finish</p>
         <p class="sub-title color-text-middle-grey">Please set up empty rows.</p>
         <img src="{{user?.avatar}}" class="avatar">
-        <img src="{{usedAuthSocial === 'facebook'? '../../../../assets/fbLogo.png' : '../../../../assets/gLogo.png'}}" class="icon-social">
+        <img src="{{user.provider_name === 'facebook'? '../../../../assets/fbLogo.png' : '../../../../assets/gLogo.png'}}" class="icon-social">
         <div *ngIf="user?.name !== null" class="sub-title">{{user.name}}</div>
         <div *ngIf="user?.email !== null" class="sub-title color-text-middle-grey">{{user?.email}}</div>
       </div>
@@ -90,14 +90,15 @@
             <mat-form-field>
               <input matInput
                      formControlName="phoneNumber"
-                     type='text' prefix="+ "
+                     type='text'
+                     prefix="+ "
                      mask="0 000 000 00 000"
                      name="phoneNumber" required>
             </mat-form-field>
             <div
               *ngIf="!signupForm.get('phoneNumber').valid && signupForm.get('phoneNumber').touched"
               class="help-block">
-              <span *ngIf="signupForm.get('phoneNumber').errors['range']">Phone Number should have next format: '3 777 777 77 77'</span>
+                <span *ngIf="signupForm.get('phoneNumber').errors['range']">Phone Number should have next format: '3 777 777 77 77'</span>
               <span *ngIf="signupForm.get('phoneNumber').errors['required']">This field is required!</span>
             </div>
           </td>
@@ -119,11 +120,11 @@
       <img src="../../../../assets/gLogo.png">
       <span>Sign In with Google</span>
     </div>
-    <div class="noAcc" *ngIf="usedAuthSocial === false">
+    <div class="noAcc" *ngIf="user.provider_name === null">
       <span>Already have an account?</span>
       <a [routerLink]="['/auth/login']">Log In</a>
     </div>
-    <div class="noAcc noAccUsedAuthSocial" *ngIf="usedAuthSocial !== false">
+    <div class="noAcc noAccUsedAuthSocial" *ngIf="user.provider_name !== null">
       <span>By signing up, you agree to the <b>Terms</b> and <b>Conditions</b> and <b>Privacy Policy</b>.
       You also agree to receive product-related email from CC you can unsubscribe at any time.</span>
     </div>

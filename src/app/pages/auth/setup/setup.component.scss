@@ -20,7 +20,6 @@
         flex-direction: column;
         justify-content: center;
         height: 367px;
-        border-bottom: #ccc solid 1px;
         .mat-tab-body-content{
           .tab-text-code{
             p:last-child{
@@ -46,7 +45,17 @@
             .mat-form-field{
               height:30px;
             }
-
+            .grey-border-top{
+              margin-top: 15px;
+              border-width: 1px;
+            }
+          }
+          .add-gym-button{
+            margin-top: 5px;
+            margin-bottom: 37px;
+            right: 48px;
+            font-weight: bold;
+            color: $base_color;
           }
           .form-phone-code{
             width: 240px;
@@ -69,11 +78,18 @@
             float: left;
           }
         }
+        &:last-child{
+          height: 434px;
+          .tab-text{
+            margin-top: 40px;
+          }
+        }
       }
       .mat-card-actions{
         display: flex;
         justify-content: flex-end;
         padding-right: 13px;
+        border-top: #ccc solid 1px;
         button{
           height: 28px;
           position: relative;

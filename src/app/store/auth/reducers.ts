@@ -17,7 +17,6 @@ export interface AuthState extends fromApp.AppState {
  */
 export interface State {
   authenticated: boolean;
-  usedAuthSocial: boolean|string;
   error?: string;
   user?: User;
 }
@@ -27,7 +26,7 @@ export interface State {
  */
 const initialState: State = {
   authenticated: false,
-  usedAuthSocial: false
+  user: new User()
 };
 
 /**
@@ -92,12 +91,17 @@ export function reducer(state: any = initialState, action: ActionInterface) {
     //   };
       case ActionTypes.UPDATE_AUTH_USER:
         const properties = action.payload;
-        if (state.user) {
+        if (!state.user) {
+          state.user = new User();
+        }
           Object.keys(properties).map(prop => {
-            if (properties[prop]) {
+            if (typeof properties[prop] !== 'undefined') {
               switch (prop) {
                 case 'schools':
-                  state.user[prop] = properties[prop];
+                  if (!state.user[prop]) {
+                    state.user[prop] = [];
+                  }
+                  state.user[prop].push(properties[prop]);
                   break;
                 case 'permissions':
                   break;
@@ -107,9 +111,8 @@ export function reducer(state: any = initialState, action: ActionInterface) {
               }
             }
           });
-        }
         AuthFacade.setUser(state.user);
-          console.log(state, 'UPDATE_AUTH_USER');
+        console.log(state, 'UPDATE_AUTH_USER');
       return state;
 
     case ActionTypes.SIGN_OUT:
@@ -129,16 +132,20 @@ export function reducer(state: any = initialState, action: ActionInterface) {
       };
 
       case ActionTypes.REFRESH_AUTH_STATE:
-      return {
-        ...state,
-        authenticated: action.payload.authStatus,
-        user: action.payload.user,
-        error: undefined,
-        loading: true
-      };
+        const uState = {
+          ...state,
+          authenticated: action.payload.authStatus,
+          user: action.payload.user,
+          error: undefined,
+          loading: true
+        };
+        console.log(uState, 'REFRESH_AUTH_STATE');
+
+        return uState;
 
       case ActionTypes.TOOGLE_AUTH_USED:
-        state.usedAuthSocial =  action.payload.provider;
+        state.user.usedAuthSocial =  action.payload.provider;
+        AuthFacade.setUser(state.user);
         console.log(state, 'TOOGLE_AUTH_USED');
         return state;
 

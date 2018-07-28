@@ -8,9 +8,10 @@ import * as AuthReducer from '@store/auth/reducers';
 import {Store} from '@ngrx/store';
 import {User} from '@models/user';
 import {RefreshAuthState, UpdateAuthUser} from '@store/auth/actions';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators} from '@angular/forms';
 import {PaymentService} from '@services/payment/payment.service';
 import {AccountServiceResponseInterface} from '@interfaces/accountServiceResponse.interface';
+import {SchoolService} from '@services/school/school.service';
 
 @Component({
   selector: 'app-setup',
@@ -30,11 +31,13 @@ export class SetupComponent implements OnInit {
   currentIndex = 0;
 
   constructor(
-    private route: ActivatedRoute,
     private router: Router,
-    private authService: AuthService,
-    private paymentService: PaymentService,
+    private fb: FormBuilder,
+    private route: ActivatedRoute,
     private authFacade: AuthFacade,
+    private authService: AuthService,
+    private schoolService: SchoolService,
+    private paymentService: PaymentService,
     private authStore: Store<AuthReducer.AuthState>,
   ) {
     this.route.queryParams.subscribe(params => {
@@ -48,27 +51,28 @@ export class SetupComponent implements OnInit {
         const auth = val.auth;
         if (auth && auth.user) {
           this.user = auth.user;
-          console.log(this.user, 'subsc');
-          this.identificateRegistration();
         }
       }
     );
-
-    if (this.user && !this.user.emailVerified && this.token) {
-      this.checkEmailsToken();
-      this.currentIndex = 0;
-    } else {
-      this.tokenWasChecked = true;
-    }
+    this.identificateRegistration();
     this.setUpForm = new FormGroup({
       'code': new FormControl(null, [Validators.required]),
       'card_number': new FormControl(null, [Validators.required]),
       'exp_date': new FormControl(null, [Validators.required]),
       'cvv': new FormControl(null, [Validators.required]),
-      'gym_name': new FormControl(null, [Validators.required]),
-      'gym_address': new FormControl(null, [Validators.required]),
-      'gym_phone': new FormControl(null, [Validators.required]),
-    })
+      'gyms':  this.fb.array([])
+    });
+    this.addGym();
+    console.log(this.setUpForm);
+  }
+
+  checkLimit(min: number, max: number): ValidatorFn {
+    return (c: AbstractControl): { [key: string]: boolean } | null => {
+      if (c.value !== null && (c.value.length < min || c.value.length > max)) {
+        return {'range': true};
+      }
+      return null;
+    };
   }
 
   sendSms() {
@@ -77,7 +81,7 @@ export class SetupComponent implements OnInit {
       .subscribe(
         resp => {
           console.log(resp);
-        }
+        },
       );
   }
 
@@ -88,9 +92,11 @@ export class SetupComponent implements OnInit {
           (resp: AuthenticateResponseInterface) => {
             console.log(resp);
             if (resp.data.token && resp.data.token.length > 0) {
+              AuthFacade.setToken(resp.data.token, ResetPasswordComponent.resetTokenPrefix);
               const tmpUser = this.authFacade.createUser(resp.data.authUser);
               if (tmpUser.email === this.user.email && tmpUser.phone === this.user.phone) {
                 this.codeWasChecked = true;
+                this.authStore.dispatch(new UpdateAuthUser(tmpUser));
                 this.currentIndex++;
               } else {
                 this.setUpForm.get('code').setErrors({wrongCode: true});
@@ -117,25 +123,41 @@ export class SetupComponent implements OnInit {
         exp_date: this.setUpForm.get('exp_date').value,
         cvv: this.setUpForm.get('cvv').value,
       }).subscribe(
-        (resp: AccountServiceResponseInterface) => {
-          const tmpUser = this.authFacade.createUser(resp);
+        (resp: AuthenticateResponseInterface) => {
+          if (resp.data.token && resp.data.token.length > 0) {
+            AuthFacade.setToken(resp.data.token, ResetPasswordComponent.resetTokenPrefix);
+          } else {
+            this.router.navigate(['/auth/login']);
+          }
+          const tmpUser = this.authFacade.createUser(resp.data.authUser);
           if (tmpUser.email === this.user.email && tmpUser.phone === this.user.phone) {
             this.paymentSettingVerified = true;
             this.currentIndex++;
             this.authStore.dispatch(new UpdateAuthUser(tmpUser));
-            AuthFacade.setUser(tmpUser);
           }
           this.paymentSettingVerified = false;
-          this.currentIndex++;
         }
-      )
+      );
     } else {
       this.currentIndex++;
     }
-  };
+  }
 
   saveGyms() {
-    console.log(this.setUpForm);
+    const gyms = this.setUpForm.get('gyms')['controls'];
+    gyms.map(gym => {
+      console.log(gym);
+      this.schoolService.create({
+        name: gym.get('gym_name').value,
+        address: gym.get('gym_address').value,
+        phone: gym.get('gym_phone').value
+      }).subscribe(
+        (resp: {data}) => {
+          this.authStore.dispatch(new UpdateAuthUser({schools: resp.data}));
+        }
+      );
+    });
+    this.router.navigate(['auth/login']);
   }
 
   prev(event) {
@@ -143,25 +165,30 @@ export class SetupComponent implements OnInit {
   }
 
   identificateRegistration() {
-    if (this.user.phoneNumberVerified === true) {
-      this.codeWasChecked = true;
-      this.currentIndex = 1;
-    } else {
+    if (this.user && !this.user.emailVerified && this.token && !this.tokenWasChecked) {
+      this.checkEmailsToken();
       this.currentIndex = 0;
-      this.sendSms();
-    }
+    } else {
+      this.tokenWasChecked = true;
+      if (this.user.phoneNumberVerified === true) {
+        this.codeWasChecked = true;
+        this.currentIndex = 1;
+      } else {
+        this.currentIndex = 0;
+        this.sendSms();
+      }
+      if (this.user.paymentSettingVerified === true && this.user.phoneNumberVerified === true) {
+        this.paymentSettingVerified = true;
+        this.currentIndex = 2;
+      }
 
-    if (this.user.paymentSettingVerified === true) {
-      this.paymentSettingVerified = true;
-      this.currentIndex = 2;
-    }
+      if (this.user.schools && this.user.schools.length > 0) {
+        this.hasSchool = true;
+      }
 
-    if (this.user.schools.length > 0) {
-      this.hasSchool = true;
-    }
-
-    if (this.hasSchool === true && this.codeWasChecked === true && this.tokenWasChecked === true && this.paymentInformation === true) {
-      this.router.navigate(['auth/login']);
+      if (this.hasSchool === true && this.codeWasChecked === true && this.tokenWasChecked === true && this.paymentInformation === true) {
+        this.router.navigate(['auth/login']);
+      }
     }
   }
 
@@ -171,9 +198,10 @@ export class SetupComponent implements OnInit {
         (resp: AuthenticateResponseInterface) => {
           console.log(resp);
           if (resp.data.token && resp.data.token.length > 0) {
-            this.tokenWasChecked = true;
             AuthFacade.setToken(resp.data.token, ResetPasswordComponent.resetTokenPrefix);
             this.user = this.authFacade.createUser(resp.data.authUser);
+            this.authStore.dispatch(new UpdateAuthUser(this.user));
+            this.tokenWasChecked = true;
             this.identificateRegistration();
             console.log(this.user);
           } else {
@@ -182,5 +210,15 @@ export class SetupComponent implements OnInit {
         },
         err => this.router.navigate(['/auth/login'])
       );
+  }
+
+  addGym() {
+    if ( this.setUpForm.get('gyms')['controls'] &&  this.setUpForm.get('gyms')['controls'].length < 4) {
+    this.setUpForm.get('gyms')['controls'].push(  this.fb.group({
+      'gym_name': new FormControl(null, [Validators.required]),
+      'gym_address': new FormControl(null, [Validators.required]),
+      'gym_phone': new FormControl(null, [Validators.required,  this.checkLimit(12, 12)]),
+    }));
+    }
   }
 }

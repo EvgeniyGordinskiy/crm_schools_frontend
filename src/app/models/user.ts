@@ -19,6 +19,7 @@ export class User implements UserInterface {
     key?: [Permission]
   };
   schools?: [School];
+  usedAuthSocial: boolean|string = false;
 
   constructor(params?: User) {
     if (params) {

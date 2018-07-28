@@ -77,7 +77,7 @@
               Add your gyms to get started
             </p>
           </div>
-          <form [formGroup]="setUpForm">
+          <form *ngFor="let key of setUpForm.get('gyms')['controls']" [formGroup]="key">
             <table>
               <div class="gym">
                 <span class="form-field-header">Gym Name</span>
@@ -85,19 +85,43 @@
                   <input matInput
                        formControlName="gym_name">
                 </mat-form-field>
+                <div
+                  *ngIf="!key.get('gym_name').valid && key.get('gym_name').touched"
+                  class="help-block">
+                  <span *ngIf="key.get('gym_name').errors['required']">This field is required!</span>
+                </div>
                 <span class="form-field-header">Gym Address</span>
                 <mat-form-field>
                   <input matInput
                        formControlName="gym_address">
                 </mat-form-field>
+                <div
+                  *ngIf="!key.get('gym_address').valid && key.get('gym_address').touched"
+                  class="help-block">
+                  <span *ngIf="key.get('gym_address').errors['required']">This field is required!</span>
+                </div>
                 <span class="form-field-header">Gym Phone</span>
                 <mat-form-field>
                   <input matInput
-                       formControlName="gym_phone">
+                       formControlName="gym_phone"
+                         type='text'
+                         prefix="+ "
+                         mask="0 000 000 00 000">
                 </mat-form-field>
+                <div
+                  *ngIf="!key.get('gym_phone').valid && key.get('gym_phone').touched"
+                  class="help-block">
+                  <span *ngIf="key.get('gym_phone').errors['required']">This field is required!</span>
+                  <span *ngIf="key.get('gym_phone').errors['range']">Phone Number should have next format: '3 777 777 77 77'</span>
+                </div>
               </div>
             </table>
+            <div class="grey-border-top"></div>
           </form>
+          <button mat-button class="add-gym-button" (click)="addGym()">
+            <mat-icon>add</mat-icon>
+            Add Another Gym
+          </button>
         </mat-tab>
       </mat-tab-group>
       <mat-card-actions>

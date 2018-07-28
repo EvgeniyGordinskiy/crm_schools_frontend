@@ -18,4 +18,5 @@ export interface UserInterface {
     key?: [Permission]
   };
   schools?: [School];
+  usedAuthSocial?: boolean|string;
 }

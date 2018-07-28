@@ -33,15 +33,15 @@ export class EmailSentComponent implements OnInit {
 
   resendEmail() {
     let redirect = 'auth/login';
-    if(this.user.phoneNumberVerified === false || this.user.paymentSettingVerified === false || !this.user.schools.length ) {
-      this.router.navigate(['auth/setup']);
+    if (this.user.phoneNumberVerified === false || this.user.paymentSettingVerified === false || !this.user.schools.length) {
+      redirect = 'auth/setup';
     }
     this.authService.sendEmail(this.user.email, redirect)
       .subscribe(
         resp => {
           console.log(resp);
         }
-      )
+      );
   }
 
 }

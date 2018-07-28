@@ -40,7 +40,7 @@ export class CreateSchoolComponent implements OnInit {
         this.authStore.dispatch(new UpdateAuthUser({schools: resp.data}));
         this.dialog.closeAll();
       }
-    )
+    );
   }
 
 }

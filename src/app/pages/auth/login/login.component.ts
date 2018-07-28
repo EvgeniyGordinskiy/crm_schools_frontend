@@ -24,6 +24,7 @@ import {AccountServiceResponseInterface} from '@app/interfaces/accountServiceRes
 import {AuthFacade} from '@app/facades/auth/authFacade';
 import {PermissionFacade} from '@facades/permission/permissionFacade';
 import {AuthService as AuthServiceSocial, FacebookLoginProvider, GoogleLoginProvider} from 'angular5-social-login';
+import {ResetPasswordComponent} from '@pages/auth/reset-password/reset-password.component';
 
 @Component({
   selector: 'app-login',
@@ -113,10 +114,12 @@ export class LoginComponent implements OnInit, OnDestroy {
       (response: AccountServiceResponseInterface) => {
         const permissions = PermissionFacade.groupByModelName(response.data.permissions);
         const user =  this.authFacade.createUser(response, permissions);
+        console.log(user, 'authenticate login');
         this.store.dispatch(new UpdateAuthUser(user));
         if (user.emailVerified === false) {
           this.router.navigate(['auth/emailSent']);
-        } else if(user.phoneNumberVerified === false || user.paymentSettingVerified === false || !user.schools.length ) {
+        } else if (user.phoneNumberVerified === false || user.paymentSettingVerified === false || !user.schools.length ) {
+          AuthFacade.setToken(token, ResetPasswordComponent.resetTokenPrefix);
           this.router.navigate(['auth/setup']);
         } else {
           this.store.dispatch(new AuthenticatedSuccessAction({authenticated: true, user: user}));

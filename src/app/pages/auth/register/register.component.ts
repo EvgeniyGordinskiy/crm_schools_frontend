@@ -59,8 +59,8 @@ export class RegisterComponent implements OnInit {
     this.authStore.subscribe(
       (val) => {
         const auth = val.auth;
-        this.usedAuthSocial = auth.usedAuthSocial;
         if (auth && auth.user) {
+          this.usedAuthSocial = auth.user.usedAuthSocial;
           this.user['name'] = auth.user.name && auth.user.name.length > 0 ? auth.user.name : null;
           this.user['provider_name'] = auth.user.provider_name && auth.user.provider_name.length > 0 ? auth.user.provider_name : null;
           this.user['provider_id'] = auth.user.provider_id && auth.user.provider_id.length > 0 ? auth.user.provider_id : null;
@@ -109,8 +109,8 @@ export class RegisterComponent implements OnInit {
       password_confirmation: this.signupForm.get('confirm_password').value
     };
     if (this.usedAuthSocial) {
-      formBody['fromSocial']['provider_name'] = this.user.provider_name,
-      formBody['fromSocial']['provider_id'] = this.user.provider_id
+      formBody['fromSocial']['provider_name'] = this.user.provider_name;
+      formBody['fromSocial']['provider_id'] = this.user.provider_id;
 
     }
     this.spinnerStore.dispatch(new StartSpinner());
@@ -130,7 +130,7 @@ export class RegisterComponent implements OnInit {
       (err: ErrorResponse) => {
           console.log(err);
           Object.keys(err.error.errors).map(item => {
-            this.signupForm.controls[item].setErrors({'apiValidate': err.error.errors[item]})
+            this.signupForm.controls[item].setErrors({'apiValidate': err.error.errors[item]});
           });
         }
       );
