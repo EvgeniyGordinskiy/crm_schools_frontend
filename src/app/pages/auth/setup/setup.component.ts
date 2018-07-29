@@ -7,10 +7,9 @@ import {AuthenticateResponseInterface} from '@interfaces/authenticateResponse.in
 import * as AuthReducer from '@store/auth/reducers';
 import {Store} from '@ngrx/store';
 import {User} from '@models/user';
-import {RefreshAuthState, UpdateAuthUser} from '@store/auth/actions';
+import {UpdateAuthUser} from '@store/auth/actions';
 import {AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators} from '@angular/forms';
 import {PaymentService} from '@services/payment/payment.service';
-import {AccountServiceResponseInterface} from '@interfaces/accountServiceResponse.interface';
 import {SchoolService} from '@services/school/school.service';
 
 @Component({

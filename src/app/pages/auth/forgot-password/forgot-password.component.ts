@@ -12,6 +12,7 @@ import {Router} from '@angular/router';
 })
 export class ForgotPasswordComponent implements OnInit {
   forgotPasswordForm: FormGroup;
+  emailWasSent = false;
   constructor(
     private router: Router,
     private authService: AuthService,
@@ -25,13 +26,17 @@ export class ForgotPasswordComponent implements OnInit {
   }
 
   sendEmail() {
-    this.authService.sendEmailForResettingPassword( this.forgotPasswordForm.get('email').value, 'uth/resetPassword')
+    this.authService.sendEmailForResettingPassword( this.forgotPasswordForm.get('email').value, 'auth/resetPassword')
       .subscribe(
         (resp: SuccessResponse) => {
-          this.notificationManager.success(resp.success.message ? resp.success.message : 'Password successfully', 'Success' );
-          this.router.navigate(['auth/login']);
+          // this.notificationManager.success(resp.success.message ? resp.success.message : 'Password successfully', 'Success' );
+          this.emailWasSent = true;
         }
-      )
+      );
+  }
+
+  toLoginPage() {
+    this.router.navigate(['auth/login']);
   }
 
 }
