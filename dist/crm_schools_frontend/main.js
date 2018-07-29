@@ -940,7 +940,7 @@ module.exports = "<mat-toolbar>\n  <mat-toolbar-row class=\"first-header\">\n   
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ":host .mat-toolbar {\n  background: transparent; }\n  :host .mat-toolbar .first-header {\n    padding-right: 0;\n    height: 59px; }\n  :host .mat-toolbar .first-header .first-header-content {\n      display: flex;\n      font-size: 14px;\n      justify-content: space-between;\n      align-items: center;\n      min-width: 335px;\n      margin-left: auto; }\n  :host .mat-toolbar .first-header .first-header-content mat-select {\n        width: 340px;\n        height: 30px;\n        border: rgba(155, 155, 155, 0.31) solid 1px;\n        border-radius: 20px;\n        padding: 0 10px;\n        margin-top: 5px; }\n  :host .mat-toolbar .first-header .first-header-content mat-select ::ng-deep .mat-select-arrow {\n          display: inline-block;\n          padding: 3px;\n          margin-bottom: 3px;\n          border: #2e7e88 solid;\n          border-width: 0 1.5px 1.5px 0;\n          transform: rotate(45deg);\n          -webkit-transform: rotate(45deg); }\n  :host .mat-toolbar .first-header .first-header-content .add-gym-button {\n        border-radius: 20px;\n        width: 175px;\n        height: 30px;\n        padding-left: 6px;\n        justify-content: center;\n        flex-direction: column;\n        margin-top: 5px;\n        margin-left: 50px; }\n  :host .mat-toolbar .first-header .first-header-content .add-gym-button .mat-icon {\n          font-size: 17px;\n          font-weight: bold;\n          margin-top: 7px; }\n  :host .mat-toolbar .first-header .first-header-content .profile-details {\n        display: flex;\n        justify-content: center;\n        width: 60%;\n        align-items: center; }\n  :host .mat-toolbar .first-header .first-header-content .profile-details img {\n          margin-right: 9px;\n          border-radius: 50%;\n          width: 35px;\n          height: 35px; }\n  :host .mat-toolbar .second-header {\n    background-color: #7f7f7f;\n    height: 39px;\n    display: flex;\n    justify-content: center; }\n  :host .content {\n  margin: 0 auto;\n  height: 100%;\n  width: 70%;\n  -ms-grid-row-align: center;\n      align-self: center; }\n"
+module.exports = ":host .mat-toolbar {\n  background: transparent; }\n  :host .mat-toolbar .first-header {\n    padding-right: 0;\n    height: 59px; }\n  :host .mat-toolbar .first-header .first-header-content {\n      display: flex;\n      font-size: 14px;\n      justify-content: space-between;\n      align-items: center;\n      min-width: 335px;\n      margin-left: auto; }\n  :host .mat-toolbar .first-header .first-header-content mat-select {\n        width: 340px;\n        height: 30px;\n        border: rgba(155, 155, 155, 0.31) solid 1px;\n        border-radius: 20px;\n        padding: 0 10px;\n        margin-top: 5px; }\n  :host .mat-toolbar .first-header .first-header-content mat-select ::ng-deep .mat-select-arrow {\n          display: inline-block;\n          padding: 3px;\n          margin-bottom: 3px;\n          border: #0b7685 solid;\n          border-width: 0 1.5px 1.5px 0;\n          transform: rotate(45deg);\n          -webkit-transform: rotate(45deg); }\n  :host .mat-toolbar .first-header .first-header-content .add-gym-button {\n        border-radius: 20px;\n        width: 175px;\n        height: 30px;\n        padding-left: 6px;\n        justify-content: center;\n        flex-direction: column;\n        margin-top: 5px;\n        margin-left: 50px; }\n  :host .mat-toolbar .first-header .first-header-content .add-gym-button .mat-icon {\n          font-size: 17px;\n          font-weight: bold;\n          margin-top: 7px; }\n  :host .mat-toolbar .first-header .first-header-content .profile-details {\n        display: flex;\n        justify-content: center;\n        width: 60%;\n        align-items: center; }\n  :host .mat-toolbar .first-header .first-header-content .profile-details img {\n          margin-right: 9px;\n          border-radius: 50%;\n          width: 35px;\n          height: 35px; }\n  :host .mat-toolbar .second-header {\n    background-color: #7f7f7f;\n    height: 39px;\n    display: flex;\n    justify-content: center; }\n  :host .content {\n  margin: 0 auto;\n  height: 100%;\n  width: 70%;\n  -ms-grid-row-align: center;\n      align-self: center; }\n"
 
 /***/ }),
 
@@ -1071,7 +1071,7 @@ var User = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<mat-card *ngIf=\"tokenWasChecked\">\n  <mat-card-header>\n    <mat-card-title>Reset password.</mat-card-title>\n  </mat-card-header>\n  <mat-card-content>\n    <form [formGroup]=\"resetPasswordForm\" (ngSubmit)=\"resetPassword()\">\n      <table cellspacing=\"0\">\n        <tr>\n          <td>\n            <mat-form-field>\n              <input matInput placeholder=\"Password\"\n                     formControlName=\"password\"\n                     type=\"password\"\n                     name=\"password\" required>\n            </mat-form-field>\n            <div\n              *ngIf=\"!resetPasswordForm.get('password').valid && resetPasswordForm.get('password').touched\"\n              class=\"help-block\">\n              <span *ngIf=\"resetPasswordForm.get('password').errors['required']\">This field is required!</span>\n            </div>\n          </td>\n        </tr>\n        <tr>\n          <td>\n            <mat-form-field>\n              <input matInput placeholder=\"Confirm password\"\n                     formControlName=\"confirm_password\"\n                     type=\"password\"\n                     name=\"confirm_password\" required>\n            </mat-form-field>\n            <div\n              *ngIf=\"!resetPasswordForm.get('confirm_password').valid && resetPasswordForm.get('confirm_password').touched\"\n              class=\"help-block\">\n              <span *ngIf=\"resetPasswordForm.get('confirm_password').errors['confirmedPassword']\">Password not confirmed!</span>\n              <span *ngIf=\"resetPasswordForm.get('confirm_password').errors['required']\">This field is required!</span>\n            </div>\n          </td>\n        </tr>\n      </table>\n      <mat-card-actions>\n        <button mat-raised-button\n                color=\"primary\"\n                [disabled]=\"!resetPasswordForm.valid && resetPasswordForm.touched || !resetPasswordForm.touched\n    \">Save</button>\n      </mat-card-actions>\n    </form>\n  </mat-card-content>\n</mat-card>\n"
+module.exports = "<mat-card class=\"auth-modal reset-password-auth-card\" *ngIf=\"tokenWasChecked\">\n  <mat-card-header>\n    <mat-card-title>Change your password</mat-card-title>\n  </mat-card-header>\n  <p class=\"sub-header\">\n    Please set new password and try don't forget this.\n  </p>\n  <mat-card-content>\n    <form [formGroup]=\"resetPasswordForm\" (ngSubmit)=\"resetPassword()\">\n      <table cellspacing=\"0\">\n        <tr>\n          <td>\n            <span class=\"form-field-header\">New Password</span>\n            <mat-form-field>\n              <input matInput\n                     formControlName=\"password\"\n                     type=\"password\"\n                     name=\"password\" required>\n            </mat-form-field>\n            <div\n              *ngIf=\"!resetPasswordForm.get('password').valid && resetPasswordForm.get('password').touched\"\n              class=\"help-block\">\n              <span *ngIf=\"resetPasswordForm.get('password').errors['required']\">This field is required!</span>\n            </div>\n          </td>\n        </tr>\n        <tr>\n          <td>\n            <span class=\"form-field-header\">Confirm Password</span>\n            <mat-form-field>\n              <input matInput\n                     formControlName=\"confirm_password\"\n                     type=\"password\"\n                     name=\"confirm_password\" required>\n            </mat-form-field>\n            <div\n              *ngIf=\"!resetPasswordForm.get('confirm_password').valid && resetPasswordForm.get('confirm_password').touched\"\n              class=\"help-block\">\n              <span *ngIf=\"resetPasswordForm.get('confirm_password').errors['confirmedPassword']\">Password do not match!</span>\n              <span *ngIf=\"resetPasswordForm.get('confirm_password').errors['required']\">This field is required!</span>\n            </div>\n          </td>\n        </tr>\n        <mat-card-actions>\n          <button mat-raised-button\n                  color=\"primary\"\n                  [disabled]=\"!resetPasswordForm.valid && resetPasswordForm.touched || !resetPasswordForm.touched\n    \">Change Password</button>\n        </mat-card-actions>\n      </table>\n    </form>\n  </mat-card-content>\n</mat-card>\n"
 
 /***/ }),
 
@@ -1082,7 +1082,7 @@ module.exports = "<mat-card *ngIf=\"tokenWasChecked\">\n  <mat-card-header>\n   
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ""
+module.exports = ".reset-password-auth-card {\n  width: 246px !important;\n  padding: 24px 47px 4px 47px !important;\n  border-radius: 10px;\n  border: rgba(155, 155, 155, 0.31) solid 1px;\n  box-shadow: none !important; }\n  .reset-password-auth-card .sub-header {\n    font-size: 14px;\n    width: 183px;\n    margin: -4px auto 8px auto;\n    text-align: center;\n    color: rgba(155, 155, 155, 0.97); }\n  .reset-password-auth-card form table .mat-card-actions button {\n    margin-top: 18px; }\n"
 
 /***/ }),
 
@@ -1102,6 +1102,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _services_auth_auth_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @services/auth/auth.service */ "./src/app/services/auth/auth.service.ts");
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
 /* harmony import */ var _facades_auth_authFacade__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @facades/auth/authFacade */ "./src/app/facades/auth/authFacade.ts");
+/* harmony import */ var _store_auth_actions__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @store/auth/actions */ "./src/app/store/auth/actions.ts");
+/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1117,14 +1119,18 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
+
+
 var ResetPasswordComponent = /** @class */ (function () {
-    function ResetPasswordComponent(route, router, authService, notificationManager) {
+    function ResetPasswordComponent(route, router, authFacade, authService, notificationManager, authStore) {
         var _this = this;
         this.route = route;
         this.router = router;
+        this.authFacade = authFacade;
         this.authService = authService;
         this.notificationManager = notificationManager;
-        this.tokenWasChecked = false;
+        this.authStore = authStore;
+        this.tokenWasChecked = true;
         this.route.queryParams.subscribe(function (params) {
             _this.token = params['token'];
         });
@@ -1132,14 +1138,25 @@ var ResetPasswordComponent = /** @class */ (function () {
     ResetPasswordComponent_1 = ResetPasswordComponent;
     ResetPasswordComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.authService.checkResetPasswordToken(this.token)
-            .subscribe(function (resp) {
-            console.log(resp);
-            if (resp.data.token && resp.data.token.length > 0) {
-                _this.tokenWasChecked = true;
-                _facades_auth_authFacade__WEBPACK_IMPORTED_MODULE_5__["AuthFacade"].setToken(resp.data.token, ResetPasswordComponent_1.resetTokenPrefix);
-            }
-        });
+        if (!this.token) {
+            this.notificationManager.error('Token is required', 'Error');
+            this.router.navigate(['auth/login']);
+        }
+        else {
+            this.authService.checkResetPasswordToken(this.token)
+                .subscribe(function (resp) {
+                console.log(resp);
+                if (resp.data.token && resp.data.token.length > 0) {
+                    _this.tokenWasChecked = true;
+                    _facades_auth_authFacade__WEBPACK_IMPORTED_MODULE_5__["AuthFacade"].setToken(resp.data.token, ResetPasswordComponent_1.resetTokenPrefix);
+                    var tmpUser = _this.authFacade.createUser(resp.data.authUser);
+                    _this.authStore.dispatch(new _store_auth_actions__WEBPACK_IMPORTED_MODULE_6__["UpdateAuthUser"](tmpUser));
+                }
+                else {
+                    _this.router.navigate(['/auth/login']);
+                }
+            }, function (err) { return _this.router.navigate(['/auth/login']); });
+        }
         this.resetPasswordForm = new _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormGroup"]({
             'password': new _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormControl"](null, [_angular_forms__WEBPACK_IMPORTED_MODULE_1__["Validators"].required]),
             'confirm_password': new _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormControl"](null, [_angular_forms__WEBPACK_IMPORTED_MODULE_1__["Validators"].required, this.confirmedPassword.bind(this)]),
@@ -1178,8 +1195,10 @@ var ResetPasswordComponent = /** @class */ (function () {
         }),
         __metadata("design:paramtypes", [_angular_router__WEBPACK_IMPORTED_MODULE_4__["ActivatedRoute"],
             _angular_router__WEBPACK_IMPORTED_MODULE_4__["Router"],
+            _facades_auth_authFacade__WEBPACK_IMPORTED_MODULE_5__["AuthFacade"],
             _services_auth_auth_service__WEBPACK_IMPORTED_MODULE_3__["AuthService"],
-            ngx_toastr__WEBPACK_IMPORTED_MODULE_2__["ToastrService"]])
+            ngx_toastr__WEBPACK_IMPORTED_MODULE_2__["ToastrService"],
+            _ngrx_store__WEBPACK_IMPORTED_MODULE_7__["Store"]])
     ], ResetPasswordComponent);
     return ResetPasswordComponent;
     var ResetPasswordComponent_1;
