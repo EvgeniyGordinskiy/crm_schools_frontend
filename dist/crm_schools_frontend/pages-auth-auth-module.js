@@ -1053,10 +1053,10 @@ var EmailSentComponent = /** @class */ (function () {
         this.resendEmail();
     };
     EmailSentComponent.prototype.resendEmail = function () {
-        var redirect = 'auth/login';
-        if (this.user.phoneNumberVerified === false || this.user.paymentSettingVerified === false || !this.user.schools.length) {
-            redirect = 'auth/setup';
-        }
+        var redirect = 'auth/setup';
+        // if (this.user.phoneNumberVerified === false || this.user.paymentSettingVerified === false || !this.user.schools.length) {
+        //   redirect = 'auth/setup';
+        // }
         this.authService.sendEmail(this.user.email, redirect)
             .subscribe(function (resp) {
             console.log(resp);
