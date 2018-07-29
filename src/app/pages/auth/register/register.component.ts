@@ -54,7 +54,7 @@ export class RegisterComponent implements OnInit {
   ngOnInit() {
     this.user = new User();
     this.signupForm = new FormGroup({
-      'name': new FormControl(this.user.name, [Validators.required]),
+      'name': new FormControl(null, [Validators.required]),
       'phoneNumber': new FormControl(null, [Validators.required, this.checkLimit(12, 12)]),
       'avatar': new FormControl(this.user.avatar),
       'email': new FormControl(null, [Validators.required, Validators.email]),
@@ -74,7 +74,6 @@ export class RegisterComponent implements OnInit {
             this.signupForm.get('email').setValue(this.user['email']);
           }
           this.user['avatar'] = auth.user.avatar && auth.user.avatar.length > 0 ? auth.user.avatar : null;
-          this.signupForm.get('name').setValue(this.user['name']);
           this.signupForm.get('avatar').setValue(this.user['avatar']);
         }
       }
@@ -135,7 +134,9 @@ export class RegisterComponent implements OnInit {
       (err: ErrorResponse) => {
           console.log(err);
           Object.keys(err.error.errors).map(item => {
-            this.signupForm.controls[item].setErrors({'apiValidate': err.error.errors[item]});
+            if (item !== 'avatar') {
+              this.signupForm.controls[item].setErrors({'apiValidate': err.error.errors[item]});
+            }
           });
         }
       );

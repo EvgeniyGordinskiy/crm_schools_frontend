@@ -89,6 +89,7 @@
                   *ngIf="!key.get('gym_name').valid && key.get('gym_name').touched"
                   class="help-block">
                   <span *ngIf="key.get('gym_name').errors['required']">This field is required!</span>
+                  <span *ngIf="key.get('gym_name').errors['apiValidate']">{{key.get('gym_name').errors['apiValidate']}}</span>
                 </div>
                 <span class="form-field-header">Gym Address</span>
                 <mat-form-field>
@@ -99,6 +100,7 @@
                   *ngIf="!key.get('gym_address').valid && key.get('gym_address').touched"
                   class="help-block">
                   <span *ngIf="key.get('gym_address').errors['required']">This field is required!</span>
+                  <span *ngIf="key.get('gym_address').errors['apiValidate']">{{key.get('gym_address').errors['apiValidate']}}</span>
                 </div>
                 <span class="form-field-header">Gym Phone</span>
                 <mat-form-field>

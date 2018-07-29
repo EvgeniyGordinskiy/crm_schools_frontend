@@ -13,7 +13,7 @@
         Add Gym
       </button>
       <div class="profile-details inline_block">
-        <img src="{{avatar}}">
+        <img src="{{avatar !== null && avatar.length > 0 ? avatar : '../../assets/noAvatar.png'}}">
         <span>
           {{name}}
         </span>

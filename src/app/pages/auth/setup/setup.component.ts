@@ -11,6 +11,7 @@ import {UpdateAuthUser} from '@store/auth/actions';
 import {AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators} from '@angular/forms';
 import {PaymentService} from '@services/payment/payment.service';
 import {SchoolService} from '@services/school/school.service';
+import {ErrorResponse} from '@interfaces/responses/error-response';
 
 @Component({
   selector: 'app-setup',
@@ -146,15 +147,27 @@ export class SetupComponent implements OnInit {
     const gyms = this.setUpForm.get('gyms')['controls'];
     gyms.map(gym => {
       console.log(gym);
-      this.schoolService.create({
-        name: gym.get('gym_name').value,
-        address: gym.get('gym_address').value,
-        phone: gym.get('gym_phone').value
-      }).subscribe(
-        (resp: {data}) => {
-          this.authStore.dispatch(new UpdateAuthUser({schools: resp.data}));
-        }
-      );
+      if (
+        gym.get('gym_name').value !== null &&
+        gym.get('gym_address').value !== null &&
+        gym.get('gym_phone').value !== null
+      ) {
+        this.schoolService.create({
+          name: gym.get('gym_name').value,
+          address: gym.get('gym_address').value,
+          phone: gym.get('gym_phone').value
+        }).subscribe(
+          (resp: { data }) => {
+            this.authStore.dispatch(new UpdateAuthUser({schools: resp.data}));
+          },
+          (err: ErrorResponse) => {
+            console.log(err);
+            Object.keys(err.error.errors).map(item => {
+              gym.controls[item].setErrors({'apiValidate': err.error.errors[item]});
+            });
+          }
+        );
+      }
     });
     this.router.navigate(['auth/login']);
   }
