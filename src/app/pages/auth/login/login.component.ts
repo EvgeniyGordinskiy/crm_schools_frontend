@@ -96,8 +96,9 @@ export class LoginComponent implements OnInit, OnDestroy {
                  name: user.name,
                  email: user.email,
                  avatar: user.avatar,
+                 provider_name: provider
                }));
-              this.store.dispatch(new ToggleUsedAuthSocial({provider: provider}));
+              // this.store.dispatch(new ToggleUsedAuthSocial({provider: provider}));
               this.router.navigate(['auth/register']);
             } else {
               this.authenticate(resp.data.token);

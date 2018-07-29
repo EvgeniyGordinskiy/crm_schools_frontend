@@ -1298,8 +1298,9 @@ var LoginComponent = /** @class */ (function () {
                         name: user.name,
                         email: user.email,
                         avatar: user.avatar,
+                        provider_name: provider
                     }));
-                    _this.store.dispatch(new _store_auth_actions__WEBPACK_IMPORTED_MODULE_7__["ToggleUsedAuthSocial"]({ provider: provider }));
+                    // this.store.dispatch(new ToggleUsedAuthSocial({provider: provider}));
                     _this.router.navigate(['auth/register']);
                 }
                 else {
@@ -1397,6 +1398,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var angular5_social_login__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! angular5-social-login */ "./node_modules/angular5-social-login/angular5-social-login.umd.js");
 /* harmony import */ var angular5_social_login__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(angular5_social_login__WEBPACK_IMPORTED_MODULE_9__);
 /* harmony import */ var _models_user__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @models/user */ "./src/app/models/user.ts");
+/* harmony import */ var _facades_permission_permissionFacade__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @facades/permission/permissionFacade */ "./src/app/facades/permission/permissionFacade.ts");
+/* harmony import */ var _pages_auth_reset_password_reset_password_component__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @pages/auth/reset-password/reset-password.component */ "./src/app/pages/auth/reset-password/reset-password.component.ts");
+/* harmony import */ var _services_account_account_service__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @services/account/account.service */ "./src/app/services/account/account.service.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1417,12 +1421,16 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
+
+
+
 var RegisterComponent = /** @class */ (function () {
-    function RegisterComponent(router, authFacade, authService, schoolService, socialAuthService, authStore, spinnerStore) {
+    function RegisterComponent(router, authFacade, authService, schoolService, accountService, socialAuthService, authStore, spinnerStore) {
         this.router = router;
         this.authFacade = authFacade;
         this.authService = authService;
         this.schoolService = schoolService;
+        this.accountService = accountService;
         this.socialAuthService = socialAuthService;
         this.authStore = authStore;
         this.spinnerStore = spinnerStore;
@@ -1538,12 +1546,33 @@ var RegisterComponent = /** @class */ (function () {
                     _this.authStore.dispatch(new _store_auth_actions__WEBPACK_IMPORTED_MODULE_8__["ToggleUsedAuthSocial"]({ provider: provider }));
                 }
                 else {
-                    _this.authStore.dispatch(new _store_auth_actions__WEBPACK_IMPORTED_MODULE_8__["AuthenticateAction"](resp.data.token));
-                    var user = _this.authFacade.loginAndFetchUserData();
-                    _this.authStore.dispatch(new _store_auth_actions__WEBPACK_IMPORTED_MODULE_8__["AuthenticatedSuccessAction"]({ authenticated: true, user: user }));
-                    _this.authFacade.checkAuthStatusAndRedirect();
+                    _this.authenticate(resp.data.token);
                 }
             });
+        });
+    };
+    RegisterComponent.prototype.authenticate = function (token) {
+        var _this = this;
+        console.log(token);
+        this.authStore.dispatch(new _store_auth_actions__WEBPACK_IMPORTED_MODULE_8__["AuthenticateAction"](token));
+        this.accountService.getAccount().subscribe(function (response) {
+            var permissions = _facades_permission_permissionFacade__WEBPACK_IMPORTED_MODULE_11__["PermissionFacade"].groupByModelName(response.data.permissions);
+            var user = _this.authFacade.createUser(response, permissions);
+            console.log(user, 'authenticate login');
+            _this.authStore.dispatch(new _store_auth_actions__WEBPACK_IMPORTED_MODULE_8__["UpdateAuthUser"](user));
+            if (user.emailVerified === false) {
+                _this.router.navigate(['auth/emailSent']);
+            }
+            else if (user.phoneNumberVerified === false || user.paymentSettingVerified === false || !user.schools.length) {
+                _facades_auth_authFacade__WEBPACK_IMPORTED_MODULE_7__["AuthFacade"].setToken(token, _pages_auth_reset_password_reset_password_component__WEBPACK_IMPORTED_MODULE_12__["ResetPasswordComponent"].resetTokenPrefix);
+                _this.router.navigate(['auth/setup']);
+            }
+            else {
+                _this.authStore.dispatch(new _store_auth_actions__WEBPACK_IMPORTED_MODULE_8__["AuthenticatedSuccessAction"]({ authenticated: true, user: user }));
+                _this.authFacade.checkAuthStatusAndRedirect();
+            }
+        }, function (error) {
+            console.log(error);
         });
     };
     RegisterComponent = __decorate([
@@ -1556,6 +1585,7 @@ var RegisterComponent = /** @class */ (function () {
             _facades_auth_authFacade__WEBPACK_IMPORTED_MODULE_7__["AuthFacade"],
             _services_auth_auth_service__WEBPACK_IMPORTED_MODULE_2__["AuthService"],
             _services_school_school_service__WEBPACK_IMPORTED_MODULE_6__["SchoolService"],
+            _services_account_account_service__WEBPACK_IMPORTED_MODULE_13__["AccountService"],
             angular5_social_login__WEBPACK_IMPORTED_MODULE_9__["AuthService"],
             _ngrx_store__WEBPACK_IMPORTED_MODULE_3__["Store"],
             _ngrx_store__WEBPACK_IMPORTED_MODULE_3__["Store"]])

@@ -23,6 +23,10 @@ import {State} from '@store/auth/reducers';
 import {User} from '@models/user';
 import {HttpErrorResponse} from '@angular/common/http';
 import {ErrorResponse} from '@interfaces/responses/error-response';
+import {AccountServiceResponseInterface} from '@interfaces/accountServiceResponse.interface';
+import {PermissionFacade} from '@facades/permission/permissionFacade';
+import {ResetPasswordComponent} from '@pages/auth/reset-password/reset-password.component';
+import {AccountService} from '@services/account/account.service';
 
 @Component({
   selector: 'app-register',
@@ -41,6 +45,7 @@ export class RegisterComponent implements OnInit {
     private authFacade: AuthFacade,
     private authService: AuthService,
     private schoolService: SchoolService,
+    private accountService: AccountService,
     private socialAuthService: AuthServiceSocial,
     private authStore: Store<AuthReducer.AuthState>,
   private spinnerStore: Store<SpinnerReducer.SpinnerState>
@@ -160,13 +165,36 @@ export class RegisterComponent implements OnInit {
                 }));
                 this.authStore.dispatch(new ToggleUsedAuthSocial({provider: provider}));
               } else {
-                this.authStore.dispatch(new AuthenticateAction(resp.data.token));
-                const user = this.authFacade.loginAndFetchUserData();
-                this.authStore.dispatch(new AuthenticatedSuccessAction({authenticated: true, user: user}));
-                this.authFacade.checkAuthStatusAndRedirect();
+                this.authenticate(resp.data.token);
               }
             }
           );
       });
+  }
+
+  private authenticate(token) {
+    console.log(token);
+    this.authStore.dispatch(new AuthenticateAction(token));
+    this.accountService.getAccount().subscribe(
+      (response: AccountServiceResponseInterface) => {
+        const permissions = PermissionFacade.groupByModelName(response.data.permissions);
+        const user =  this.authFacade.createUser(response, permissions);
+        console.log(user, 'authenticate login');
+        this.authStore.dispatch(new UpdateAuthUser(user));
+        if (user.emailVerified === false) {
+          this.router.navigate(['auth/emailSent']);
+        } else if (user.phoneNumberVerified === false || user.paymentSettingVerified === false || !user.schools.length ) {
+          AuthFacade.setToken(token, ResetPasswordComponent.resetTokenPrefix);
+          this.router.navigate(['auth/setup']);
+        } else {
+          this.authStore.dispatch(new AuthenticatedSuccessAction({authenticated: true, user: user}));
+          this.authFacade.checkAuthStatusAndRedirect();
+        }
+      },
+      error => {
+        console.log(error);
+      }
+    );
+
   }
 }
