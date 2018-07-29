@@ -1,7 +1,7 @@
 <mat-card class="auth-modal">
   <mat-card-header>
     <mat-card-title>
-      <div class="social-data" *ngIf="user.provider_name !== 'null'">
+      <div class="social-data" *ngIf="user.provider_name && user.provider_name !== 'null'">
         <p>Almost Finish</p>
         <p class="sub-title color-text-middle-grey">Please set up empty rows.</p>
         <img src="{{user?.avatar}}" class="avatar">
