@@ -66,12 +66,15 @@ export class RegisterComponent implements OnInit {
         const auth = val.auth;
         if (auth && auth.user) {
           this.usedAuthSocial = auth.user.usedAuthSocial;
-          this.user['name'] = auth.user.name && auth.user.name.length > 0 ? auth.user.name : null;
           this.user['provider_name'] = auth.user.provider_name && auth.user.provider_name.length > 0 ? auth.user.provider_name : null;
           this.user['provider_id'] = auth.user.provider_id && auth.user.provider_id.length > 0 ? auth.user.provider_id : null;
           if ( auth.user.email && auth.user.email.length > 0 &&  auth.user.email !== null) {
             this.user['email'] = auth.user.email;
             this.signupForm.get('email').setValue(this.user['email']);
+          }
+          if ( auth.user.name && auth.user.name.length > 0 &&  auth.user.name !== null) {
+            this.user['name'] = auth.user.name;
+            this.signupForm.get('name').setValue(this.user['name']);
           }
           this.user['avatar'] = auth.user.avatar && auth.user.avatar.length > 0 ? auth.user.avatar : null;
           this.signupForm.get('avatar').setValue(this.user['avatar']);
@@ -81,6 +84,7 @@ export class RegisterComponent implements OnInit {
   }
 
   confirmedPassword(control: FormControl): {[s: string]: boolean} {
+    console.log(this.signupForm);
     if (this.signupForm && this.signupForm.get('password').value !== this.signupForm.get('confirm_password').value) {
       return {'confirmedPassword': true};
     } else {
