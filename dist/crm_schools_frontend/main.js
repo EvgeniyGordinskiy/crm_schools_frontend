@@ -207,7 +207,8 @@ var AppComponent = /** @class */ (function () {
     }
     AppComponent.prototype.beforeRoute = function () {
         // this.router.navigate(['/auth/emailSent']);
-        if (this.router.url === 'auth/login' || this.router.url === 'auth/register') {
+        console.log(this.router.url);
+        if (this.router.url === '/auth/login' || this.router.url === '/auth/register') {
             this.authStore.dispatch(new _store_auth_actions__WEBPACK_IMPORTED_MODULE_4__["SignOut"](this.authFacade));
         }
         if (this.authFacade.pageNeedAuth() && !_facades_permission_permissionFacade__WEBPACK_IMPORTED_MODULE_7__["PermissionFacade"].checkPermissionsToAccessPage(this.router.url.split('?')[0], this.user)) {
@@ -2090,7 +2091,8 @@ function reducer(state, action) {
             console.log(state, 'UPDATE_AUTH_USER');
             return state;
         case _actions__WEBPACK_IMPORTED_MODULE_0__["ActionTypes"].SIGN_OUT:
-            return __assign({}, state, { authenticated: false, error: undefined, user: undefined });
+            console.log(state, 'SIGN_OUT');
+            return __assign({}, state, { authenticated: false, error: undefined, user: new _models_user__WEBPACK_IMPORTED_MODULE_1__["User"]() });
         case _actions__WEBPACK_IMPORTED_MODULE_0__["ActionTypes"].SIGN_UP:
             return __assign({}, state, { authenticated: false, error: undefined, loading: true });
         case _actions__WEBPACK_IMPORTED_MODULE_0__["ActionTypes"].REFRESH_AUTH_STATE:

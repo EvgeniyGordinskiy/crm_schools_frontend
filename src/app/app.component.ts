@@ -39,7 +39,8 @@ export class AppComponent {
 
   beforeRoute() {
     // this.router.navigate(['/auth/emailSent']);
-      if (this.router.url === 'auth/login' || this.router.url === 'auth/register') {
+    console.log(this.router.url);
+      if (this.router.url === '/auth/login' || this.router.url === '/auth/register') {
         this.authStore.dispatch(new SignOut(this.authFacade));
       }
      if (this.authFacade.pageNeedAuth() && !PermissionFacade.checkPermissionsToAccessPage(this.router.url.split('?')[0], this.user)) {

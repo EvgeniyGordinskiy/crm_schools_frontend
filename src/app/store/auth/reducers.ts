@@ -116,11 +116,12 @@ export function reducer(state: any = initialState, action: ActionInterface) {
       return state;
 
     case ActionTypes.SIGN_OUT:
+      console.log(state, 'SIGN_OUT');
       return {
         ...state,
         authenticated: false,
         error: undefined,
-        user: undefined
+        user: new User()
       };
 
     case ActionTypes.SIGN_UP:
