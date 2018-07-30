@@ -8,11 +8,15 @@
     font-size: $base_font;
     a{
       color: black;
-
     }
     li{
       height: 100%;
       padding: 0 19px;
+      ::ng-deep .mat-con{
+        position: relative;
+        top: 9px;
+        right: 5px;
+      }
       span{
         position: relative;
         top: 3px;

@@ -1,12 +1,14 @@
 <ul class="main-menu">
-    <a [routerLink]="['/dashboard']"><li class="inline_block"><span>Dashboard</span></li></a>
-  <li class="inline_block" *ngIf="checkPermission('Message')"><span>Messages</span></li>
+    <a [routerLink]="['/dashboard']"><li class="inline_block"><mat-icon>dashboard</mat-icon><span>Dashboard</span></li></a>
+  <li class="inline_block" *ngIf="checkPermission('Message')"><mat-icon>chat_bubble_outline</mat-icon><span>Messages</span></li>
+  <li class="inline_block" ><mat-icon>people</mat-icon><span>Students</span></li>
+  <li class="inline_block" ><img src="../../../assets/hierarchical-structure.svg" class="mat-icon"><span>Teachers</span></li>
   <li class="inline_block" *ngIf="checkPermission('User')"><span>Customers</span></li>
   <a [routerLink]="['/permissions']" *ngIf="checkPermission('Permission')"><li class="inline_block"><span>Permissions</span></li></a>
   <li class="inline_block" *ngIf="checkPermission('School')"><span>Schools</span></li>
-  <a [routerLink]="['/program']" *ngIf="checkPermission('Program')"><li class="inline_block"><span>Programs</span></li></a>
+  <a [routerLink]="['/program']" *ngIf="checkPermission('Program')"><li class="inline_block"><mat-icon>list</mat-icon><span>Programs</span></li></a>
   <li class="inline_block" *ngIf="checkPermission('Membership')"><span>Memberships</span></li>
-  <li class="inline_block" *ngIf="checkPermission('Payment')"><span>Payments</span></li>
+  <li class="inline_block" *ngIf="checkPermission('Payment')"><mat-icon>local_atm</mat-icon><span>Payments</span></li>
   <li class="inline_block" *ngIf="checkPermission('Attendances')"><span>Attendances</span></li>
-  <li class="inline_block"><span>Curriculums</span></li>
+  <!--<li class="inline_block"><span>Curriculums</span></li>-->
 </ul>

@@ -451,7 +451,7 @@ var DashboardComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<ul class=\"main-menu\">\n    <a [routerLink]=\"['/dashboard']\"><li class=\"inline_block\"><span>Dashboard</span></li></a>\n  <li class=\"inline_block\" *ngIf=\"checkPermission('Message')\"><span>Messages</span></li>\n  <li class=\"inline_block\" *ngIf=\"checkPermission('User')\"><span>Customers</span></li>\n  <a [routerLink]=\"['/permissions']\" *ngIf=\"checkPermission('Permission')\"><li class=\"inline_block\"><span>Permissions</span></li></a>\n  <li class=\"inline_block\" *ngIf=\"checkPermission('School')\"><span>Schools</span></li>\n  <a [routerLink]=\"['/program']\" *ngIf=\"checkPermission('Program')\"><li class=\"inline_block\"><span>Programs</span></li></a>\n  <li class=\"inline_block\" *ngIf=\"checkPermission('Membership')\"><span>Memberships</span></li>\n  <li class=\"inline_block\" *ngIf=\"checkPermission('Payment')\"><span>Payments</span></li>\n  <li class=\"inline_block\" *ngIf=\"checkPermission('Attendances')\"><span>Attendances</span></li>\n  <li class=\"inline_block\"><span>Curriculums</span></li>\n</ul>\n"
+module.exports = "<ul class=\"main-menu\">\n    <a [routerLink]=\"['/dashboard']\"><li class=\"inline_block\"><mat-icon>dashboard</mat-icon><span>Dashboard</span></li></a>\n  <li class=\"inline_block\" *ngIf=\"checkPermission('Message')\"><mat-icon>chat_bubble_outline</mat-icon><span>Messages</span></li>\n  <li class=\"inline_block\" ><mat-icon>people</mat-icon><span>Students</span></li>\n  <li class=\"inline_block\" ><img src=\"../../../assets/hierarchical-structure.svg\" class=\"mat-icon\"><span>Teachers</span></li>\n  <li class=\"inline_block\" *ngIf=\"checkPermission('User')\"><span>Customers</span></li>\n  <a [routerLink]=\"['/permissions']\" *ngIf=\"checkPermission('Permission')\"><li class=\"inline_block\"><span>Permissions</span></li></a>\n  <li class=\"inline_block\" *ngIf=\"checkPermission('School')\"><span>Schools</span></li>\n  <a [routerLink]=\"['/program']\" *ngIf=\"checkPermission('Program')\"><li class=\"inline_block\"><mat-icon>list</mat-icon><span>Programs</span></li></a>\n  <li class=\"inline_block\" *ngIf=\"checkPermission('Membership')\"><span>Memberships</span></li>\n  <li class=\"inline_block\" *ngIf=\"checkPermission('Payment')\"><mat-icon>local_atm</mat-icon><span>Payments</span></li>\n  <li class=\"inline_block\" *ngIf=\"checkPermission('Attendances')\"><span>Attendances</span></li>\n  <!--<li class=\"inline_block\"><span>Curriculums</span></li>-->\n</ul>\n"
 
 /***/ }),
 
@@ -462,7 +462,7 @@ module.exports = "<ul class=\"main-menu\">\n    <a [routerLink]=\"['/dashboard']
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ":host {\n  height: 100%; }\n  :host .main-menu {\n    height: 100%;\n    margin: 0;\n    font-size: 14px; }\n  :host .main-menu a {\n      color: black; }\n  :host .main-menu li {\n      height: 100%;\n      padding: 0 19px; }\n  :host .main-menu li span {\n        position: relative;\n        top: 3px; }\n  :host .main-menu li:hover {\n        background-color: #fff; }\n"
+module.exports = ":host {\n  height: 100%; }\n  :host .main-menu {\n    height: 100%;\n    margin: 0;\n    font-size: 14px; }\n  :host .main-menu a {\n      color: black; }\n  :host .main-menu li {\n      height: 100%;\n      padding: 0 19px; }\n  :host .main-menu li ::ng-deep .mat-con {\n        position: relative;\n        top: 9px;\n        right: 5px; }\n  :host .main-menu li span {\n        position: relative;\n        top: 3px; }\n  :host .main-menu li:hover {\n        background-color: #fff; }\n"
 
 /***/ }),
 
@@ -832,7 +832,7 @@ var PermissionFacade = /** @class */ (function () {
     PermissionFacade.checkPermission = function (permissions, modelName, event, type) {
         if (event === void 0) { event = ''; }
         if (type === void 0) { type = ''; }
-        var finded = false;
+        var fond = false;
         if (permissions) {
             Object.keys(permissions).map(function (key) {
                 if (key === modelName) {
@@ -841,22 +841,22 @@ var PermissionFacade = /** @class */ (function () {
                             if (item.event === event) {
                                 if (type.length > 0) {
                                     if (item.type === type.length) {
-                                        finded = true;
+                                        fond = true;
                                     }
                                 }
                                 else {
-                                    finded = true;
+                                    fond = true;
                                 }
                             }
                         });
                     }
                     else {
-                        finded = true;
+                        fond = true;
                     }
                 }
             });
         }
-        return finded;
+        return fond;
     };
     PermissionFacade.userVerified = function (user) {
         return user.registerComplete === true && user.emailVerified === true && user.phoneNumberVerified === true;
@@ -944,7 +944,7 @@ module.exports = "<mat-toolbar>\n  <mat-toolbar-row class=\"first-header\">\n   
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ":host .mat-toolbar {\n  background: transparent; }\n  :host .mat-toolbar .first-header {\n    padding-right: 0;\n    height: 59px; }\n  :host .mat-toolbar .first-header .first-header-content {\n      display: flex;\n      font-size: 14px;\n      justify-content: space-between;\n      align-items: center;\n      min-width: 335px;\n      margin-left: auto; }\n  :host .mat-toolbar .first-header .first-header-content mat-select {\n        width: 340px;\n        height: 30px;\n        border: rgba(155, 155, 155, 0.31) solid 1px;\n        border-radius: 20px;\n        padding: 0 10px;\n        margin-top: 5px; }\n  :host .mat-toolbar .first-header .first-header-content mat-select ::ng-deep .mat-select-arrow {\n          display: inline-block;\n          padding: 3px;\n          margin-bottom: 3px;\n          border: #0b7685 solid;\n          border-width: 0 1.5px 1.5px 0;\n          transform: rotate(45deg);\n          -webkit-transform: rotate(45deg); }\n  :host .mat-toolbar .first-header .first-header-content .add-gym-button {\n        border-radius: 20px;\n        width: 175px;\n        height: 30px;\n        padding-left: 6px;\n        justify-content: center;\n        flex-direction: column;\n        margin-top: 5px;\n        margin-left: 50px; }\n  :host .mat-toolbar .first-header .first-header-content .add-gym-button .mat-icon {\n          font-size: 17px;\n          font-weight: bold;\n          margin-top: 7px; }\n  :host .mat-toolbar .first-header .first-header-content .profile-details {\n        display: flex;\n        justify-content: center;\n        width: 60%;\n        align-items: center; }\n  :host .mat-toolbar .first-header .first-header-content .profile-details img {\n          margin-right: 9px;\n          border-radius: 50%;\n          width: 35px;\n          height: 35px; }\n  :host .mat-toolbar .second-header {\n    background-color: #7f7f7f;\n    height: 39px;\n    display: flex;\n    justify-content: center; }\n  :host .content {\n  margin: 0 auto;\n  height: 100%;\n  width: 70%;\n  -ms-grid-row-align: center;\n      align-self: center; }\n"
+module.exports = ":host .mat-toolbar {\n  background: transparent; }\n  :host .mat-toolbar .first-header {\n    padding-right: 0;\n    height: 59px; }\n  :host .mat-toolbar .first-header .first-header-content {\n      display: flex;\n      font-size: 14px;\n      justify-content: space-between;\n      align-items: center;\n      min-width: 335px;\n      margin-left: auto; }\n  :host .mat-toolbar .first-header .first-header-content mat-select {\n        width: 340px;\n        height: 30px;\n        border: rgba(155, 155, 155, 0.31) solid 1px;\n        border-radius: 20px;\n        padding: 0 10px;\n        margin-top: 5px; }\n  :host .mat-toolbar .first-header .first-header-content mat-select ::ng-deep .mat-select-arrow {\n          display: inline-block;\n          padding: 3px;\n          margin-bottom: 3px;\n          border: #0b7685 solid;\n          border-width: 0 1.5px 1.5px 0;\n          transform: rotate(45deg);\n          -webkit-transform: rotate(45deg); }\n  :host .mat-toolbar .first-header .first-header-content .add-gym-button {\n        border-radius: 20px;\n        width: 175px;\n        height: 30px;\n        padding-left: 6px;\n        justify-content: center;\n        flex-direction: column;\n        margin-top: 5px;\n        margin-left: 50px; }\n  :host .mat-toolbar .first-header .first-header-content .add-gym-button .mat-icon {\n          font-size: 17px;\n          font-weight: bold;\n          margin-top: 7px; }\n  :host .mat-toolbar .first-header .first-header-content .profile-details {\n        display: flex;\n        justify-content: center;\n        width: 60%;\n        align-items: center; }\n  :host .mat-toolbar .first-header .first-header-content .profile-details img {\n          margin-right: 9px;\n          border-radius: 50%;\n          width: 35px;\n          height: 35px; }\n  :host .mat-toolbar .second-header {\n    background-color: #f7f7f7;\n    height: 50px;\n    display: flex;\n    justify-content: center;\n    box-shadow: 0 0 black;\n    max-width: 89%;\n    margin: auto; }\n  :host .mat-toolbar .second-header ::ng-deep .mat-icon {\n      position: relative;\n      top: 9px;\n      right: 5px; }\n  :host .content {\n  margin: 0 auto;\n  height: 100%;\n  width: 70%;\n  -ms-grid-row-align: center;\n      align-self: center; }\n"
 
 /***/ }),
 

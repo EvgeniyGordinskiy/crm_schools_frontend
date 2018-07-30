@@ -34,7 +34,7 @@ export class PermissionFacade {
   }
 
   static checkPermission(permissions, modelName: string, event = '', type = '') {
-    let finded = false;
+    let fond = false;
     if (permissions) {
       Object.keys(permissions).map((key) => {
         if (key === modelName) {
@@ -43,20 +43,20 @@ export class PermissionFacade {
               if (item.event === event) {
                 if (type.length > 0) {
                   if (item.type === type.length) {
-                    finded = true;
+                    fond = true;
                   }
                 } else {
-                  finded = true;
+                  fond = true;
                 }
               }
             });
           } else {
-            finded = true;
+            fond = true;
           }
         }
       });
     }
-    return finded;
+    return fond;
   }
 
   static userVerified(user) {

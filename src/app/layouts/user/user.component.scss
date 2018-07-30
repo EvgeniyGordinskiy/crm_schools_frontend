@@ -60,10 +60,18 @@
       }
     }
     .second-header{
-      background-color: #7f7f7f;
-      height: 39px;
+      background-color: #f7f7f7;
+      height: 50px;
       display: flex;
       justify-content: center;
+      box-shadow: 0 0 black;
+      max-width: 89%;
+      margin: auto;
+     ::ng-deep .mat-icon{
+        position: relative;
+        top: 9px;
+        right: 5px;
+      }
     }
   }
   .content{
