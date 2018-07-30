@@ -7,7 +7,7 @@ import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/takeWhile';
 
 import * as AuthenticateReducer from '@store/auth/reducers';
-import {RefreshAuthState} from '@store/auth/actions';
+import {RefreshAuthState, SignOut} from '@store/auth/actions';
 import {AuthFacade} from '@app/facades/auth/authFacade';
 import {Router} from '@angular/router';
 import {PermissionFacade} from '@facades/permission/permissionFacade';
@@ -39,7 +39,9 @@ export class AppComponent {
 
   beforeRoute() {
     // this.router.navigate(['/auth/emailSent']);
-
+      if (this.router.url === 'auth/login' || this.router.url === 'auth/register') {
+        this.authStore.dispatch(new SignOut(this.authFacade));
+      }
      if (this.authFacade.pageNeedAuth() && !PermissionFacade.checkPermissionsToAccessPage(this.router.url.split('?')[0], this.user)) {
        if (AuthFacade.getAuthStatus()) {
          this.router.navigate(['/home']);

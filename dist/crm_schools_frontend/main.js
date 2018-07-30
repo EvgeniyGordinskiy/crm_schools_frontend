@@ -207,6 +207,9 @@ var AppComponent = /** @class */ (function () {
     }
     AppComponent.prototype.beforeRoute = function () {
         // this.router.navigate(['/auth/emailSent']);
+        if (this.router.url === 'auth/login' || this.router.url === 'auth/register') {
+            this.authStore.dispatch(new _store_auth_actions__WEBPACK_IMPORTED_MODULE_4__["SignOut"](this.authFacade));
+        }
         if (this.authFacade.pageNeedAuth() && !_facades_permission_permissionFacade__WEBPACK_IMPORTED_MODULE_7__["PermissionFacade"].checkPermissionsToAccessPage(this.router.url.split('?')[0], this.user)) {
             if (_app_facades_auth_authFacade__WEBPACK_IMPORTED_MODULE_5__["AuthFacade"].getAuthStatus()) {
                 this.router.navigate(['/home']);
