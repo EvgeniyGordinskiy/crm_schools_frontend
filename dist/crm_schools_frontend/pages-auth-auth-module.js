@@ -1457,12 +1457,15 @@ var RegisterComponent = /** @class */ (function () {
             var auth = val.auth;
             if (auth && auth.user) {
                 _this.usedAuthSocial = auth.user.usedAuthSocial;
-                _this.user['name'] = auth.user.name && auth.user.name.length > 0 ? auth.user.name : null;
                 _this.user['provider_name'] = auth.user.provider_name && auth.user.provider_name.length > 0 ? auth.user.provider_name : null;
                 _this.user['provider_id'] = auth.user.provider_id && auth.user.provider_id.length > 0 ? auth.user.provider_id : null;
                 if (auth.user.email && auth.user.email.length > 0 && auth.user.email !== null) {
                     _this.user['email'] = auth.user.email;
                     _this.signupForm.get('email').setValue(_this.user['email']);
+                }
+                if (auth.user.name && auth.user.name.length > 0 && auth.user.name !== null) {
+                    _this.user['name'] = auth.user.name;
+                    _this.signupForm.get('name').setValue(_this.user['name']);
                 }
                 _this.user['avatar'] = auth.user.avatar && auth.user.avatar.length > 0 ? auth.user.avatar : null;
                 _this.signupForm.get('avatar').setValue(_this.user['avatar']);
@@ -1470,6 +1473,7 @@ var RegisterComponent = /** @class */ (function () {
         });
     };
     RegisterComponent.prototype.confirmedPassword = function (control) {
+        console.log(this.signupForm);
         if (this.signupForm && this.signupForm.get('password').value !== this.signupForm.get('confirm_password').value) {
             return { 'confirmedPassword': true };
         }
